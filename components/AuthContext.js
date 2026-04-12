@@ -90,6 +90,9 @@ export const AuthProvider = ({ children }) => {
         try {
             const userRef = doc(db, "users", user.uid);
             const userSnap = await withTimeout(getDoc(userRef), 3000);
+            
+            // Check if the user was just created in this session
+            const isNewlyCreated = user.metadata.creationTime === user.metadata.lastSignInTime;
 
             if (!userSnap.exists()) {
                 await withTimeout(setDoc(userRef, {
@@ -100,11 +103,14 @@ export const AuthProvider = ({ children }) => {
                     createdAt: serverTimestamp(),
                     isAnonymous: user.isAnonymous,
                 }), 3000);
-                if (!user.isAnonymous) {
+            }
+
+            // Always send welcome email if it's a new Auth user, 
+            // even if the firestore doc somehow existed
+            if (!user.isAnonymous) {
+                if (isNewlyCreated) {
                     await sendAuthAlert(user, 'signup');
-                }
-            } else {
-                if (!user.isAnonymous) {
+                } else {
                     await sendAuthAlert(user, 'login');
                 }
             }
