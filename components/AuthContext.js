@@ -90,10 +90,16 @@ export const AuthProvider = ({ children }) => {
         try {
             const userRef = doc(db, "users", user.uid);
             const userSnap = await withTimeout(getDoc(userRef), 3000);
+            const isDocMissing = !userSnap.exists();
             
-            const isFirstTime = !userSnap.exists();
+            // NEW ROBUST DETECTION: 
+            // If the account was created in the last 2 minutes, it's a signup.
+            // This is perfect for testing & real users.
+            const creationTime = new Date(user.metadata.creationTime).getTime();
+            const lastSignInTime = new Date(user.metadata.lastSignInTime).getTime();
+            const isBrandNewAuth = Math.abs(lastSignInTime - creationTime) < 120000; // 2 minutes
 
-            if (isFirstTime) {
+            if (isDocMissing) {
                 await withTimeout(setDoc(userRef, {
                     uid: user.uid,
                     email: user.email || null,
@@ -104,9 +110,9 @@ export const AuthProvider = ({ children }) => {
                 }), 3000);
             }
 
-            // Reliable trigger: If they didn't have a doc, it's a signup!
             if (!user.isAnonymous) {
-                if (isFirstTime) {
+                // If it's a new auth account, ALWAYS send the Khamma Ghani Welcome!
+                if (isBrandNewAuth || isDocMissing) {
                     await sendAuthAlert(user, 'signup');
                 } else {
                     await sendAuthAlert(user, 'login');
