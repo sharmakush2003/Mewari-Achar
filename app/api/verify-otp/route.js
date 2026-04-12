@@ -90,12 +90,6 @@ export async function POST(request) {
 
                 // 2. Generate Custom Token for the frontend
                 customToken = await adminAuth.createCustomToken(userRecord.uid);
-
-                // 3. Trigger Welcome Email if it's their first time
-                if (isNewUser) {
-                    // We MUST await here for Vercel to not kill the task
-                    await sendMewariWelcomeEmail(emailKey).catch(err => console.error("Welcome email failed:", err));
-                }
             }
         } catch (authError) {
             console.error('Real Auth (Admin) failed:', authError.message);

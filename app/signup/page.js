@@ -64,7 +64,7 @@ export default function SignupPage() {
                 return;
             }
 
-            await signupWithEmail(email, password, displayName);
+            // SUCCESS! Account is already created on the server and sync'd.
             router.push("/");
         } catch (err) {
             setError(err.message || 'Failed to create account');
