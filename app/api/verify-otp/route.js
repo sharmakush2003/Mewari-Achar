@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { db } from '@/lib/firebase';
 import { doc, getDoc, deleteDoc } from 'firebase/firestore';
 import { verifyOtpToken } from '@/lib/otpStore';
+import { getAdminAuth } from '@/lib/firebase-admin';
 
 // Helper for timeout
 const withTimeout = (promise, ms) => {
@@ -63,7 +64,56 @@ export async function POST(request) {
                 console.warn('Final cleanup of OTP in Firestore failed or timed out (safe to ignore)');
             }
 
-        return NextResponse.json({ message: 'OTP verified successfully', success: true });
+        // --- NEW REAL AUTH LOGIC ---
+        let customToken = null;
+        let isNewUser = false;
+        
+        try {
+            const adminAuth = getAdminAuth();
+            if (adminAuth) {
+                // 1. Get or Create user in Firebase Auth
+                let userRecord;
+                try {
+                    userRecord = await adminAuth.getUserByEmail(emailKey);
+                } catch (error) {
+                    if (error.code === 'auth/user-not-found') {
+                        userRecord = await adminAuth.createUser({
+                            email: emailKey,
+                            emailVerified: true,
+                        });
+                        isNewUser = true;
+                    } else {
+                        throw error;
+                    }
+                }
+
+                // 2. Generate Custom Token for the frontend
+                customToken = await adminAuth.createCustomToken(userRecord.uid);
+
+                // 3. Trigger Welcome Email if it's their first time
+                if (isNewUser) {
+                    try {
+                        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `https://${process.env.VERCEL_URL}` || 'http://localhost:3000';
+                        fetch(`${baseUrl}/api/send-welcome`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ email: emailKey }),
+                        }).catch(err => console.error("Welcome email background task failed:", err));
+                    } catch (emailErr) {
+                        console.error("Welcome email trigger failed:", emailErr);
+                    }
+                }
+            }
+        } catch (authError) {
+            console.error('Real Auth (Admin) failed:', authError.message);
+        }
+
+        return NextResponse.json({ 
+            message: 'OTP verified successfully', 
+            success: true,
+            customToken: customToken,
+            isNewUser: isNewUser
+        });
 
     } catch (error) {
         console.error('Error verifying OTP:', error);

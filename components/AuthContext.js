@@ -10,6 +10,7 @@ import {
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     sendPasswordResetEmail,
+    signInWithCustomToken,
 } from "firebase/auth";
 import { doc, setDoc, getDoc, serverTimestamp, collection, query, where, getDocs } from "firebase/firestore";
 import { auth, db, googleProvider } from "@/lib/firebase";
@@ -134,7 +135,19 @@ export const AuthProvider = ({ children }) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, otp, token: otpToken }),
         });
-        return await response.json();
+        const data = await response.json();
+        
+        // If we received a customToken, sign in to Firebase Auth!
+        if (data.success && data.customToken) {
+            try {
+                const userCredential = await signInWithCustomToken(auth, data.customToken);
+                await handleUserAuth(userCredential.user);
+            } catch (error) {
+                console.error("Custom token sign-in failed:", error);
+            }
+        }
+        
+        return data;
     };
 
     const loginWithEmail = async (email, password) => {
