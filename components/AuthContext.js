@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
         try {
             // For signups, we send the new premium welcome email
             if (type === 'signup') {
-                const welcomeResponse = await fetch('/api/send-welcome', {
+                const welcomeResponse = await fetch(`${window.location.origin}/api/send-welcome`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email: user.email, name: user.displayName }),
@@ -114,7 +114,7 @@ export const AuthProvider = ({ children }) => {
 
     const checkUserExists = async (email) => {
         try {
-            const response = await fetch('/api/check-user', {
+            const response = await fetch(`${window.location.origin}/api/check-user`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email }),
@@ -128,7 +128,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     const sendOtp = async (email) => {
-        const response = await fetch('/api/send-otp', {
+        const response = await fetch(`${window.location.origin}/api/send-otp`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email }),

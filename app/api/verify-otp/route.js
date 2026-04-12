@@ -3,6 +3,7 @@ import { db } from '@/lib/firebase';
 import { doc, getDoc, deleteDoc } from 'firebase/firestore';
 import { verifyOtpToken } from '@/lib/otpStore';
 import { getAdminAuth } from '@/lib/firebase-admin';
+import { sendMewariWelcomeEmail } from '@/lib/email-service';
 
 // Helper for timeout
 const withTimeout = (promise, ms) => {
@@ -92,16 +93,8 @@ export async function POST(request) {
 
                 // 3. Trigger Welcome Email if it's their first time
                 if (isNewUser) {
-                    try {
-                        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `https://${process.env.VERCEL_URL}` || 'http://localhost:3000';
-                        fetch(`${baseUrl}/api/send-welcome`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ email: emailKey }),
-                        }).catch(err => console.error("Welcome email background task failed:", err));
-                    } catch (emailErr) {
-                        console.error("Welcome email trigger failed:", emailErr);
-                    }
+                    // Call the email service directly! 
+                    sendMewariWelcomeEmail(emailKey).catch(err => console.error("Welcome email failed:", err));
                 }
             }
         } catch (authError) {
