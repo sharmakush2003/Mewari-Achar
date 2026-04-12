@@ -25,6 +25,7 @@ const withTimeout = (promise, ms) => {
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [otpToken, setOtpToken] = useState(null);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -120,14 +121,18 @@ export const AuthProvider = ({ children }) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email }),
         });
-        return await response.json();
+        const data = await response.json();
+        if (data.success && data.token) {
+            setOtpToken(data.token);
+        }
+        return data;
     };
 
     const verifyOtp = async (email, otp) => {
         const response = await fetch('/api/verify-otp', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, otp }),
+            body: JSON.stringify({ email, otp, token: otpToken }),
         });
         return await response.json();
     };

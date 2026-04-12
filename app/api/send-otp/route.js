@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { db } from '@/lib/firebase';
 import { doc, setDoc } from 'firebase/firestore';
-import { saveOtp } from '@/lib/otpStore';
+import { generateOtpToken } from '@/lib/otpStore';
 
 // Helper for timeout
 const withTimeout = (promise, ms) => {
@@ -31,10 +31,12 @@ export async function POST(request) {
             }), 3000);
             console.log(`[STORAGE] OTP saved to Firestore for ${email}`);
         } catch (dbError) {
-            console.error('Firestore save failed or timed out, falling back to local memory:', dbError.message);
             // Fallback to local memory so user isn't blocked
-            saveOtp(email, otp);
+            // saveOtp(email, otp); // No longer needed as we use stateless tokens
         }
+
+        // Always generate a token to be safe for serverless/vercel
+        const token = generateOtpToken(email, otp, expiry);
 
         const emailUser = process.env.EMAIL_USER?.trim();
         const emailPass = process.env.EMAIL_PASS?.trim().replace(/\s/g, '');
@@ -79,7 +81,11 @@ export async function POST(request) {
         };
 
         await transporter.sendMail(mailOptions);
-        return NextResponse.json({ message: 'OTP sent successfully', success: true });
+        return NextResponse.json({ 
+            message: 'OTP sent successfully', 
+            success: true,
+            token: token // This token will stay in the browser for verification
+        });
 
     } catch (error) {
         console.error('Error in send-otp API:', error);

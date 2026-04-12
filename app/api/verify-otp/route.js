@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/firebase';
 import { doc, getDoc, deleteDoc } from 'firebase/firestore';
-import { getOtp, deleteOtp } from '@/lib/otpStore';
+import { verifyOtpToken } from '@/lib/otpStore';
 
 // Helper for timeout
 const withTimeout = (promise, ms) => {
@@ -13,7 +13,7 @@ const withTimeout = (promise, ms) => {
 
 export async function POST(request) {
     try {
-        const { email, otp } = await request.json();
+        const { email, otp, token } = await request.json();
 
         if (!email || !otp) {
             return NextResponse.json({ message: 'Email and OTP are required' }, { status: 400 });
@@ -39,11 +39,11 @@ export async function POST(request) {
             console.error('Firestore verify check failed or timed out:', dbError.message);
         }
 
-        // If not found in DB (or DB failed), check memory fallback
         if (!storedOtp) {
-            storedOtp = getOtp(emailKey);
-            if (storedOtp) {
-                console.log(`[VERIFY] Found OTP in local memory for ${emailKey}`);
+            // If Firestore failed, check the stateless token
+            if (token && verifyOtpToken(emailKey, otp, token)) {
+                console.log(`[VERIFY] Successfully verified stateless token for ${emailKey}`);
+                storedOtp = otp; // Mark as verified
             }
         }
 
@@ -62,7 +62,6 @@ export async function POST(request) {
             } catch (e) {
                 console.warn('Final cleanup of OTP in Firestore failed or timed out (safe to ignore)');
             }
-        deleteOtp(emailKey);
 
         return NextResponse.json({ message: 'OTP verified successfully', success: true });
 
