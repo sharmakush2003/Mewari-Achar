@@ -39,6 +39,17 @@ export const AuthProvider = ({ children }) => {
 
     const sendAuthAlert = async (user, type) => {
         try {
+            // For signups, we send the new premium welcome email
+            if (type === 'signup') {
+                const welcomeResponse = await fetch('/api/send-welcome', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: user.email, name: user.displayName }),
+                });
+                return await welcomeResponse.json();
+            }
+
+            // For other alerts (logins), use the standard alert system
             await fetch('/api/send-login-alert', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
