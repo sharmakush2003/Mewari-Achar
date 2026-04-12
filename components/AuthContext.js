@@ -88,39 +88,19 @@ export const AuthProvider = ({ children }) => {
 
     const handleUserAuth = async (user) => {
         try {
-            const userRef = doc(db, "users", user.uid);
-            const userSnap = await withTimeout(getDoc(userRef), 3000);
-            const isDocMissing = !userSnap.exists();
+            // Obtain the user's ID token to send to our sync endpoint
+            const idToken = await user.getIdToken();
             
-            // NEW ROBUST DETECTION: 
-            // If the account was created in the last 2 minutes, it's a signup.
-            // This is perfect for testing & real users.
-            const creationTime = new Date(user.metadata.creationTime).getTime();
-            const lastSignInTime = new Date(user.metadata.lastSignInTime).getTime();
-            const isBrandNewAuth = Math.abs(lastSignInTime - creationTime) < 120000; // 2 minutes
+            const response = await fetch(`${window.location.origin}/api/auth/sync`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ idToken }),
+            });
 
-            if (isDocMissing) {
-                await withTimeout(setDoc(userRef, {
-                    uid: user.uid,
-                    email: user.email || null,
-                    displayName: user.displayName || 'Guest User',
-                    photoURL: user.photoURL || null,
-                    createdAt: serverTimestamp(),
-                    isAnonymous: user.isAnonymous,
-                }), 3000);
-            }
-
-            if (!user.isAnonymous) {
-                // If it's a new auth account, ALWAYS send the Khamma Ghani Welcome!
-                if (isBrandNewAuth || isDocMissing) {
-                    await sendAuthAlert(user, 'signup');
-                } else {
-                    await sendAuthAlert(user, 'login');
-                }
-            }
+            const data = await response.json();
+            console.log("[AUTH SYNC] Result:", data);
         } catch (error) {
-            console.warn("Firestore operation timed out or failed in handleUserAuth (Safe Mode):", error.message);
-            // We still proceed so the UI doesn't hang
+            console.error("Auth Synchronisation failed:", error.message);
         }
     };
 
