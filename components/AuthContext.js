@@ -41,12 +41,18 @@ export const AuthProvider = ({ children }) => {
         try {
             // For signups, we send the new premium welcome email
             if (type === 'signup') {
-                const welcomeResponse = await fetch(`${window.location.origin}/api/send-welcome`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: user.email, name: user.displayName }),
-                });
-                return await welcomeResponse.json();
+                try {
+                    const welcomeResponse = await fetch(`${window.location.origin}/api/send-welcome`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: user.email, name: user.displayName }),
+                    });
+                    const result = await welcomeResponse.json();
+                    console.log("[AUTH] Welcome email trigger result:", result);
+                } catch (e) {
+                    console.error("[AUTH] Welcome email fetch failed:", e);
+                }
+                return;
             }
 
             // For other alerts (logins), use the standard alert system

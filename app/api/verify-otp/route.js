@@ -93,8 +93,8 @@ export async function POST(request) {
 
                 // 3. Trigger Welcome Email if it's their first time
                 if (isNewUser) {
-                    // Call the email service directly! 
-                    sendMewariWelcomeEmail(emailKey).catch(err => console.error("Welcome email failed:", err));
+                    // We MUST await here for Vercel to not kill the task
+                    await sendMewariWelcomeEmail(emailKey).catch(err => console.error("Welcome email failed:", err));
                 }
             }
         } catch (authError) {
