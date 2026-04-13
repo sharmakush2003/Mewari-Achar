@@ -5,18 +5,19 @@
 */
 
 :root {
-    --primary-color: #8B0000;
-    --secondary-color: #D4AF37;
+    --primary-color: #8B0000; /* Royal Madder Red */
+    --secondary-color: #D4AF37; /* Gold */
     --accent-color: #2E8B57;
-    --bg-color: #FFFDD0;
-    --text-color: #2C1810;
+    --bg-color: #faf9f2; /* Premium Bone Cream */
+    --text-color: #2c1810; /* Deep Earth Brown */
     --white: #ffffff;
     --glass: rgba(255, 255, 255, 0.8);
-    --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    --shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
     
-    /* Next.js Font Mapping (Crucial for Vercel/Local Parity) */
+    /* Next.js Font Mapping */
     --font-main: var(--font-main);
     --font-heading: var(--font-heading);
+    --font-royal: var(--font-royal);
     
     --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
@@ -33,7 +34,8 @@ html, body {
     padding: 0;
     width: 100%;
     overflow-x: hidden;
-    -webkit-overflow-scrolling: touch; /* Smooth mobile scroll */
+    background-color: var(--bg-color);
+    -webkit-overflow-scrolling: touch;
 }
 
 body {
@@ -47,11 +49,13 @@ body {
     width: 100%;
     overflow-x: hidden;
     position: relative;
+    background: var(--bg-color);
 }
 
 h1, h2, h3, h4 {
-    font-family: var(--font-heading);
+    font-family: var(--font-royal, var(--font-heading));
     color: var(--primary-color);
+    letter-spacing: -0.01em;
 }
 
 /* Top Bar */

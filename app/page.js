@@ -9,6 +9,7 @@ import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import confetti from 'canvas-confetti';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 // Product Data (Matches original naming for 1:1 parity)
 const products = [
@@ -30,6 +31,9 @@ export default function Home() {
   
   const [activeModal, setActiveModal] = useState(null);
   const [notification, setNotification] = useState("");
+
+  const { scrollY } = useScroll();
+  const yParallax = useTransform(scrollY, [0, 1000], [0, 100]);
 
   useEffect(() => {
     AOS.init({ duration: 1000, once: true });
@@ -143,38 +147,78 @@ export default function Home() {
         onOpenOrders={() => setActiveModal('orders')} 
       />
       
-      {/* Hero Section (Exact original nesting) */}
-      <header id="home" className="hero">
-        <div className="hero-content" data-aos="fade-right">
-          <span className="hero-tag">Handcrafted with Love</span>
-          <h1>Taste the <br/><span>Legacy of Flavour</span></h1>
-          <p>Experience the authentic taste of tradition. Homemade, preservative-free, and bursting with the finest spices.</p>
-          <a href="#products" className="btn-primary">Explore Collection</a>
-        </div>
-        <div className="hero-visual" data-aos="zoom-in">
-          <div className="hero-circle"></div>
-          <img src="/Images/Mango Achar.jpg" alt="Premium Mango Achar" className="hero-img" />
-        </div>
-      </header>
+      <section id="home" className="royal-hero">
+        <div className="hero-texture"></div>
+        <div className="hero-soft-glow"></div>
+        
+        <div className="hero-content" data-aos="fade-up">
+          <div className="hero-crown-seal">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+              <path d="M20 5L24 13H16L20 5Z" fill="#8B0000" />
+              <circle cx="20" cy="20" r="15" stroke="#D4AF37" strokeWidth="0.8" strokeDasharray="3 3" />
+            </svg>
+            <span>Legacy of Mewar</span>
+          </div>
 
-      {/* Product List (Reverted back to exact class 'gallery-grid' for 1:1 CSS matching) */}
-      <section id="products" className="section">
-        <h2 className="section-title">Featured Masterpieces</h2>
-        <div className="gallery-grid">
+          <h1 className="hero-display">Taste the <br/><span>Heritage of Flavour</span></h1>
+          
+          <div className="hero-accents">
+            <div className="accent-line"></div>
+            <div className="accent-diamond"></div>
+            <div className="accent-line"></div>
+          </div>
+
+          <p className="hero-lead">
+            Experience the authentic taste of tradition. Handcrafted, sun-dried, 
+            and matured in the heat of the Rajasthan desert.
+          </p>
+
+          <div className="hero-cta">
+            <a href="#products" className="btn-royal">Explore Collection</a>
+            <button onClick={() => setActiveModal('sample')} className="btn-link-royal">Claim Free Sample</button>
+          </div>
+        </div>
+
+        <motion.div 
+           initial={{ opacity: 0, scale: 0.9 }}
+           animate={{ opacity: 1, scale: 1 }}
+           transition={{ duration: 1.5, ease: "easeOut" }}
+           style={{ y: yParallax }}
+           className="hero-visual-center"
+        >
+           <div className="img-frame-accent"></div>
+           <img src="/Images/Mango Achar.jpg" alt="Premium Mango Achar" className="hero-main-img" />
+        </motion.div>
+      </section>
+
+      {/* Product List */}
+      <section id="products" className="royal-section">
+        <div className="section-header" data-aos="fade-up">
+           <span className="section-label">Masterpieces</span>
+           <h2 className="section-display">Featured <span>Collection</span></h2>
+           <div className="section-accent"></div>
+        </div>
+
+        <div className="gallery-stack">
           {products.map(product => (
-            <div key={product.id} className="product-card" data-aos="fade-up">
-              <img src={product.image} alt={product.name} className="product-img" />
+            <div key={product.id} className="royal-product-card" data-aos="fade-up">
+              <div className="product-visual">
+                <img src={product.image} alt={product.name} className="product-img" />
+              </div>
               <div className="product-info">
-                <h3 className="product-title">{product.name}</h3>
+                <h3 className="product-name">{product.name}</h3>
                 <p className="product-desc">{product.desc}</p>
-                <div className="price-options">
-                  <div className="price-row">
-                    <span>500g - <span className="price-tag">₹{product.price500g}</span></span>
-                    <button className="btn-sm" onClick={() => addToCart(product.id, "500g")}>Add</button>
+                
+                <div className="price-tiers">
+                  <div className="price-box">
+                    <span className="weight">500g</span>
+                    <span className="cost">₹{product.price500g}</span>
+                    <button className="btn-add-royal" onClick={() => addToCart(product.id, "500g")}>Add to Basket</button>
                   </div>
-                  <div className="price-row">
-                    <span>1kg - <span className="price-tag">₹{product.price1kg}</span></span>
-                    <button className="btn-sm" onClick={() => addToCart(product.id, "1kg")}>Add</button>
+                  <div className="price-box">
+                    <span className="weight">1kg</span>
+                    <span className="cost">₹{product.price1kg}</span>
+                    <button className="btn-add-royal" onClick={() => addToCart(product.id, "1kg")}>Add to Basket</button>
                   </div>
                 </div>
               </div>
@@ -183,110 +227,610 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Features Grid (Exact match) */}
-      <section className="section">
-        <h2 className="section-title">The Art of Pickle Making</h2>
-        <div className="features-grid">
-            <div className="feature-card" data-aos="fade-up" data-aos-delay="0">
-                <div className="feature-icon">🌿</div>
-                <h3>100% Natural</h3>
+      {/* Philosophy Section */}
+      <section className="royal-section alt-cream">
+        <div className="section-header" data-aos="fade-up">
+           <span className="section-label">Our Philosophy</span>
+           <h2 className="section-display">The Art of <span>Achaar</span></h2>
+           <div className="section-accent"></div>
+        </div>
+        
+        <div className="royal-features-grid">
+            <div className="royal-feature-card" data-aos="fade-up">
+                <div className="feature-symbol">🌿</div>
+                <h3>Artisanal Integrity</h3>
                 <p>Pure ingredients, no preservatives. Just nature's goodness in a jar.</p>
             </div>
-            <div className="feature-card" data-aos="fade-up" data-aos-delay="100">
-                <div className="feature-icon">👵</div>
-                <h3>Heirloom Recipes</h3>
-                <p>Secret blends of spices passed down through generations.</p>
+            <div className="royal-feature-card" data-aos="fade-up" data-aos-delay="100">
+                <div className="feature-symbol">🏺</div>
+                <h3>Clay Pot Matured</h3>
+                <p>Traditional slow-aging methods that allow flavors to deepen naturally.</p>
             </div>
-            <div className="feature-card" data-aos="fade-up" data-aos-delay="200">
-                <div className="feature-icon">❤️</div>
+            <div className="royal-feature-card" data-aos="fade-up" data-aos-delay="200">
+                <div className="feature-symbol">❤️</div>
                 <h3>Small Batches</h3>
-                <p>Handcrafted in small quantities to ensure perfection in every jar.</p>
+                <p>Handcrafted in limited quantities to ensure perfection in every drop.</p>
             </div>
         </div>
       </section>
 
-      {/* Availability (Centered without causing overflow) */}
-      <section className="section" style={{ background: 'rgba(212, 175, 55, 0.05)', borderRadius: '40px', width: '90%', margin: '0 auto', padding: '4rem 2rem' }}>
-          <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📦</div>
-              <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>Taste the Legacy, Anywhere</h2>
-              <p style={{ fontSize: '1.2rem', color: '#5a4a42', maxWidth: '700px', margin: '0 auto 1.5rem' }}>
-                  Experience the authentic taste of tradition in person or from the comfort of your home. <strong>We are available online</strong> and we deliver our premium handcrafted jars right to your doorstep!
-              </p>
-          </div>
-      </section>
+      {/* Order Section */}
+      <section id="order" className="royal-section order-royal">
+        <div className="section-header" data-aos="fade-up">
+           <span className="section-label">Checkout</span>
+           <h2 className="section-display">Secure Your <span>Jar</span></h2>
+           <div className="section-accent"></div>
+        </div>
 
-      {/* Order Section (Exact match) */}
-      <section id="order" className="section order-section">
-        <h2 className="section-title">Secure Your Jar</h2>
-        <div className="order-container">
-          <div className="order-summary" data-aos="fade-right">
+        <div className="royal-order-container">
+          <div className="basket-summary" data-aos="fade-right">
             <h3>Your Selection</h3>
-            <div id="cart-items">
-              {Object.keys(cart).length === 0 ? <p className="empty-cart-msg">Your basket is empty. Select your favorites.</p> : 
+            <div className="basket-items">
+              {Object.keys(cart).length === 0 ? <p className="empty-msg">Your basket is waiting for tradition.</p> : 
                 Object.keys(cart).map(key => {
                   const [id, size] = key.split("_");
                   const product = products.find(p => p.id === parseInt(id));
-                  return <div key={key} className="cart-item">
-                      <span>{product.name} ({size}) x {cart[key]}</span>
+                  return <div key={key} className="basket-row">
+                      <span>{product.name} ({size})</span>
+                      <span className="qty">x {cart[key]}</span>
                   </div>
                 })
               }
             </div>
-            <div className="delivery-notice" style={{ marginTop: '1.5rem', fontSize: '0.85rem', color: '#8b1d1d', background: '#fff5f5', padding: '10px', borderRadius: '8px', borderLeft: '4px solid #8b1d1d' }}>
-                📢 <strong>Note:</strong> Delivery Charges are applicable on every order based on distance.
-            </div>
-            <div className="total-price">Total: ₹{calculateTotal()}</div>
+            <div className="basket-total">Total: ₹{calculateTotal()}</div>
           </div>
 
-          <form className="order-form" onSubmit={handleOrderSubmit} data-aos="fade-left">
-            <h3>Delivery Details</h3>
-            <div className="form-group">
-                <label>Full Name</label>
-                <input type="text" placeholder="e.g. Rahul Sharma" required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
+          <form className="royal-form" onSubmit={handleOrderSubmit} data-aos="fade-left">
+            <div className="form-row">
+                <div className="input-group">
+                    <label>Full Name</label>
+                    <input type="text" placeholder="Rahul Sharma" required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
+                </div>
+                <div className="input-group">
+                    <label>Phone Number</label>
+                    <input type="tel" placeholder="98765 43210" required onChange={e => setFormData({...formData, phone: e.target.value})} />
+                </div>
             </div>
-            <div className="form-group">
-                <label>Phone Number</label>
-                <input type="tel" placeholder="e.g. 98765 43210" required onChange={e => setFormData({...formData, phone: e.target.value})} />
-            </div>
-            <div className="form-group">
-                <label>Email Address (For Confirmation)</label>
+            <div className="input-group">
+                <label>Email Address</label>
                 <input type="email" placeholder="name@example.com" required value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} />
             </div>
-            <div className="form-group">
+            <div className="input-group">
                 <label>Delivery Address</label>
                 <textarea placeholder="Full address with pincode" required onChange={e => setFormData({...formData, address: e.target.value})}></textarea>
             </div>
-            <div className="form-group">
-                <label>Special Requests</label>
-                <textarea placeholder="Any specific preferences? (e.g. Extra oil, Less spicy)" onChange={e => setFormData({...formData, instructions: e.target.value})}></textarea>
-            </div>
-            <div className="form-group">
-                <label>Payment Method</label>
-                <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
-                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 'normal' }}>
-                        <input type="radio" name="payment" value="Online Banking" checked={formData.payment === 'Online Banking'} onChange={() => setFormData({...formData, payment: 'Online Banking'})} /> Online Banking
-                    </label>
-                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 'normal' }}>
-                        <input type="radio" name="payment" value="Cash On Delivery" checked={formData.payment === 'Cash On Delivery'} onChange={() => setFormData({...formData, payment: 'Cash On Delivery'})} /> Cash On Delivery
-                    </label>
-                </div>
-            </div>
-            <button type="submit" className="btn-primary full-width">Place Order via WhatsApp</button>
+            <button type="submit" className="btn-royal full-width">Place Order via WhatsApp</button>
           </form>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer>
-          <p>&copy; 2026 Mewari Homemade Achaar. Preserving Tradition.</p>
-          <div style={{ margin: '15px 0' }}>
-              <button onClick={() => setActiveModal('policy')} style={{ background: 'none', border: 'none', color: '#D4AF37', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '600' }}>Refund & Cancellation Policy</button>
+      <footer className="royal-footer">
+          <div className="footer-logo">Mewari Achaar</div>
+          <div className="footer-links">
+               <button onClick={() => setActiveModal('policy')}>Policies</button>
+               <a href="mailto:rajesh.chittaurgarh@gmail.com">Contact Support</a>
           </div>
-          <div className="footer-contact" style={{ marginTop: '1rem', fontSize: '0.9rem', opacity: '0.8' }}>
-              <p>Email: <a href="mailto:rajesh.chittaurgarh@gmail.com">rajesh.chittaurgarh@gmail.com</a> | Phone: <a href="tel:+919785054474">+91 9785054474</a></p>
-          </div>
+          <div className="footer-copyright">&copy; 2026 Mewari Homemade Achaar</div>
       </footer>
+
+      <style dangerouslySetInnerHTML={{ __html: `
+        .royal-hero {
+          position: relative;
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          padding: 120px 20px 60px;
+          overflow: hidden;
+          background: #faf9f2;
+        }
+
+        .hero-texture {
+          position: absolute;
+          top: 0; left: 0; width: 100%; height: 100%;
+          background-image: url("https://www.transparenttextures.com/patterns/paper.png");
+          opacity: 0.15;
+          pointer-events: none;
+        }
+
+        .hero-soft-glow {
+          position: absolute;
+          top: 30%; left: 50%;
+          transform: translate(-50%, -50%);
+          width: 100%;
+          max-width: 1200px;
+          height: 90vh;
+          background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%);
+          pointer-events: none;
+        }
+
+        .hero-content {
+          position: relative;
+          z-index: 2;
+          max-width: 850px;
+          margin-bottom: 40px;
+          width: 100%;
+        }
+
+        .hero-crown-seal {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 12px;
+          margin-bottom: 25px;
+        }
+
+        .hero-crown-seal span {
+          font-size: 0.65rem;
+          text-transform: uppercase;
+          letter-spacing: 4px;
+          color: #8B0000;
+          font-weight: 700;
+        }
+
+        .hero-display {
+          font-family: var(--font-royal, serif);
+          font-size: clamp(2.5rem, 8vw, 5.5rem);
+          line-height: 1.1;
+          margin-bottom: 20px;
+          color: #2c1810;
+          font-weight: 500;
+          letter-spacing: -1px;
+        }
+
+        .hero-display span {
+          color: #8B0000;
+          font-style: italic;
+        }
+
+        .hero-accents {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 15px;
+          margin-bottom: 30px;
+        }
+
+        .accent-line {
+          width: 50px;
+          height: 1px;
+          background: linear-gradient(to right, transparent, #D4AF37, transparent);
+        }
+
+        .accent-diamond {
+          width: 5px;
+          height: 5px;
+          border: 1px solid #8B0000;
+          transform: rotate(45deg);
+        }
+
+        .hero-lead {
+          font-size: clamp(1rem, 3vw, 1.2rem);
+          color: #5a4a42;
+          line-height: 1.7;
+          max-width: 600px;
+          margin: 0 auto 35px;
+          font-weight: 400;
+          opacity: 0.85;
+          padding: 0 10px;
+        }
+
+        .hero-cta {
+          display: flex;
+          gap: 20px;
+          justify-content: center;
+          align-items: center;
+          flex-wrap: wrap;
+        }
+
+        .btn-royal {
+          background: linear-gradient(90deg, #8B0000 0%, #a50000 50%, #8B0000 100%);
+          background-size: 200% auto;
+          color: #fff;
+          padding: 14px 35px;
+          border-radius: 50px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 1.5px;
+          text-decoration: none;
+          transition: 0.4s;
+          box-shadow: 0 8px 25px rgba(139, 0, 0, 0.15);
+          font-size: 0.9rem;
+          animation: shimmer 8s linear infinite;
+        }
+
+        .btn-royal:hover {
+          background-position: 100% 50%;
+          transform: translateY(-3px);
+          box-shadow: 0 12px 35px rgba(212, 175, 55, 0.25);
+        }
+
+        .btn-link-royal {
+          background: none;
+          border: none;
+          color: #8B0000;
+          text-transform: uppercase;
+          letter-spacing: 1.5px;
+          font-size: 0.8rem;
+          font-weight: 700;
+          cursor: pointer;
+          border-bottom: 1.5px solid #D4AF37;
+          padding-bottom: 3px;
+        }
+
+        .hero-visual-center {
+          position: relative;
+          z-index: 2;
+          max-width: 450px;
+          width: 100%;
+          margin: 0 auto;
+          display: flex;
+          justify-content: center;
+        }
+
+        .hero-main-img {
+          width: 100%;
+          max-width: 380px;
+          height: auto;
+          border-radius: 4px;
+          box-shadow: 0 30px 60px rgba(44, 24, 16, 0.1);
+          border: 1px solid #fff;
+          position: relative;
+          z-index: 2;
+        }
+
+        .img-frame-accent {
+          position: absolute;
+          top: -20px; left: -20px; right: -20px; bottom: -20px;
+          border: 1px solid rgba(212, 175, 55, 0.3);
+          border-radius: 4px;
+          z-index: 1;
+        }
+
+        .royal-section {
+          background: #faf9f2;
+          padding: 120px 24px;
+        }
+
+        .alt-cream {
+          background: #fdfdfa;
+        }
+
+        .section-header {
+          text-align: center;
+          margin-bottom: 80px;
+        }
+
+        .section-label {
+          font-size: 0.75rem;
+          text-transform: uppercase;
+          letter-spacing: 4px;
+          color: #D4AF37;
+          margin-bottom: 15px;
+          display: block;
+          font-weight: 700;
+        }
+
+        .section-display {
+          font-family: var(--font-royal, serif);
+          font-size: 3.2rem;
+          color: #2c1810;
+          margin-bottom: 20px;
+        }
+
+        .section-display span {
+          color: #8B0000;
+          font-style: italic;
+        }
+
+        .section-accent {
+          width: 40px;
+          height: 1.5px;
+          background: #8B0000;
+          margin: 0 auto;
+        }
+
+        .gallery-stack {
+          display: flex;
+          flex-direction: column;
+          gap: 120px;
+          max-width: 950px;
+          margin: 0 auto;
+        }
+
+        .royal-product-card {
+          display: flex;
+          gap: 60px;
+          align-items: center;
+        }
+
+        .product-visual {
+          flex: 1;
+          aspect-ratio: 1/1;
+          border: 1px solid rgba(139, 0, 0, 0.1);
+          background: #fff;
+          padding: 15px;
+          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+        }
+
+        .product-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .product-info {
+          flex: 1.2;
+        }
+
+        .product-name {
+          font-family: var(--font-royal, serif);
+          font-size: 2.5rem;
+          color: #2c1810;
+          margin-bottom: 15px;
+        }
+
+        .product-desc {
+          font-size: 1.05rem;
+          color: #5a4a42;
+          line-height: 1.7;
+          margin-bottom: 35px;
+          opacity: 0.8;
+        }
+
+        .price-tiers {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 25px;
+        }
+
+        .price-box {
+          padding: 25px;
+          background: #fff;
+          border: 1px solid rgba(139, 0, 0, 0.05);
+          text-align: center;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+        }
+
+        .weight {
+          display: block;
+          font-size: 0.75rem;
+          text-transform: uppercase;
+          letter-spacing: 2px;
+          color: #8B0000;
+          margin-bottom: 10px;
+          font-weight: 700;
+        }
+
+        .cost {
+          display: block;
+          font-size: 1.8rem;
+          color: #2c1810;
+          margin-bottom: 20px;
+          font-family: var(--font-royal, serif);
+        }
+
+        .btn-add-royal {
+          background: #fff;
+          border: 1.5px solid #8B0000;
+          color: #8B0000;
+          padding: 10px 20px;
+          font-size: 0.75rem;
+          text-transform: uppercase;
+          font-weight: 700;
+          letter-spacing: 1px;
+          cursor: pointer;
+          transition: 0.3s;
+        }
+
+        .btn-add-royal:hover {
+          background: #8B0000;
+          color: #fff;
+        }
+
+        .royal-features-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 40px;
+          max-width: 1200px;
+          margin: 0 auto;
+        }
+
+        .royal-feature-card {
+          text-align: center;
+          padding: 50px 30px;
+          background: #fff;
+          border: 1px solid rgba(139, 0, 0, 0.03);
+          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.03);
+        }
+
+        .feature-symbol {
+          font-size: 2.8rem;
+          margin-bottom: 20px;
+        }
+
+        .royal-order-container {
+          display: grid;
+          grid-template-columns: 1fr 1.5fr;
+          gap: 80px;
+          max-width: 1150px;
+          margin: 0 auto;
+        }
+
+        .basket-summary {
+          background: #fff;
+          padding: 45px;
+          border: 1px solid rgba(139, 0, 0, 0.05);
+          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.03);
+        }
+
+        .basket-row {
+          display: flex;
+          justify-content: space-between;
+          padding: 18px 0;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+          color: #5a4a42;
+        }
+
+        .basket-total {
+          font-size: 2.2rem;
+          color: #8B0000;
+          margin-top: 35px;
+          font-family: var(--font-royal, serif);
+        }
+
+        .royal-form {
+          display: flex;
+          flex-direction: column;
+          gap: 30px;
+        }
+
+        .form-row {
+          display: flex;
+          gap: 25px;
+        }
+
+        .input-group {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .input-group label {
+          font-size: 0.8rem;
+          text-transform: uppercase;
+          letter-spacing: 2px;
+          color: #8B0000;
+          font-weight: 700;
+        }
+
+        .input-group input, 
+        .input-group textarea {
+          background: #fff;
+          border: 1px solid rgba(0, 0, 0, 0.08);
+          padding: 18px;
+          color: #2c1810;
+          font-family: var(--font-main);
+          border-radius: 4px;
+          font-size: 1rem;
+        }
+
+        .royal-footer {
+          background: #f4f3ed;
+          padding: 100px 24px;
+          text-align: center;
+          border-top: 1px solid rgba(139, 0, 0, 0.1);
+        }
+
+        .royal-footer p {
+          color: #2c1810;
+          opacity: 0.8;
+          max-width: 600px;
+          margin: 0 auto 25px;
+        }
+
+        .footer-logo {
+          font-family: var(--font-royal, serif);
+          font-size: 2.8rem;
+          color: #8B0000;
+          margin-bottom: 15px;
+        }
+
+        .footer-links {
+          margin-bottom: 30px;
+        }
+
+        .footer-links button, .footer-links a {
+          background: none;
+          border: none;
+          color: #8B0000;
+          margin: 0 15px;
+          text-decoration: none;
+          font-weight: 700;
+          cursor: pointer;
+          border-bottom: 1px solid transparent;
+          transition: 0.3s;
+        }
+
+        .footer-links button:hover, .footer-links a:hover {
+          border-bottom-color: #D4AF37;
+        }
+
+        .footer-copyright {
+          margin-top: 40px;
+          font-size: 0.85rem;
+          color: #2c1810;
+          opacity: 0.6;
+        }
+
+        .footer-heritage {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 15px;
+          margin-bottom: 40px;
+        }
+
+        .heritage-tag {
+          font-size: 0.65rem;
+          text-transform: uppercase;
+          letter-spacing: 3px;
+          color: #8B0000;
+          font-weight: 700;
+          opacity: 0.5;
+        }
+
+
+        @media (max-width: 968px) {
+          .royal-hero {
+            padding: 100px 20px 40px;
+            min-height: auto;
+          }
+          .hero-display {
+            font-size: 2.5rem;
+          }
+          .hero-main-img {
+            max-width: 280px;
+          }
+          .royal-section {
+            padding: 80px 20px;
+          }
+          .section-display {
+            font-size: 2.2rem;
+          }
+          .royal-product-card {
+            flex-direction: column;
+            gap: 30px;
+            text-align: center;
+          }
+          .product-visual {
+            max-width: 320px;
+            margin: 0 auto;
+            width: 100%;
+          }
+          .product-name {
+            font-size: 1.8rem;
+          }
+          .price-tiers {
+            grid-template-columns: 1fr;
+            gap: 15px;
+          }
+          .royal-features-grid, .royal-order-container {
+            grid-template-columns: 1fr;
+            gap: 40px;
+          }
+          .form-row {
+            flex-direction: column;
+            gap: 20px;
+          }
+          .basket-summary {
+            padding: 30px 20px;
+          }
+        }
+      `}} />
 
       <SampleModal active={activeModal === 'sample'} onClose={() => setActiveModal(null)} />
       <PolicyModal active={activeModal === 'policy'} onClose={() => setActiveModal(null)} />
