@@ -76,9 +76,7 @@ function FlavorRadar({ profile }) {
             </svg>
         </div>
     );
-}n Achar.jpg", desc: "Whole garlic cloves slow-matured in mustard oil and red chilli powder. A robust, pungent flavor." },
-];
-
+}
 export default function Home() {
   const { user } = useAuth();
   const [cart, setCart] = useState({});
