@@ -1074,3 +1074,127 @@ footer a {
 .notification.show {
     transform: translateX(0);
 }
+
+/* MSME Trust Section */
+.royal-msme-trust {
+    background: #fff;
+    padding: 80px 24px;
+    border-top: 1px solid rgba(139, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(139, 0, 0, 0.05);
+    text-align: center;
+}
+
+.msme-container {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+.msme-badge-lockup {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    background: linear-gradient(135deg, #fff 0%, #fdfdfa 100%);
+    padding: 40px 60px;
+    border-radius: 24px;
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    box-shadow: 0 20px 60px rgba(44, 24, 16, 0.04);
+}
+
+.msme-logo-shield {
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(135deg, #8B0000 0%, #a50000 100%);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 800;
+    font-size: 1.4rem;
+    position: relative;
+    box-shadow: 0 15px 35px rgba(139, 0, 0, 0.25);
+    flex-shrink: 0;
+}
+
+.msme-logo-shield::after {
+    content: '';
+    position: absolute;
+    top: -8px; bottom: -8px; left: -8px; right: -8px;
+    border: 1.5px solid #D4AF37;
+    border-radius: 50%;
+    opacity: 0.6;
+}
+
+.msme-logo-shield span {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: 0.9;
+}
+
+.msme-info {
+    text-align: left;
+}
+
+.msme-tag {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #D4AF37;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: block;
+}
+
+.msme-title {
+    font-family: var(--font-royal, serif);
+    font-size: 2.2rem;
+    color: #2c1810;
+    margin-bottom: 15px;
+    line-height: 1.2;
+}
+
+.msme-number {
+    font-family: monospace;
+    font-size: 1.1rem;
+    color: #8B0000;
+    background: rgba(139, 0, 0, 0.04);
+    padding: 6px 16px;
+    border-radius: 6px;
+    border: 1px dashed rgba(139, 0, 0, 0.15);
+    display: inline-block;
+}
+
+.msme-nic {
+    font-size: 0.95rem;
+    color: #5a4a42;
+    margin-top: 15px;
+    font-style: italic;
+    opacity: 0.7;
+}
+
+.msme-footer-tag {
+    font-size: 0.8rem;
+    color: var(--primary-color);
+    margin-bottom: 25px;
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .msme-badge-lockup {
+        flex-direction: column;
+        padding: 40px 20px;
+        text-align: center;
+    }
+    .msme-info {
+        text-align: center;
+    }
+}

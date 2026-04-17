@@ -267,6 +267,25 @@ export default function Home() {
         </div>
       </section>
 
+      {/* MSME Trust Section */}
+      <section className="royal-msme-trust" data-aos="fade-up">
+        <div className="msme-container">
+           <div className="msme-badge-lockup">
+              <div className="msme-logo-shield">
+                 <span>GOVT OF INDIA</span>
+                 MSME
+                 <span>MINISTRY</span>
+              </div>
+              <div className="msme-info">
+                 <span className="msme-tag">Certified Micro Enterprise</span>
+                 <h2 className="msme-title">Government Recognized Enterprise</h2>
+                 <div className="msme-number">Reg No: UDYAM-RJ-10-0076393</div>
+                 <p className="msme-nic">NIC Code 10306: Manufacture of pickles, chutney etc.</p>
+              </div>
+           </div>
+        </div>
+      </section>
+
       {/* Order Section */}
       <section id="order" className="royal-section order-royal">
         <div className="section-header" data-aos="fade-up">
@@ -327,12 +346,31 @@ export default function Home() {
       </section>
 
       <footer className="royal-footer">
-          <div className="footer-logo">Mewari Achaar</div>
-          <div className="footer-links">
-               <button onClick={() => setActiveModal('policy')}>Policies</button>
-               <a href="mailto:rajesh.chittaurgarh@gmail.com">Contact Support</a>
+          <div className="footer-main-content">
+              <div className="footer-brand">
+                  <div className="footer-logo">Mewari Achaar</div>
+                  <p className="footer-tagline">Preserving the legacy of Rajasthani flavors, one jar at a time.</p>
+              </div>
+              
+              <div className="footer-msme-details">
+                  <div className="msme-icon-small">
+                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                  </div>
+                  <span>MSME Certified Enterprise</span>
+                  <span className="divider">|</span>
+                  <span className="udyam-reg">UDYAM-RJ-10-0076393</span>
+              </div>
+
+              <div className="footer-nav">
+                   <button onClick={() => setActiveModal('policy')} className="footer-nav-link">Policies</button>
+                   <span className="dot-divider"></span>
+                   <a href="mailto:rajesh.chittaurgarh@gmail.com" className="footer-nav-link">Contact Support</a>
+              </div>
           </div>
-          <div className="footer-copyright">&copy; 2026 Mewari Homemade Achaar</div>
+          
+          <div className="footer-bottom">
+              <div className="footer-copyright">&copy; 2026 Mewari Homemade Achaar. All Rights Reserved.</div>
+          </div>
       </footer>
 
       <style dangerouslySetInnerHTML={{ __html: `
@@ -768,68 +806,121 @@ export default function Home() {
         }
 
         .royal-footer {
-          background: #f4f3ed;
-          padding: 100px 24px;
+          background: #fdfdfa;
+          padding: 80px 24px 40px;
+          border-top: 1px solid rgba(139, 0, 0, 0.08);
+          position: relative;
+        }
+
+        .footer-main-content {
+          max-width: 1200px;
+          margin: 0 auto;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 40px;
           text-align: center;
-          border-top: 1px solid rgba(139, 0, 0, 0.1);
         }
 
-        .royal-footer p {
-          color: #2c1810;
-          opacity: 0.8;
-          max-width: 600px;
-          margin: 0 auto 25px;
-        }
-
-        .footer-logo {
-          font-family: var(--font-royal, serif);
-          font-size: 2.8rem;
-          color: #8B0000;
-          margin-bottom: 15px;
-        }
-
-        .footer-links {
-          margin-bottom: 30px;
-        }
-
-        .footer-links button, .footer-links a {
-          background: none;
-          border: none;
-          color: #8B0000;
-          margin: 0 15px;
-          text-decoration: none;
-          font-weight: 700;
-          cursor: pointer;
-          border-bottom: 1px solid transparent;
-          transition: 0.3s;
-        }
-
-        .footer-links button:hover, .footer-links a:hover {
-          border-bottom-color: #D4AF37;
-        }
-
-        .footer-copyright {
-          margin-top: 40px;
-          font-size: 0.85rem;
-          color: #2c1810;
-          opacity: 0.6;
-        }
-
-        .footer-heritage {
+        .footer-brand {
           display: flex;
           flex-direction: column;
           align-items: center;
           gap: 15px;
-          margin-bottom: 40px;
         }
 
-        .heritage-tag {
-          font-size: 0.65rem;
-          text-transform: uppercase;
-          letter-spacing: 3px;
+        .footer-logo {
+          font-family: var(--font-royal, serif);
+          font-size: 3rem;
           color: #8B0000;
+          line-height: 1;
+        }
+
+        .footer-tagline {
+          font-size: 0.95rem;
+          color: #5a4a42;
+          opacity: 0.7;
+          max-width: 400px;
+          font-style: italic;
+        }
+
+        .footer-msme-details {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 15px;
+          background: rgba(139, 0, 0, 0.03);
+          padding: 12px 25px;
+          border-radius: 50px;
+          border: 1px solid rgba(139, 0, 0, 0.05);
+          color: #8B0000;
+          font-weight: 600;
+          font-size: 0.85rem;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+        }
+
+        .msme-icon-small {
+          color: #D4AF37;
+          display: flex;
+        }
+
+        .footer-msme-details .divider {
+          opacity: 0.3;
+        }
+
+        .footer-msme-details .udyam-reg {
+          color: #2c1810;
+          font-family: monospace;
+          letter-spacing: 0;
+        }
+
+        .footer-nav {
+          display: flex;
+          align-items: center;
+          gap: 25px;
+        }
+
+        .footer-nav-link {
+          background: none;
+          border: none;
+          color: #2c1810;
           font-weight: 700;
-          opacity: 0.5;
+          text-decoration: none;
+          cursor: pointer;
+          font-size: 0.9rem;
+          opacity: 0.6;
+          transition: 0.3s;
+          text-transform: uppercase;
+          letter-spacing: 1.5px;
+        }
+
+        .footer-nav-link:hover {
+          opacity: 1;
+          color: #8B0000;
+        }
+
+        .dot-divider {
+          width: 4px;
+          height: 4px;
+          background: #D4AF37;
+          border-radius: 50%;
+        }
+
+        .footer-bottom {
+          margin-top: 60px;
+          padding-top: 30px;
+          border-top: 1px solid rgba(0, 0, 0, 0.03);
+          max-width: 1200px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        .footer-copyright {
+          font-size: 0.8rem;
+          color: #2c1810;
+          opacity: 0.4;
+          letter-spacing: 0.5px;
         }
 
 
