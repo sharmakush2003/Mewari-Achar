@@ -13,12 +13,70 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 
 // Product Data (Matches original naming for 1:1 parity)
 const products = [
-    { id: 1, name: "Mango Achar (आम का अचार)", price500g: 200, price1kg: 380, image: "/Images/Mango Achar.jpg", desc: "Hand-cut raw mangoes sun-dried and matured in a rich blend of mustard oil, fenugreek, and fennel seeds." },
-    { id: 2, name: "Mirchi Achar (मिर्च का अचार)", price500g: 170, price1kg: 300, image: "/Images/Mirchi Achar.jpg", desc: "Fresh green chillies slit and stuffed with a tangy, spicy masala mix. A fiery companion to your parathas." },
-    { id: 3, name: "Adrak Achar (अदरक का अचार)", price500g: 300, price1kg: 580, image: "/Images/Adrak Achar.jpg", desc: "Tender ginger strips pickled in lemon juice and spices. A zesty, digestive aid that warms the soul." },
-    { id: 4, name: "Amla Achar (आंवला का अचार)", price500g: 180, price1kg: 350, image: "/Images/Amla Achar.jpg", desc: "Whole Indian gooseberries steeped in spices. A perfect balance of sour and spicy, packed with tradition." },
-    { id: 5, name: "Haldi Achar (हल्दी का अचार)", price500g: 220, price1kg: 400, image: "/Images/Haldi Achar.jpg", desc: "Fresh turmeric roots pickled to perfection. An earthy, immunity-boosting delight with a golden hue." },
-    { id: 6, name: "Garlic Achar (लहसुन का अचार)", price500g: 250, price1kg: 480, image: "/Images/Lasson Achar.jpg", desc: "Whole garlic cloves slow-matured in mustard oil and red chilli powder. A robust, pungent flavor." },
+    { id: 1, name: "Mango Achar (आम का अचार)", price500g: 200, price1kg: 380, image: "/Images/Mango Achar.jpg", desc: "Hand-cut raw mangoes sun-dried and matured in a rich blend of mustard oil, fenugreek, and fennel seeds.", flavorProfile: { spicy: 8, tangy: 9, earthy: 5, pungent: 6, savory: 7 } },
+    { id: 2, name: "Mirchi Achar (मिर्च का अचार)", price500g: 170, price1kg: 300, image: "/Images/Mirchi Achar.jpg", desc: "Fresh green chillies slit and stuffed with a tangy, spicy masala mix. A fiery companion to your parathas.", flavorProfile: { spicy: 10, tangy: 4, earthy: 3, pungent: 7, savory: 6 } },
+    { id: 3, name: "Adrak Achar (अदरक का अचार)", price500g: 300, price1kg: 580, image: "/Images/Adrak Achar.jpg", desc: "Tender ginger strips pickled in lemon juice and spices. A zesty, digestive aid that warms the soul.", flavorProfile: { spicy: 6, tangy: 5, earthy: 9, pungent: 4, savory: 8 } },
+    { id: 4, name: "Amla Achar (आंवला का अचार)", price500g: 180, price1kg: 350, image: "/Images/Amla Achar.jpg", desc: "Whole Indian gooseberries steeped in spices. A perfect balance of sour and spicy, packed with tradition.", flavorProfile: { spicy: 4, tangy: 10, earthy: 7, pungent: 3, savory: 9 } },
+    { id: 5, name: "Haldi Achar (हल्दी का अचार)", price500g: 220, price1kg: 400, image: "/Images/Haldi Achar.jpg", desc: "Fresh turmeric roots pickled to perfection. An earthy, immunity-boosting delight with a golden hue.", flavorProfile: { spicy: 5, tangy: 3, earthy: 10, pungent: 4, savory: 7 } },
+    { id: 6, name: "Garlic Achar (लहसुन का अचार)", price500g: 250, price1kg: 480, image: "/Images/Lasson Achar.jpg", desc: "Whole garlic cloves slow-matured in mustard oil and red chilli powder. A robust, pungent flavor.", flavorProfile: { spicy: 7, tangy: 2, earthy: 8, pungent: 10, savory: 6 } },
+];
+
+function FlavorRadar({ profile }) {
+    const size = 100;
+    const center = size / 2;
+    const radius = size * 0.35;
+    const labels = ["Spicy", "Tangy", "Earthy", "Pungent", "Savory"];
+    const axes = labels.length;
+
+    const points = labels.map((_, i) => {
+        const value = Object.values(profile)[i] / 10;
+        const angle = (Math.PI * 2 * i) / axes - Math.PI / 2;
+        return {
+            x: center + radius * value * Math.cos(angle),
+            y: center + radius * value * Math.sin(angle)
+        };
+    });
+
+    const polyPoints = points.map(p => `${p.x},${p.y}`).join(" ");
+
+    return (
+        <div className="flavor-radar-box">
+            <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+                {/* Background Polygons */}
+                {[0.5, 1].map(scale => (
+                    <polygon
+                        key={scale}
+                        points={labels.map((_, i) => {
+                            const angle = (Math.PI * 2 * i) / axes - Math.PI / 2;
+                            return `${center + radius * scale * Math.cos(angle)},${center + radius * scale * Math.sin(angle)}`;
+                        }).join(" ")}
+                        fill="none"
+                        stroke="rgba(212, 175, 55, 0.2)"
+                        strokeWidth="0.5"
+                    />
+                ))}
+                
+                {/* Axes */}
+                {labels.map((label, i) => {
+                    const angle = (Math.PI * 2 * i) / axes - Math.PI / 2;
+                    const x2 = center + radius * Math.cos(angle);
+                    const y2 = center + radius * Math.sin(angle);
+                    const lx = center + (radius + 12) * Math.cos(angle);
+                    const ly = center + (radius + 12) * Math.sin(angle);
+                    return (
+                        <g key={label}>
+                            <line x1={center} y1={center} x2={x2} y2={y2} stroke="rgba(212, 175, 55, 0.2)" strokeWidth="0.5" />
+                            <text x={lx} y={ly} fontSize="5" textAnchor="middle" fill="#8B0000" fontWeight="700" style={{ textTransform: 'uppercase', letterSpacing: '0.5px' }}>{label}</text>
+                        </g>
+                    );
+                })}
+
+                {/* Data Polygon */}
+                <polygon points={polyPoints} fill="rgba(139, 0, 0, 0.4)" stroke="#8B0000" strokeWidth="1" />
+            </svg>
+        </div>
+    );
+}n Achar.jpg", desc: "Whole garlic cloves slow-matured in mustard oil and red chilli powder. A robust, pungent flavor." },
 ];
 
 export default function Home() {
@@ -219,7 +277,10 @@ export default function Home() {
                 <img src={product.image} alt={product.name} className="product-img" />
               </div>
               <div className="product-info">
-                <h3 className="product-name">{product.name}</h3>
+                <div className="product-header-flex">
+                   <h3 className="product-name">{product.name}</h3>
+                   <FlavorRadar profile={product.flavorProfile} />
+                </div>
                 <p className="product-desc">{product.desc}</p>
                 
                 <div className="price-tiers">
@@ -625,11 +686,28 @@ export default function Home() {
           flex: 1.2;
         }
 
+        .product-header-flex {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 15px;
+          gap: 20px;
+        }
+
+        .flavor-radar-box {
+          flex-shrink: 0;
+          background: rgba(255, 255, 255, 0.5);
+          border-radius: 12px;
+          padding: 5px;
+          border: 1px solid rgba(212, 175, 55, 0.1);
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+        }
+
         .product-name {
           font-family: var(--font-royal, serif);
-          font-size: 2.5rem;
+          font-size: 2.2rem;
           color: #2c1810;
-          margin-bottom: 15px;
+          margin-bottom: 0px;
         }
 
         .product-desc {
