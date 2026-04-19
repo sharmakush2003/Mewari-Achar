@@ -524,6 +524,7 @@ export default function Order() {
                     }
                     .order-item-card {
                         flex-direction: column;
+                        align-items: center;
                         text-align: center;
                         gap: 15px;
                         padding-bottom: 25px;
