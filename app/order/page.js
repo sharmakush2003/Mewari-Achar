@@ -523,11 +523,14 @@ export default function Order() {
                         font-size: 2rem;
                     }
                     .order-item-card {
-                        flex-direction: column;
-                        align-items: center;
-                        text-align: center;
-                        gap: 15px;
-                        padding-bottom: 25px;
+                        flex-direction: column !important;
+                        align-items: center !important;
+                        text-align: center !important;
+                        gap: 15px !important;
+                        padding-bottom: 25px !important;
+                    }
+                    .item-visual {
+                        margin: 0 auto !important;
                     }
                     .item-meta {
                         justify-content: center;
