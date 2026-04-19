@@ -12,8 +12,23 @@ export const CartProvider = ({ children }) => {
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
+        const savedCart = localStorage.getItem('mewari_cart');
+        if (savedCart) {
+            try {
+                setCart(JSON.parse(savedCart));
+            } catch (e) {
+                console.error("Failed to parse saved cart", e);
+            }
+        }
         setMounted(true);
     }, []);
+
+    // Sync cart to localStorage whenever it changes
+    useEffect(() => {
+        if (mounted) {
+            localStorage.setItem('mewari_cart', JSON.stringify(cart));
+        }
+    }, [cart, mounted]);
 
     const showNotification = (msg) => {
         setNotification(msg);
