@@ -1,6 +1,8 @@
 import './globals.css';
 import { Outfit, Playfair_Display } from 'next/font/google';
 import { AuthProvider } from '@/components/AuthContext';
+import { CartProvider } from '@/components/CartContext';
+import CartDrawer from '@/components/CartDrawer';
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -26,7 +28,10 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`${outfit.variable} ${playfair.variable}`}>
       <body>
         <AuthProvider>
-          {children}
+          <CartProvider>
+            <CartDrawer />
+            {children}
+          </CartProvider>
         </AuthProvider>
       </body>
     </html>
