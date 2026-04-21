@@ -82,7 +82,7 @@ export default function SignupPage() {
     return (
         <div className="auth-page">
             <div className="auth-card">
-                <h1>Create Account</h1>
+                <h1>{step === 'email-entry' ? "Create Account" : "Verify Email"}</h1>
                 <p>
                     {step === 'email-entry' 
                         ? "Join the Mewari Special Achaar family" 
@@ -105,7 +105,7 @@ export default function SignupPage() {
                             />
                         </div>
                         <div className="auth-group">
-                            <label>Email Address</label>
+                            <label>Email address</label>
                             <input
                                 type="email"
                                 required
@@ -123,22 +123,42 @@ export default function SignupPage() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 className="auth-input"
+                                placeholder="••••••••"
                             />
+                            {password && password.length < 6 && (
+                                <span style={{color: '#d32f2f', fontSize: '11px', marginTop: '4px', marginLeft: '4px'}}>
+                                    Password must be at least 6 characters.
+                                </span>
+                            )}
                         </div>
                         <div className="auth-group">
-                            <label>Confirm Password</label>
+                            <label>Confirm password</label>
                             <input
                                 type="password"
                                 required
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                 className="auth-input"
+                                placeholder="••••••••"
                             />
+                            {confirmPassword && password !== confirmPassword && (
+                                <span style={{color: '#d32f2f', fontSize: '11px', marginTop: '4px', marginLeft: '4px'}}>
+                                    Passwords do not match.
+                                </span>
+                            )}
                         </div>
 
-                        <button type="submit" disabled={loading} className="auth-btn-primary">
-                            {loading ? "Sending Code..." : "Send Verification Code"}
+                        <button 
+                            type="submit" 
+                            disabled={loading || password.length < 6 || password !== confirmPassword} 
+                            className="auth-btn-primary"
+                        >
+                            {loading ? "Sending Code..." : "Create account"}
                         </button>
+                        
+                        <p style={{fontSize: '11px', color: '#999', marginTop: '10px'}}>
+                            🛡️ Your privacy is our priority. We never share your data.
+                        </p>
                     </form>
                 ) : (
                     <form onSubmit={handleVerifyAndSignup} className="auth-form">
@@ -167,7 +187,7 @@ export default function SignupPage() {
                         <button
                             type="button"
                             onClick={() => setStep('email-entry')}
-                            style={{background: 'none', border: 'none', color: '#888', cursor: 'pointer', fontSize: '0.9rem'}}
+                            style={{background: 'none', border: 'none', color: '#888', cursor: 'pointer', fontSize: '0.9rem', marginTop: '10px'}}
                         >
                             ← Back to details
                         </button>
@@ -175,10 +195,10 @@ export default function SignupPage() {
                 )}
 
                 <div className="auth-divider">
-                    <span>Or signup with</span>
+                    <span>Or sign up with</span>
                 </div>
 
-                <div style={{marginBottom: '20px'}}>
+                <div className="auth-social-grid">
                     <button
                         onClick={async () => {
                             try {
@@ -189,7 +209,6 @@ export default function SignupPage() {
                             }
                         }}
                         className="auth-btn-social"
-                        style={{width: '100%'}}
                     >
                         <span>Continue as Guest</span>
                     </button>

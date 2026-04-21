@@ -193,6 +193,24 @@ export const AuthProvider = ({ children }) => {
         await sendPasswordResetEmail(auth, email);
     };
 
+    const sendFailedLoginAlert = async (email) => {
+        try {
+            await fetch('/api/send-login-alert', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    to: email,
+                    displayName: email.split('@')[0], // Fallback if name unknown
+                    deviceInfo: navigator.userAgent,
+                    loginTime: new Date().toLocaleString(),
+                    type: 'failed-login',
+                }),
+            });
+        } catch (error) {
+            console.error("Failed to send failed login alert:", error);
+        }
+    };
+
     return (
         <AuthContext.Provider value={{ 
             user, 
@@ -205,7 +223,8 @@ export const AuthProvider = ({ children }) => {
             loginWithEmail,
             signupWithEmail,
             checkUserExists,
-            resetPassword
+            resetPassword,
+            sendFailedLoginAlert
         }}>
             {children}
         </AuthContext.Provider>

@@ -72,10 +72,14 @@ export async function POST(request) {
                     </div>
                     <p style="color: #444; font-size: 16px;">Hello,</p>
                     <p style="color: #444; font-size: 16px;">Your verification code for Mewari Special Achaar is:</p>
-                    <div style="background-color: #fdf5e6; padding: 30px; border-radius: 10px; margin: 25px 0; text-align: center; border: 1px dashed #d2691e;">
-                        <h1 style="color: #d2691e; font-size: 42px; margin: 0; letter-spacing: 10px; font-weight: bold;">${otp}</h1>
+                    <div style="background-color: #fdf5e6; padding: 25px; border-radius: 10px; margin: 25px 0; text-align: center; border: 1px dashed #d2691e;">
+                        <h1 style="color: #d2691e; font-size: 42px; margin: 0; letter-spacing: 10px; font-weight: bold; white-space: nowrap; display: block; width: 100%;">${otp}</h1>
                     </div>
                     <p style="color: #444; font-size: 14px;">This code will expire in <strong style="color: #d2691e;">5 minutes</strong>.</p>
+                    <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+                    <p style="font-size: 12px; color: #666; text-align: center; line-height: 1.6;">
+                        <strong>Security Note:</strong> Mewari Special Achaar Security Team will never call or message you for this code. Do not share your OTP with anyone for security reasons.
+                    </p>
                 </div>
             `,
         };

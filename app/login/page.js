@@ -20,7 +20,8 @@ export default function LoginPage() {
         loginWithEmail,
         sendOtp, 
         verifyOtp,
-        resetPassword
+        resetPassword,
+        sendFailedLoginAlert
     } = useAuth();
     
     const router = useRouter();
@@ -32,11 +33,24 @@ export default function LoginPage() {
     const [error, setError] = useState("");
     const [info, setInfo] = useState("");
     const [loading, setLoading] = useState(false);
+    const [alertSent, setAlertSent] = useState(false);
 
     const handleCheckEmail = async (e) => {
         e.preventDefault();
-        setStep(STEPS.PASSWORD);
+        setLoading(true);
         setError("");
+        try {
+            const exists = await checkUserExists(email);
+            if (exists) {
+                setStep(STEPS.PASSWORD);
+            } else {
+                setStep(STEPS.NOT_FOUND);
+            }
+        } catch (err) {
+            setError("Something went wrong. Please try again.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handlePasswordLogin = async (e) => {
@@ -54,6 +68,11 @@ export default function LoginPage() {
                 setStep(STEPS.NOT_FOUND);
             } else {
                 setError("Incorrect password. Please try again.");
+                // Send security alert for failed password attempt (only once per session)
+                if (!alertSent) {
+                    sendFailedLoginAlert(email);
+                    setAlertSent(true);
+                }
             }
         } finally {
             setLoading(false);
@@ -61,17 +80,30 @@ export default function LoginPage() {
     };
 
     const handleSendOtp = async () => {
+        if (!email) {
+            setError("Please enter an email address first.");
+            return;
+        }
         setLoading(true);
         setError("");
         try {
+            // Check if user exists first (as requested for security/flow)
+            const exists = await checkUserExists(email);
+            if (!exists) {
+                setStep(STEPS.NOT_FOUND);
+                return;
+            }
+
             const res = await sendOtp(email);
             if (res.success) {
                 setStep(STEPS.OTP);
             } else {
                 setError(res.message);
+                alert("Error: " + res.message);
             }
         } catch (err) {
             setError("Failed to send OTP.");
+            alert("Failed to send OTP. Please check your connection.");
         } finally {
             setLoading(false);
         }
@@ -130,11 +162,11 @@ export default function LoginPage() {
     return (
         <div className="auth-page">
             <div className="auth-card">
-                <h1>{step === STEPS.NOT_FOUND ? "Account Not Found" : "Welcome Back"}</h1>
+                                <h1>{step === STEPS.NOT_FOUND ? "Account Not Found" : "Welcome Back"}</h1>
                 <p>
                     {step === STEPS.NOT_FOUND 
                         ? "We couldn't find an account with that email." 
-                        : "Sign in to your Mewari account"}
+                        : "Sign in to your account"}
                 </p>
 
                 {error && <div className="auth-error">{error}</div>}
@@ -143,7 +175,7 @@ export default function LoginPage() {
                 {step === STEPS.EMAIL && (
                     <form onSubmit={handleCheckEmail} className="auth-form">
                         <div className="auth-group">
-                            <label>Email Address</label>
+                            <label>Email address</label>
                             <input
                                 type="email"
                                 required
@@ -154,7 +186,27 @@ export default function LoginPage() {
                             />
                         </div>
                         <button type="submit" disabled={loading} className="auth-btn-primary">
-                            {loading ? "Checking..." : "Continue"}
+                            {loading ? "Checking..." : "Continue with Password"}
+                        </button>
+
+                        <div className="auth-divider" style={{margin: '1.2rem 0'}}>
+                            <span>OR</span>
+                        </div>
+
+                        <button 
+                            type="button" 
+                            onClick={() => {
+                                if (!email) {
+                                    alert("Please enter your email address first.");
+                                    return;
+                                }
+                                handleSendOtp();
+                            }}
+                            disabled={loading}
+                            className="auth-btn-social"
+                            style={{borderColor: 'var(--secondary-color)', color: 'var(--secondary-color)', fontWeight: '600', width: '100%', padding: '12px'}}
+                        >
+                            {loading ? "Please wait..." : "Sign in with OTP (Passwordless)"}
                         </button>
                     </form>
                 )}
@@ -162,7 +214,7 @@ export default function LoginPage() {
                 {step === STEPS.PASSWORD && (
                     <form onSubmit={handlePasswordLogin} className="auth-form">
                         <div className="auth-group">
-                            <label>Password for {email}</label>
+                            <label>Password</label>
                             <input
                                 type="password"
                                 required
@@ -174,33 +226,39 @@ export default function LoginPage() {
                             />
                         </div>
                         <button type="submit" disabled={loading} className="auth-btn-primary">
-                            {loading ? "Signing in..." : "Login"}
+                            {loading ? "Signing in..." : "Sign in with Password"}
                         </button>
-                        <div style={{marginTop: '15px'}}>
-                            <button 
-                                type="button" 
-                                onClick={handleSendOtp}
-                                style={{background: 'none', border: 'none', color: 'var(--secondary-color)', cursor: 'pointer', fontSize: '14px', fontWeight: '600'}}
-                            >
-                                Login with OTP instead
-                            </button>
+                        
+                        <div className="auth-divider" style={{margin: '1rem 0'}}>
+                            <span style={{fontSize: '12px', color: '#999'}}>OR</span>
                         </div>
-                        <div style={{marginTop: '10px'}}>
+
+                        <button 
+                            type="button" 
+                            onClick={handleSendOtp}
+                            disabled={loading}
+                            className="auth-btn-social"
+                            style={{borderColor: 'var(--secondary-color)', color: 'var(--secondary-color)', fontWeight: '600', padding: '12px', width: '100%'}}
+                        >
+                            {loading ? "Please wait..." : "Sign in with OTP (Passwordless)"}
+                        </button>
+                        
+                        <div style={{marginTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '10px'}}>
                             <button 
                                 type="button" 
                                 onClick={handleForgotPassword}
-                                style={{background: 'none', border: 'none', color: '#666', cursor: 'pointer', fontSize: '13px', textDecoration: 'underline'}}
+                                style={{background: 'none', border: 'none', color: '#888', cursor: 'pointer', fontSize: '13px', textDecoration: 'none'}}
                             >
                                 Forgot Password?
                             </button>
+                            <button
+                                type="button"
+                                onClick={() => setStep(STEPS.EMAIL)}
+                                style={{background: 'none', border: 'none', color: '#888', cursor: 'pointer', fontSize: '13px', textDecoration: 'none'}}
+                            >
+                                Change Email
+                            </button>
                         </div>
-                        <button
-                            type="button"
-                            onClick={() => setStep(STEPS.EMAIL)}
-                            style={{background: 'none', border: 'none', color: '#888', cursor: 'pointer', fontSize: '14px', marginTop: '10px'}}
-                        >
-                            Change Email
-                        </button>
                     </form>
                 )}
 
@@ -223,7 +281,7 @@ export default function LoginPage() {
                             </p>
                         </div>
                         <button type="submit" disabled={loading} className="auth-btn-primary">
-                            {loading ? "Verifying..." : "Verify & Sign In"}
+                            {loading ? "Verifying..." : "Verify & Sign in"}
                         </button>
                         <button
                             type="button"
@@ -237,10 +295,10 @@ export default function LoginPage() {
 
                 {step === STEPS.NOT_FOUND && (
                     <div className="auth-form">
-                        <p style={{marginBottom: '20px', fontSize: '15px'}}>
-                            We couldn't find an account with this email in our system. Would you like to create one?
+                        <p style={{marginBottom: '20px', fontSize: '16px', fontWeight: '500'}}>
+                            No account found with this email. Please create a new one.
                         </p>
-                        <Link href="/signup" className="auth-btn-primary" style={{textDecoration: 'none', textAlign: 'center'}}>
+                        <Link href="/signup" className="auth-btn-primary" style={{textDecoration: 'none', textAlign: 'center', display: 'block'}}>
                             Create New Account
                         </Link>
                         <button
@@ -265,7 +323,7 @@ export default function LoginPage() {
                             <path fill="#FBBC05" d="M5.84 14.1c-.22-.66-.35-1.36-.35-2.1s.13-1.44.35-2.1V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.83z"/>
                             <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.66l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.83c.87-2.6 3.3-4.53 12-5.38z"/>
                         </svg>
-                        <span>Google</span>
+                        <span>Sign in with Google</span>
                     </button>
                     <button
                         onClick={async () => {
@@ -278,13 +336,13 @@ export default function LoginPage() {
                         }}
                         className="auth-btn-social"
                     >
-                        <span>Guest</span>
+                        <span>Continue as Guest</span>
                     </button>
                 </div>
 
                 <div className="auth-footer">
-                    New to Mewari Achaar?{" "}
-                    <Link href="/signup">Create an account</Link>
+                    Don't have an account?{" "}
+                    <Link href="/signup">Sign up</Link>
                 </div>
             </div>
         </div>
