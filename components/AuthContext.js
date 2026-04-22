@@ -190,7 +190,13 @@ export const AuthProvider = ({ children }) => {
     };
 
     const resetPassword = async (email) => {
-        await sendPasswordResetEmail(auth, email);
+        // By adding this URL, Firebase will show a "Continue" button on their page
+        // that redirects the user back to your site after they finish.
+        const actionCodeSettings = {
+            url: `${window.location.origin}/login`,
+            handleCodeInApp: false, // Keep it false to use Firebase's default page
+        };
+        await sendPasswordResetEmail(auth, email, actionCodeSettings);
     };
 
     const sendFailedLoginAlert = async (email) => {
