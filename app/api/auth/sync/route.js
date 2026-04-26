@@ -4,7 +4,7 @@ import { sendMewariWelcomeEmail } from '@/lib/email-service';
 
 export async function POST(request) {
     try {
-        const { idToken } = await request.json();
+        const { idToken, displayName: bodyDisplayName } = await request.json();
         if (!idToken) return NextResponse.json({ error: 'Missing token' }, { status: 400 });
 
         const auth = getAdminAuth();
@@ -13,6 +13,9 @@ export async function POST(request) {
         // 1. Verify the user's token
         const decodedToken = await auth.verifyIdToken(idToken);
         const { uid, email, name, picture } = decodedToken;
+        
+        // Priority: Decoded Token Name > Body Name > Fallback
+        const finalDisplayName = name || bodyDisplayName || 'Guest';
 
         const userRef = db.collection('users').doc(uid);
         const userDoc = await userRef.get();
@@ -25,28 +28,34 @@ export async function POST(request) {
         const isBrandNewAuth = Math.abs(lastSignInTime - creationTime) < 300000;
         const exists = userDoc.exists;
 
-        // 2. Ensure Firestore record exists
-        if (!exists) {
+        // 2. Ensure Firestore record exists and is up to date
+        if (!userDoc.exists) {
             await userRef.set({
                 uid,
                 email: email || null,
-                displayName: name || 'Valued Guest',
+                displayName: finalDisplayName,
                 photoURL: picture || null,
                 createdAt: new Date(),
                 isAnonymous: false,
                 welcomeEmailSent: true // Mark so we don't spam
             });
+        } else {
+            const currentData = userDoc.data();
+            // If the current name is a placeholder and we have a better one, update it!
+            if ((currentData.displayName === 'Valued Guest' || currentData.displayName === 'Guest' || !currentData.displayName) && finalDisplayName !== 'Guest') {
+                await userRef.update({ displayName: finalDisplayName });
+            }
         }
 
         // 3. TRIGGER WELCOME EMAIL (The Khamma Ghani logic)
-        // If it's a new auth account or the firestore doc was missing
-        if (isBrandNewAuth || !exists) {
+        const userData = userDoc.data();
+        if ((isBrandNewAuth || !exists) && !userData?.welcomeEmailSent) {
             console.log(`[AUTH SYNC] Sending Khamma Ghani to new user: ${email}`);
             await sendMewariWelcomeEmail(email, name || 'हुकुम').catch(err => {
                 console.error("[AUTH SYNC] Email failed:", err);
             });
-        } else {
-            // Normal login alert logic could go here if needed
+            // Update the flag so we don't send it again
+            await userRef.update({ welcomeEmailSent: true });
         }
 
         return NextResponse.json({ success: true, isNewUser: !exists || isBrandNewAuth });

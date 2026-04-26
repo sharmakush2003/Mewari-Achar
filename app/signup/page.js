@@ -57,7 +57,7 @@ export default function SignupPage() {
         setError("");
 
         try {
-            const verifyRes = await verifyOtp(email, otp);
+            const verifyRes = await verifyOtp(email, otp, displayName);
             if (!verifyRes.success) {
                 setError(verifyRes.message || 'Invalid verification code');
                 setLoading(false);

@@ -15,7 +15,7 @@ const withTimeout = (promise, ms) => {
 
 export async function POST(request) {
     try {
-        const { email, otp, token } = await request.json();
+        const { email, otp, token, displayName } = await request.json();
 
         if (!email || !otp) {
             return NextResponse.json({ message: 'Email and OTP are required' }, { status: 400 });
@@ -81,6 +81,7 @@ export async function POST(request) {
                         userRecord = await adminAuth.createUser({
                             email: emailKey,
                             emailVerified: true,
+                            displayName: displayName || null
                         });
                         isNewUser = true;
                     } else {

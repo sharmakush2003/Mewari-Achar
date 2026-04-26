@@ -99,17 +99,23 @@ export const OrdersModal = ({ active = true, onClose, user }) => {
   useEffect(() => {
     if (active && user) {
         setLoading(true);
+        // Query only by UID to avoid needing a composite index
         const q = query(
             collection(db, "orders"), 
-            where("uid", "==", user.uid),
-            orderBy("timestamp", "desc")
+            where("uid", "==", user.uid)
         );
         getDocs(q).then(snap => {
             const data = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            // Sort by timestamp descending on the client side
+            data.sort((a, b) => {
+                const timeA = a.timestamp?.seconds || 0;
+                const timeB = b.timestamp?.seconds || 0;
+                return timeB - timeA;
+            });
             setOrders(data);
             setLoading(false);
         }).catch(err => {
-            console.error(err);
+            console.error("Order fetch error:", err);
             setLoading(false);
         });
     }

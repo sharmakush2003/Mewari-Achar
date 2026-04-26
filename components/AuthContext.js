@@ -29,8 +29,29 @@ export const AuthProvider = ({ children }) => {
     const [otpToken, setOtpToken] = useState(null);
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            setUser(user);
+        const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+            if (firebaseUser) {
+                try {
+                    const userRef = doc(db, "users", firebaseUser.uid);
+                    const userSnap = await getDoc(userRef);
+                    
+                    if (userSnap.exists()) {
+                        const userData = userSnap.data();
+                        // Enrich the user object with Firestore data
+                        setUser({
+                            ...firebaseUser,
+                            displayName: userData.displayName || firebaseUser.displayName || 'हुकुम'
+                        });
+                    } else {
+                        setUser(firebaseUser);
+                    }
+                } catch (error) {
+                    console.error("Error fetching user profile:", error);
+                    setUser(firebaseUser);
+                }
+            } else {
+                setUser(null);
+            }
             setLoading(false);
         });
 
@@ -86,7 +107,7 @@ export const AuthProvider = ({ children }) => {
         return user;
     };
 
-    const handleUserAuth = async (user) => {
+    const handleUserAuth = async (user, displayName) => {
         try {
             // Obtain the user's ID token to send to our sync endpoint
             const idToken = await user.getIdToken();
@@ -94,7 +115,7 @@ export const AuthProvider = ({ children }) => {
             const response = await fetch(`${window.location.origin}/api/auth/sync`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ idToken }),
+                body: JSON.stringify({ idToken, displayName }),
             });
 
             const data = await response.json();
@@ -136,11 +157,11 @@ export const AuthProvider = ({ children }) => {
         return data;
     };
 
-    const verifyOtp = async (email, otp) => {
+    const verifyOtp = async (email, otp, displayName) => {
         const response = await fetch('/api/verify-otp', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, otp, token: otpToken }),
+            body: JSON.stringify({ email, otp, token: otpToken, displayName }),
         });
         const data = await response.json();
         
@@ -148,7 +169,7 @@ export const AuthProvider = ({ children }) => {
         if (data.success && data.customToken) {
             try {
                 const userCredential = await signInWithCustomToken(auth, data.customToken);
-                await handleUserAuth(userCredential.user);
+                await handleUserAuth(userCredential.user, displayName);
             } catch (error) {
                 console.error("Custom token sign-in failed:", error);
             }
