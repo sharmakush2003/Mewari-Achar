@@ -13,13 +13,18 @@ export default function AdminOrders() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (!authLoading && user?.email !== 'kushsharma.cor@gmail.com') {
-            router.push('/');
-        }
-    }, [user, authLoading, router]);
-
-    useEffect(() => {
-        if (user?.email === 'kushsharma.cor@gmail.com') {
+        if (authLoading) return;
+        const adminEmail = 'kushsharma.cor@gmail.com';
+        const currentUserEmail = user?.email?.toLowerCase().trim();
+        
+        if (!user || currentUserEmail !== adminEmail) {
+            const timer = setTimeout(() => {
+                if (!user || user.email?.toLowerCase().trim() !== adminEmail) {
+                    router.push('/');
+                }
+            }, 800);
+            return () => clearTimeout(timer);
+        } else {
             const fetchOrders = async () => {
                 try {
                     const q = query(collection(db, 'orders'));
@@ -37,10 +42,17 @@ export default function AdminOrders() {
             };
             fetchOrders();
         }
-    }, [user]);
+    }, [user, authLoading, router]);
 
-    if (authLoading || user?.email !== 'kushsharma.cor@gmail.com') {
-        return <div style={{ padding: '100px', textAlign: 'center', color: '#8B0000' }}>🏰 Verifying Admin Status...</div>;
+    const isAdmin = !authLoading && user?.email?.toLowerCase().trim() === 'kushsharma.cor@gmail.com';
+
+    if (authLoading || !isAdmin) {
+        return <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fdfbf7', color: '#8B0000', fontFamily: 'serif' }}>
+            <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '3rem', marginBottom: '20px' }}>🏰</div>
+                <h2>Verifying Royal Access...</h2>
+            </div>
+        </div>;
     }
 
     return (

@@ -13,22 +13,39 @@ export default function AdminDashboard() {
     const [stats, setStats] = useState({ orders: 0, users: 0 });
 
     useEffect(() => {
-        if (!authLoading && user?.email !== 'kushsharma.cor@gmail.com') {
-            router.push('/');
-        } else if (user?.email === 'kushsharma.cor@gmail.com') {
+        if (authLoading) return;
+
+        const adminEmail = 'kushsharma.cor@gmail.com';
+        const currentUserEmail = user?.email?.toLowerCase().trim();
+
+        if (!user || currentUserEmail !== adminEmail) {
+            // Wait an extra half second to be absolutely sure
+            const timer = setTimeout(() => {
+                if (!user || user.email?.toLowerCase().trim() !== adminEmail) {
+                    router.push('/');
+                }
+            }, 800);
+            return () => clearTimeout(timer);
+        } else {
             const fetchStats = async () => {
-                const ordersSnap = await getDocs(collection(db, 'orders'));
-                const usersSnap = await getDocs(collection(db, 'users'));
-                setStats({
-                    orders: ordersSnap.size,
-                    users: usersSnap.size
-                });
+                try {
+                    const ordersSnap = await getDocs(collection(db, 'orders'));
+                    const usersSnap = await getDocs(collection(db, 'users'));
+                    setStats({
+                        orders: ordersSnap.size,
+                        users: usersSnap.size
+                    });
+                } catch (err) {
+                    console.error("Stats error:", err);
+                }
             };
             fetchStats();
         }
     }, [user, authLoading, router]);
 
-    if (authLoading || user?.email !== 'kushsharma.cor@gmail.com') {
+    const isAdmin = !authLoading && user?.email?.toLowerCase().trim() === 'kushsharma.cor@gmail.com';
+
+    if (authLoading || !isAdmin) {
         return (
             <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fdfbf7', color: '#8B0000', fontFamily: 'serif' }}>
                 <div style={{ textAlign: 'center' }}>

@@ -13,13 +13,29 @@ export default function CampaignPage() {
     const [results, setResults] = useState(null);
 
     useEffect(() => {
-        if (!authLoading && user?.email !== 'kushsharma.cor@gmail.com') {
-            router.push('/');
+        if (authLoading) return;
+        const adminEmail = 'kushsharma.cor@gmail.com';
+        const currentUserEmail = user?.email?.toLowerCase().trim();
+        
+        if (!user || currentUserEmail !== adminEmail) {
+            const timer = setTimeout(() => {
+                if (!user || user.email?.toLowerCase().trim() !== adminEmail) {
+                    router.push('/');
+                }
+            }, 800);
+            return () => clearTimeout(timer);
         }
     }, [user, authLoading, router]);
 
-    if (authLoading || user?.email !== 'kushsharma.cor@gmail.com') {
-        return <div style={{ padding: '100px', textAlign: 'center', color: '#8B0000' }}>🏰 Verifying Admin Status...</div>;
+    const isAdmin = !authLoading && user?.email?.toLowerCase().trim() === 'kushsharma.cor@gmail.com';
+
+    if (authLoading || !isAdmin) {
+        return <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fdfbf7', color: '#8B0000', fontFamily: 'serif' }}>
+            <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '3rem', marginBottom: '20px' }}>🏰</div>
+                <h2>Verifying Royal Access...</h2>
+            </div>
+        </div>;
     }
 
     const handleSend = async () => {
@@ -53,11 +69,11 @@ export default function CampaignPage() {
     };
 
     return (
-        <div style={{ padding: '40px', maxWidth: '800px', margin: '0 auto', fontFamily: 'serif' }}>
+        <div style={{ padding: '40px', maxWidth: '800px', margin: '0 auto', fontFamily: 'serif', minHeight: '100vh', background: '#fdfbf7' }}>
             <h1 style={{ color: '#8B0000', textAlign: 'center' }}>🏰 Mewari Campaign Portal</h1>
             <p style={{ textAlign: 'center', opacity: 0.7 }}>Khamma Ghani Hukum! Use this tool to invite your Chittorgarh visitors.</p>
             
-            <div style={{ marginTop: '30px', background: '#fff', padding: '30px', borderRadius: '12px', border: '1px solid #D4AF37' }}>
+            <div style={{ marginTop: '30px', background: '#fff', padding: '30px', borderRadius: '12px', border: '1px solid #D4AF37', boxShadow: '0 10px 30px rgba(0,0,0,0.05)' }}>
                 <label style={{ display: 'block', marginBottom: '10px', fontWeight: 'bold' }}>Enter Emails (separated by comma or newline):</label>
                 <textarea 
                     rows="10" 
