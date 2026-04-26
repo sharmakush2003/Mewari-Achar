@@ -13,7 +13,6 @@ export default function CampaignPage() {
     const [status, setStatus] = useState('');
     const [loading, setLoading] = useState(false);
     const [results, setResults] = useState(null);
-    const [totalStats, setTotalStats] = useState({ sent: 0, failed: 0 });
 
     useEffect(() => {
         if (authLoading) return;
@@ -28,22 +27,6 @@ export default function CampaignPage() {
             }, 800);
             return () => clearTimeout(timer);
         }
-
-        // Fetch campaign stats
-        const fetchStats = async () => {
-            try {
-                const { db } = await import('@/lib/firebase');
-                const { doc, getDoc } = await import('firebase/firestore');
-                const statsRef = doc(db, 'stats', 'campaigns');
-                const statsSnap = await getDoc(statsRef);
-                if (statsSnap.exists()) {
-                    setTotalStats(statsSnap.data());
-                }
-            } catch (err) {
-                console.error("Error fetching campaign stats:", err);
-            }
-        };
-        fetchStats();
     }, [user, authLoading, router]);
 
     if (authLoading || user?.email?.toLowerCase().trim() !== 'kushsharma.cor@gmail.com') {
@@ -63,7 +46,7 @@ export default function CampaignPage() {
         setLoading(true);
         setStatus("Preparing the royal mail queue...");
         
-        const emailList = emails.split(/[\n,]+/).map(e => e.trim()).filter(e => e.includes('@'));
+        const emailList = emails.split(/[,\n\r\s;]+/).map(e => e.trim()).filter(e => e.includes('@'));
         
         if (emailList.length === 0) {
             setLoading(false);
@@ -84,22 +67,6 @@ export default function CampaignPage() {
             const data = await res.json();
             setResults(data);
             setStatus(`Campaign complete. Sent: ${data.sent}, Failed: ${data.failed}`);
-
-            // Update stats in Firestore
-            const { db } = await import('@/lib/firebase');
-            const { doc, setDoc, increment } = await import('firebase/firestore');
-            const statsRef = doc(db, 'stats', 'campaigns');
-            await setDoc(statsRef, {
-                sent: increment(data.sent || 0),
-                failed: increment(data.failed || 0)
-            }, { merge: true });
-
-            // Refresh local stats
-            setTotalStats(prev => ({
-                sent: prev.sent + (data.sent || 0),
-                failed: prev.failed + (data.failed || 0)
-            }));
-
         } catch (error) {
             console.error(error);
             setStatus("Campaign failed to start.");
@@ -167,17 +134,8 @@ export default function CampaignPage() {
                     {status}
                 </div>}
 
-                <div style={{ marginTop: '30px', paddingTop: '20px', borderTop: '1px solid #eee', display: 'flex', justifyContent: 'space-around', textAlign: 'center' }}>
-                    <div>
-                        <p style={{ margin: 0, fontSize: '0.8rem', color: '#666', textTransform: 'uppercase' }}>Total Sent</p>
-                        <h3 style={{ margin: '5px 0 0', color: '#2e7d32', fontSize: '1.5rem' }}>{totalStats.sent}</h3>
-                    </div>
-                    <div>
-                        <p style={{ margin: 0, fontSize: '0.8rem', color: '#666', textTransform: 'uppercase' }}>Total Failed</p>
-                        <h3 style={{ margin: '5px 0 0', color: '#d32f2f', fontSize: '1.5rem' }}>{totalStats.failed}</h3>
-                    </div>
                 </div>
-            </div>
+
             
             
             <div style={{ textAlign: 'center', marginTop: '30px' }}>

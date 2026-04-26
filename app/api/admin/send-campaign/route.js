@@ -3,7 +3,14 @@ import nodemailer from 'nodemailer';
 
 export async function POST(request) {
     try {
-        const { emails, subject, message } = await request.json();
+        const body = await request.json();
+        let emails = body.emails;
+        const { subject, message } = body;
+
+        // Robustness: Handle case where 'emails' might be a single string
+        if (typeof emails === 'string') {
+            emails = emails.split(/[,\n\r\s;]+/).map(e => e.trim()).filter(e => e.includes('@'));
+        }
 
         if (!emails || !Array.isArray(emails) || emails.length === 0) {
             return NextResponse.json({ message: 'No valid emails found' }, { status: 400 });
