@@ -84,7 +84,7 @@ export const PolicyModal = ({ active = true, onClose }) => {
             <li>Product was lost in transit.</li>
           </ul>
           <p><strong>Cancellations:</strong> We reserve the right to cancel orders for any reason. If cancelled after payment, you will receive a refund within 5-7 working days.</p>
-          <p style={{ marginTop: '15px', fontWeight: 600, color: '#8B0000' }}>Questions? Contact: rajesh.chittaurgarh@gmail.com</p>
+          <p style={{ marginTop: '15px', fontWeight: 600, color: '#8B0000' }}>Questions? Contact: mewariachar@gmail.com</p>
         </div>
       </div>
     </div>
@@ -176,7 +176,7 @@ export const SupportModal = ({ active = true, onClose }) => {
           <p style={{ color: '#5a4a42', marginBottom: '2rem' }}>We are here to help you with your order or any queries about our heritage achaar.</p>
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-            <a href="mailto:rajesh.chittaurgarh@gmail.com" className="btn-outline-royal" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+            <a href="mailto:mewariachar@gmail.com" className="btn-outline-royal" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
               Email Us
             </a>
