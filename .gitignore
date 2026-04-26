@@ -4,3 +4,4 @@ node_modules/
 out/
 build/
 *.log
+SECRET_ADMIN_ACCESS.md
