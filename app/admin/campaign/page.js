@@ -8,6 +8,8 @@ export default function CampaignPage() {
     const { user, loading: authLoading } = useAuth();
     const router = useRouter();
     const [emails, setEmails] = useState('');
+    const [subject, setSubject] = useState('खम्मा घणी हुकुम! मेवाड़ की याद और यहाँ का स्वाद 🏰');
+    const [tagline, setTagline] = useState('Authentic Taste of Rajasthan');
     const [status, setStatus] = useState('');
     const [loading, setLoading] = useState(false);
     const [results, setResults] = useState(null);
@@ -27,9 +29,7 @@ export default function CampaignPage() {
         }
     }, [user, authLoading, router]);
 
-    const isAdmin = !authLoading && user?.email?.toLowerCase().trim() === 'kushsharma.cor@gmail.com';
-
-    if (authLoading || !isAdmin) {
+    if (authLoading || user?.email?.toLowerCase().trim() !== 'kushsharma.cor@gmail.com') {
         return <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fdfbf7', color: '#8B0000', fontFamily: 'serif' }}>
             <div style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: '3rem', marginBottom: '20px' }}>🏰</div>
@@ -40,6 +40,7 @@ export default function CampaignPage() {
 
     const handleSend = async () => {
         if (!emails.trim()) return alert("Hukum, please provide the email list.");
+        if (!subject.trim()) return alert("Hukum, please provide an email subject.");
         
         setLoading(true);
         setStatus("Preparing the royal mail queue...");
@@ -55,7 +56,11 @@ export default function CampaignPage() {
             const res = await fetch('/api/admin/send-campaign', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ emails: emailList })
+                body: JSON.stringify({ 
+                    emails: emailList,
+                    subject: subject,
+                    tagline: tagline
+                })
             });
             
             const data = await res.json();
@@ -71,23 +76,48 @@ export default function CampaignPage() {
     return (
         <div style={{ padding: '40px', maxWidth: '800px', margin: '0 auto', fontFamily: 'serif', minHeight: '100vh', background: '#fdfbf7' }}>
             <h1 style={{ color: '#8B0000', textAlign: 'center' }}>🏰 Mewari Campaign Portal</h1>
-            <p style={{ textAlign: 'center', opacity: 0.7 }}>Khamma Ghani Hukum! Use this tool to invite your Chittorgarh visitors.</p>
+            <p style={{ textAlign: 'center', opacity: 0.7 }}>Invite your Chittorgarh visitors with a personalized royal email.</p>
             
             <div style={{ marginTop: '30px', background: '#fff', padding: '30px', borderRadius: '12px', border: '1px solid #D4AF37', boxShadow: '0 10px 30px rgba(0,0,0,0.05)' }}>
-                <label style={{ display: 'block', marginBottom: '10px', fontWeight: 'bold' }}>Enter Emails (separated by comma or newline):</label>
-                <textarea 
-                    rows="10" 
-                    style={{ width: '100%', padding: '15px', borderRadius: '8px', border: '1px solid #ddd' }}
-                    placeholder="example1@gmail.com, example2@gmail.com..."
-                    value={emails}
-                    onChange={(e) => setEmails(e.target.value)}
-                />
+                <div style={{ marginBottom: '20px' }}>
+                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Email Subject (English/Hindi):</label>
+                    <input 
+                        type="text"
+                        style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd' }}
+                        value={subject}
+                        onChange={(e) => setSubject(e.target.value)}
+                        placeholder="Subject line of the email"
+                    />
+                </div>
+
+                <div style={{ marginBottom: '20px' }}>
+                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Email Tagline (Header):</label>
+                    <input 
+                        type="text"
+                        style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd' }}
+                        value={tagline}
+                        onChange={(e) => setTagline(e.target.value)}
+                        placeholder="e.g. Authentic Taste of Rajasthan"
+                    />
+                </div>
+
+                <div style={{ marginBottom: '20px' }}>
+                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Recipient Email List:</label>
+                    <textarea 
+                        rows="8" 
+                        style={{ width: '100%', padding: '15px', borderRadius: '8px', border: '1px solid #ddd' }}
+                        placeholder="example1@gmail.com, example2@gmail.com..."
+                        value={emails}
+                        onChange={(e) => setEmails(e.target.value)}
+                    />
+                    <p style={{ fontSize: '0.8rem', color: '#666', marginTop: '5px' }}>Separated by comma or newline.</p>
+                </div>
                 
                 <button 
                     onClick={handleSend}
                     disabled={loading}
                     style={{ 
-                        marginTop: '20px', 
+                        marginTop: '10px', 
                         width: '100%', 
                         padding: '15px', 
                         background: '#8B0000', 
@@ -122,7 +152,16 @@ export default function CampaignPage() {
             
             <div style={{ marginTop: '40px', padding: '20px', background: '#fdf9f0', borderLeft: '5px solid #8B0000', borderRadius: '4px' }}>
                 <h3 style={{ margin: 0 }}>Campaign Preview:</h3>
-                <p style={{ fontStyle: 'italic', fontSize: '0.9rem' }}>"Subject: खम्मा घणी हुकुम! मेवाड़ की याद और यहाँ का स्वाद 🏰 ..."</p>
+                <div style={{ marginTop: '10px', border: '1px solid #ddd', padding: '15px', background: 'white' }}>
+                    <p style={{ fontWeight: 'bold', margin: 0 }}>Subject: {subject}</p>
+                    <hr/>
+                    <div style={{ textAlign: 'center' }}>
+                        <h2 style={{ color: '#8B0000', margin: '10px 0' }}>मेवाड़ी अचार</h2>
+                        <p style={{ color: '#D4AF37', textTransform: 'uppercase', fontSize: '0.8rem' }}>{tagline}</p>
+                        <p>खम्मा घणी हुकुम!</p>
+                        <p>...</p>
+                    </div>
+                </div>
             </div>
             
             <div style={{ textAlign: 'center', marginTop: '20px' }}>

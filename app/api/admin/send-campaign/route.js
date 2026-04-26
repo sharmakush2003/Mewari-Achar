@@ -3,7 +3,7 @@ import nodemailer from 'nodemailer';
 
 export async function POST(request) {
     try {
-        const { emails } = await request.json();
+        const { emails, subject, tagline } = await request.json();
         
         if (!emails || !Array.isArray(emails)) {
             return NextResponse.json({ error: 'Invalid email list' }, { status: 400 });
@@ -27,18 +27,20 @@ export async function POST(request) {
         let failedCount = 0;
         let errors = [];
 
-        // We use a loop but you might want to throttle this for large lists
+        const finalSubject = subject || "खम्मा घणी हुकुम! मेवाड़ की याद और यहाँ का स्वाद 🏰";
+        const finalTagline = tagline || "Authentic Taste of Rajasthan";
+
         for (const email of emails) {
             try {
                 const mailOptions = {
                     from: `"Mewari Special Achaar" <${emailUser}>`,
                     to: email,
-                    subject: "खम्मा घणी हुकुम! मेवाड़ की याद और यहाँ का स्वाद 🏰",
+                    subject: finalSubject,
                     html: `
                         <div style="font-family: serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 2px solid #8B0000; border-radius: 12px; background-color: #fdfbf7;">
                             <div style="text-align: center; border-bottom: 1px solid #D4AF37; padding-bottom: 20px; margin-bottom: 20px;">
                                 <h1 style="color: #8B0000; margin: 0;">मेवाड़ी अचार</h1>
-                                <p style="color: #D4AF37; font-size: 0.9rem; letter-spacing: 3px; text-transform: uppercase; margin: 5px 0 0;">Authentic Taste of Rajasthan</p>
+                                <p style="color: #D4AF37; font-size: 0.9rem; letter-spacing: 3px; text-transform: uppercase; margin: 5px 0 0;">${finalTagline}</p>
                             </div>
                             
                             <h2 style="color: #8B0000; text-align: center;">खम्मा घणी हुकुम!</h2>
@@ -66,9 +68,6 @@ export async function POST(request) {
 
                 await transporter.sendMail(mailOptions);
                 sentCount++;
-                
-                // Optional: Throttle to avoid being flagged as spam (1 sec per mail)
-                // await new Promise(resolve => setTimeout(resolve, 1000));
                 
             } catch (err) {
                 failedCount++;

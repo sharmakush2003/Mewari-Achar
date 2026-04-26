@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { db } from '@/lib/firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 import { useAuth } from '@/components/AuthContext';
 import { useRouter } from 'next/navigation';
 
@@ -19,7 +19,6 @@ export default function AdminDashboard() {
         const currentUserEmail = user?.email?.toLowerCase().trim();
 
         if (!user || currentUserEmail !== adminEmail) {
-            // Wait an extra half second to be absolutely sure
             const timer = setTimeout(() => {
                 if (!user || user.email?.toLowerCase().trim() !== adminEmail) {
                     router.push('/');
@@ -30,10 +29,15 @@ export default function AdminDashboard() {
             const fetchStats = async () => {
                 try {
                     const ordersSnap = await getDocs(collection(db, 'orders'));
+                    // Fetch only users with actual data to avoid counting empty/test docs
                     const usersSnap = await getDocs(collection(db, 'users'));
+                    
+                    // Filter out any docs that don't have an email to get an accurate count
+                    const validUsers = usersSnap.docs.filter(doc => doc.data().email).length;
+
                     setStats({
                         orders: ordersSnap.size,
-                        users: usersSnap.size
+                        users: validUsers
                     });
                 } catch (err) {
                     console.error("Stats error:", err);
@@ -43,9 +47,7 @@ export default function AdminDashboard() {
         }
     }, [user, authLoading, router]);
 
-    const isAdmin = !authLoading && user?.email?.toLowerCase().trim() === 'kushsharma.cor@gmail.com';
-
-    if (authLoading || !isAdmin) {
+    if (authLoading || user?.email?.toLowerCase().trim() !== 'kushsharma.cor@gmail.com') {
         return (
             <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fdfbf7', color: '#8B0000', fontFamily: 'serif' }}>
                 <div style={{ textAlign: 'center' }}>
