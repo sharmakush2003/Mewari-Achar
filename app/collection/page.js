@@ -7,7 +7,7 @@ import { useAuth } from '@/components/AuthContext';
 import { products } from '@/lib/products-data';
 import FlavorBars from '@/components/FlavorBars';
 import { useCart } from '@/components/CartContext';
-import { PolicyModal, OrdersModal } from '@/components/Modals';
+import { PolicyModal, OrdersModal, SupportModal } from '@/components/Modals';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
@@ -78,9 +78,13 @@ export default function Collection() {
                 </div>
             </section>
 
-            <Footer onOpenPolicy={() => setActiveModal('policy')} />
+            <Footer 
+                onOpenPolicy={() => setActiveModal('policy')} 
+                onOpenSupport={() => setActiveModal('support')} 
+            />
 
             {activeModal === 'policy' && <PolicyModal onClose={() => setActiveModal(null)} />}
+            {activeModal === 'support' && <SupportModal onClose={() => setActiveModal(null)} />}
             {activeModal === 'orders' && <OrdersModal onClose={() => setActiveModal(null)} />}
 
             <style jsx>{`

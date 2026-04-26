@@ -7,7 +7,7 @@ import { useAuth } from '@/components/AuthContext';
 import { products as allProducts } from '@/lib/products-data';
 import FlavorBars from '@/components/FlavorBars';
 import { useCart } from '@/components/CartContext';
-import { SampleModal, PolicyModal, OrdersModal } from '@/components/Modals';
+import { SampleModal, PolicyModal, OrdersModal, SupportModal } from '@/components/Modals';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { motion, useScroll, useTransform } from 'framer-motion';
@@ -77,7 +77,7 @@ export default function Home() {
 
         <div className="hero-visual-center">
           <div className="img-frame-accent"></div>
-          <img src="/Images/Mango Achar.jpg" alt="Premium Mango Achar" className="hero-main-img" />
+          <img src="/Images/Mango Achar.jpg" alt="Premium Mango Achaar" className="hero-main-img" />
         </div>
       </section>
 
@@ -212,10 +212,14 @@ export default function Home() {
         </div>
       </section>
 
-      <Footer onOpenPolicy={() => setActiveModal('policy')} />
+      <Footer 
+        onOpenPolicy={() => setActiveModal('policy')} 
+        onOpenSupport={() => setActiveModal('support')} 
+      />
 
       {Boolean(activeModal === 'sample') && <SampleModal active={true} onClose={() => setActiveModal(null)} />}
       {Boolean(activeModal === 'policy') && <PolicyModal active={true} onClose={() => setActiveModal(null)} />}
+      {Boolean(activeModal === 'support') && <SupportModal active={true} onClose={() => setActiveModal(null)} />}
       {Boolean(activeModal === 'orders') && <OrdersModal active={true} user={user} onClose={() => setActiveModal(null)} />}
 
       <style jsx>{`

@@ -1,4 +1,4 @@
-export default function Footer({ onOpenPolicy }) {
+export default function Footer({ onOpenPolicy, onOpenSupport }) {
     return (
         <footer className="royal-footer">
             <div className="footer-main-content">
@@ -24,7 +24,7 @@ export default function Footer({ onOpenPolicy }) {
                 <div className="footer-nav">
                     <button onClick={onOpenPolicy} className="footer-btn">POLICIES</button>
                     <div className="gold-dot"></div>
-                    <a href="mailto:rajesh.chittaurgarh@gmail.com" className="footer-btn">CONTACT SUPPORT</a>
+                    <button onClick={onOpenSupport} className="footer-btn">CONTACT SUPPORT</button>
                 </div>
             </div>
             

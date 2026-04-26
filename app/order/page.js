@@ -6,7 +6,7 @@ import Footer from '@/components/Footer';
 import { useAuth } from '@/components/AuthContext';
 import { products } from '@/lib/products-data';
 import { useCart } from '@/components/CartContext';
-import { PolicyModal, OrdersModal } from '@/components/Modals';
+import { PolicyModal, OrdersModal, SupportModal } from '@/components/Modals';
 import { db } from '@/lib/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -234,9 +234,13 @@ export default function Order() {
                 </div>
             </section>
 
-            <Footer onOpenPolicy={() => setActiveModal('policy')} />
+            <Footer 
+                onOpenPolicy={() => setActiveModal('policy')} 
+                onOpenSupport={() => setActiveModal('support')} 
+            />
 
             {activeModal === 'policy' && <PolicyModal onClose={() => setActiveModal(null)} />}
+            {activeModal === 'support' && <SupportModal onClose={() => setActiveModal(null)} />}
             {activeModal === 'orders' && <OrdersModal onClose={() => setActiveModal(null)} />}
 
             <style jsx>{`

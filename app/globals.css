@@ -2147,3 +2147,179 @@ footer a {
         padding: 40px 0;
     }
 }
+/* ── MODALS ── */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(44, 24, 16, 0.85);
+    backdrop-filter: blur(15px);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease-out;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-content {
+    background: #fff;
+    width: 90%;
+    max-width: 550px;
+    padding: 50px;
+    border-radius: 20px;
+    position: relative;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.2s ease-out;
+    box-shadow: 0 30px 100px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.modal-overlay.active .modal-content {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.close-modal {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    background: none;
+    border: none;
+    font-size: 2.5rem;
+    color: #8B0000;
+    cursor: pointer;
+    line-height: 1;
+    opacity: 0.3;
+    transition: 0.3s;
+}
+
+.close-modal:hover {
+    opacity: 1;
+    transform: rotate(90deg);
+}
+
+.modal-header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.modal-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.modal-header h2 {
+    font-family: var(--font-royal, serif);
+    font-size: 2.2rem;
+    color: #8B0000;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 800;
+    color: #5a4a42;
+    margin-bottom: 10px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 15px 20px;
+    border-radius: 10px;
+    border: 1px solid rgba(139, 0, 0, 0.1);
+    background: #fdfdfa;
+    font-family: inherit;
+    font-size: 0.95rem;
+    transition: 0.3s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #D4AF37;
+    background: #fff;
+    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.1);
+}
+
+.full-width {
+    width: 100%;
+}
+
+.order-history-card {
+    background: #fdfdfa;
+    border: 1px solid rgba(139, 0, 0, 0.05);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 15px;
+}
+
+.order-history-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed rgba(139, 0, 0, 0.1);
+}
+
+.order-history-id {
+    font-weight: 800;
+    color: #8B0000;
+    font-size: 0.8rem;
+}
+
+.order-history-date {
+    font-size: 0.75rem;
+    opacity: 0.6;
+}
+
+.order-history-status {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    font-weight: 800;
+    background: #D4AF37;
+    color: #fff;
+    padding: 4px 12px;
+    border-radius: 20px;
+}
+
+.order-history-items {
+    font-size: 0.9rem;
+    color: #5a4a42;
+    margin-bottom: 10px;
+}
+
+.order-history-total {
+    font-weight: 700;
+    color: #2c1810;
+    text-align: right;
+}
+
+@media (max-width: 600px) {
+    .modal-content {
+        padding: 35px 25px;
+    }
+    .modal-header h2 {
+        font-size: 1.8rem;
+    }
+}

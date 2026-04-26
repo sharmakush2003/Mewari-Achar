@@ -21,6 +21,10 @@ const playfair = Playfair_Display({
 export const metadata = {
   title: 'Mewari Special Achaar - Premium Homemade Pickles',
   description: 'Authentic homemade pickles (Achaar) made with traditional recipes and love. Order now!',
+  icons: {
+    icon: '/favicon.png',
+    apple: '/favicon.png',
+  },
 };
 
 export default function RootLayout({ children }) {
