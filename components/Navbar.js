@@ -84,11 +84,20 @@ export default function Navbar({ onOpenOrders, onOpenSample }) {
 
       <nav className={`mewari-nav-fixed ${scrolled ? 'is-scrolled' : ''}`} style={{ display: menuOpen ? 'none' : 'flex' }}>
         <div className="mewari-nav-container">
-          <Link href="/" onClick={(e) => { 
+          <Link href="/" style={{ position: 'relative', height: '60px', width: '100px', display: 'flex', alignItems: 'center' }} onClick={(e) => { 
             handleSecretLogoClick(e);
             if (clickCount.current !== 3) setMenuOpen(false); 
           }}>
-            <img src="/favicon.png" alt="Mewari Achaar" style={{ height: '55px', display: 'block' }} />
+            <img src="/favicon.png" alt="Mewari Achaar" style={{ 
+              height: scrolled ? '60px' : '75px', 
+              width: 'auto', 
+              position: 'absolute', 
+              top: scrolled ? '-5px' : '-10px', 
+              left: '0', 
+              transition: 'all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1)',
+              filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.12))',
+              zIndex: 100
+            }} />
           </Link>
 
           <ul className="mewari-desktop-nav">
@@ -129,7 +138,7 @@ export default function Navbar({ onOpenOrders, onOpenSample }) {
               handleSecretLogoClick(e);
               if (clickCount.current === 3) setMenuOpen(false);
             }}>
-              <img src="/favicon.png" alt="Logo" style={{ height: '55px' }} />
+              <img src="/favicon.png" alt="Logo" style={{ height: '70px' }} />
             </Link>
             <button onClick={() => setMenuOpen(false)} style={{ background: 'none', border: 'none', color: '#8B0000', fontSize: '2.5rem', cursor: 'pointer', lineHeight: 1 }}>&times;</button>
           </div>
@@ -173,7 +182,7 @@ export default function Navbar({ onOpenOrders, onOpenSample }) {
                     <button onClick={logout} className="drawer-action-btn drawer-logout-btn">
                       Logout From Account
                     </button>
-                  </>
+                  </> 
                 )}
               </>
             )}
