@@ -84,21 +84,23 @@ export default function Navbar({ onOpenOrders, onOpenSample }) {
 
       <nav className={`mewari-nav-fixed ${scrolled ? 'is-scrolled' : ''}`} style={{ display: menuOpen ? 'none' : 'flex' }}>
         <div className="mewari-nav-container">
-          <Link href="/" style={{ position: 'relative', height: '60px', width: '100px', display: 'flex', alignItems: 'center' }} onClick={(e) => { 
+          <Link href="/" className="mewari-logo-link" onClick={(e) => { 
             handleSecretLogoClick(e);
             if (clickCount.current !== 3) setMenuOpen(false); 
           }}>
             <img src="/favicon.png" alt="Mewari Achaar" style={{ 
-              height: scrolled ? '60px' : '75px', 
+              height: '55px', 
               width: 'auto', 
-              position: 'absolute', 
-              top: scrolled ? '-5px' : '-10px', 
-              left: '0', 
+              position: 'relative', 
               transition: 'all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1)',
               filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.12))',
               zIndex: 100
             }} />
           </Link>
+
+          <div className="mobile-center-title">
+            Mewari <br/> Achaar
+          </div>
 
           <ul className="mewari-desktop-nav">
             {navItems.map((item) => (
@@ -124,9 +126,11 @@ export default function Navbar({ onOpenOrders, onOpenSample }) {
             )}
           </ul>
 
-          <button className="mewari-hamburger" onClick={() => setMenuOpen(true)}>
-            <span></span><span></span><span></span>
-          </button>
+          <div className="nav-hamburger-wrapper">
+            <button className="mewari-hamburger" onClick={() => setMenuOpen(true)}>
+              <span></span><span></span><span></span>
+            </button>
+          </div>
         </div>
       </nav>
 
