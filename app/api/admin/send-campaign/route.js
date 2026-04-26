@@ -3,7 +3,7 @@ import nodemailer from 'nodemailer';
 
 export async function POST(request) {
     try {
-        const { emails, subject, tagline } = await request.json();
+        const { emails, subject, tagline, message } = await request.json();
         
         if (!emails || !Array.isArray(emails)) {
             return NextResponse.json({ error: 'Invalid email list' }, { status: 400 });
@@ -29,6 +29,7 @@ export async function POST(request) {
 
         const finalSubject = subject || "खम्मा घणी हुकुम! मेवाड़ की याद और यहाँ का स्वाद 🏰";
         const finalTagline = tagline || "Authentic Taste of Rajasthan";
+        const finalMessage = message || "उम्मीद है कि थारो चित्तौड़गढ़ रो सफ़र बहुत ही चोखो रयो हो सी। मेवाड़ री यादों सागे अठै रो स्वाद भी थारे घर तक पहुँच सके है।";
 
         for (const email of emails) {
             try {
@@ -45,13 +46,9 @@ export async function POST(request) {
                             
                             <h2 style="color: #8B0000; text-align: center;">खम्मा घणी हुकुम!</h2>
                             
-                            <p style="font-size: 1.1rem; line-height: 1.6; color: #333; text-align: center;">
-                                उम्मीद है कि थारो चित्तौड़गढ़ रो सफ़र बहुत ही चोखो रयो हो सी। मेवाड़ री यादों सागे अठै रो स्वाद भी थारे घर तक पहुँच सके है।
-                            </p>
-                            
-                            <p style="font-size: 1.1rem; line-height: 1.6; color: #333; text-align: center;">
-                                <strong>मेवाड़ी स्पेशल अचार</strong> थारे घर तक वही हस्तनिर्मित और शुद्ध स्वाद पहुँचावेगा जो मेवाड़ री शान है।
-                            </p>
+                            <div style="font-size: 1.1rem; line-height: 1.6; color: #333; text-align: center; white-space: pre-wrap;">
+                                ${finalMessage}
+                            </div>
 
                             <div style="text-align: center; margin: 40px 0;">
                                 <a href="https://www.mewari-achar.shop/signup" style="background-color: #8B0000; color: white; padding: 15px 35px; text-decoration: none; border-radius: 5px; font-weight: bold; border: 2px solid #D4AF37;">Sign Up & Get Free Sample</a>
