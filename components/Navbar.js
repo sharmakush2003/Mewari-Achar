@@ -1,21 +1,56 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useAuth } from './AuthContext';
+import { useRouter } from 'next/navigation';
 
 export default function Navbar({ onOpenOrders, onOpenSample }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const { user, logout } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const router = useRouter();
+  
+  // Secret Trigger Logic
+  const clickCount = useRef(0);
+  const lastClickTime = useRef(0);
 
   useEffect(() => {
     setMounted(true);
     const handleScroll = () => setScrolled(window.scrollY > 50);
+    
+    // Keyboard Shortcut Trigger: Alt + Shift + A
+    const handleKeyDown = (e) => {
+      if (e.altKey && e.shiftKey && e.code === 'KeyA') {
+        router.push('/admin');
+      }
+    };
+
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    window.addEventListener('keydown', handleKeyDown);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [router]);
+
+  const handleSecretLogoClick = (e) => {
+    const now = Date.now();
+    if (now - lastClickTime.current > 1000) {
+      clickCount.current = 1;
+    } else {
+      clickCount.current += 1;
+    }
+    lastClickTime.current = now;
+
+    if (clickCount.current === 3) {
+      e.preventDefault();
+      router.push('/admin');
+      clickCount.current = 0;
+    }
+  };
 
   // Sync scroll lock
   useEffect(() => {
@@ -49,7 +84,10 @@ export default function Navbar({ onOpenOrders, onOpenSample }) {
 
       <nav className={`mewari-nav-fixed ${scrolled ? 'is-scrolled' : ''}`} style={{ display: menuOpen ? 'none' : 'flex' }}>
         <div className="mewari-nav-container">
-          <Link href="/" onClick={() => setMenuOpen(false)}>
+          <Link href="/" onClick={(e) => { 
+            handleSecretLogoClick(e);
+            if (clickCount.current !== 3) setMenuOpen(false); 
+          }}>
             <img src="/favicon.png" alt="Mewari Achaar" style={{ height: '55px', display: 'block' }} />
           </Link>
 
@@ -87,7 +125,12 @@ export default function Navbar({ onOpenOrders, onOpenSample }) {
       {menuOpen && (
         <div className="mewari-mobile-drawer">
           <div className="drawer-header" style={{ marginBottom: '2rem' }}>
-            <img src="/favicon.png" alt="Logo" style={{ height: '55px' }} />
+            <Link href="/" onClick={(e) => {
+              handleSecretLogoClick(e);
+              if (clickCount.current === 3) setMenuOpen(false);
+            }}>
+              <img src="/favicon.png" alt="Logo" style={{ height: '55px' }} />
+            </Link>
             <button onClick={() => setMenuOpen(false)} style={{ background: 'none', border: 'none', color: '#8B0000', fontSize: '2.5rem', cursor: 'pointer', lineHeight: 1 }}>&times;</button>
           </div>
 
