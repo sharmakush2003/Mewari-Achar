@@ -9,7 +9,7 @@ import FlavorBars from '@/components/FlavorBars';
 import { SampleModal, PolicyModal, SupportModal, PerksModal } from '@/components/Modals';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import FlavorQuiz from '@/components/FlavorQuiz';
+
 import Link from 'next/link';
 
 export default function Home() {
@@ -198,11 +198,7 @@ export default function Home() {
         </div>
       </section>
       
-      <section className="royal-section flavor-discovery-hub" data-aos="fade-up">
-        <div className="discovery-container">
-          <FlavorQuiz />
-        </div>
-      </section>
+
 
       <section className="royal-msme-trust" data-aos="fade-up">
         <div className="msme-container">
