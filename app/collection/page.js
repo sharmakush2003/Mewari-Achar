@@ -6,14 +6,12 @@ import Footer from '@/components/Footer';
 import { useAuth } from '@/components/AuthContext';
 import { products } from '@/lib/products-data';
 import FlavorBars from '@/components/FlavorBars';
-import { useCart } from '@/components/CartContext';
 import { PolicyModal, OrdersModal, SupportModal } from '@/components/Modals';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 export default function Collection() {
     const { user } = useAuth();
-    const { addToCart, notification } = useCart();
     const [activeModal, setActiveModal] = useState(null);
 
     useEffect(() => {
@@ -25,15 +23,9 @@ export default function Collection() {
             <div className="hero-texture"></div>
             <div className="hero-soft-glow"></div>
 
-            <Navbar 
-                onOpenOrders={() => setActiveModal('orders')} 
-            />
+            <Navbar />
 
-            {notification ? (
-              <div className="royal-notification">
-                {notification}
-              </div>
-            ) : null}
+
 
             <section className="royal-section collection-hero">
                 <div className="section-header" data-aos="fade-up">
@@ -64,12 +56,28 @@ export default function Collection() {
                                     <div className="box-card-premium">
                                         <span className="weight">500g</span>
                                         <span className="editorial-pricing">₹{product.price500g}</span>
-                                        <button className="btn-outline-royal" onClick={() => addToCart(product.id, "500g", products)}>Add to Basket</button>
-                                    </div>
-                                    <div className="box-card-premium">
+                                        <a 
+                                          href={`https://wa.me/917014102742?text=Hello! I want to order ${product.name} (500g) for ₹${product.price500g}.`} 
+                                          target="_blank" 
+                                          rel="noopener noreferrer"
+                                          className="btn-add-royal"
+                                          style={{ textDecoration: 'none', textAlign: 'center' }}
+                                        >
+                                          Order on WhatsApp
+                                        </a>
+                                      </div>
+                                      <div className="price-box">
                                         <span className="weight">1kg</span>
-                                        <span className="editorial-pricing">₹{product.price1kg}</span>
-                                        <button className="btn-outline-royal" onClick={() => addToCart(product.id, "1kg", products)}>Add to Basket</button>
+                                        <span className="cost">₹{product.price1kg}</span>
+                                        <a 
+                                          href={`https://wa.me/917014102742?text=Hello! I want to order ${product.name} (1kg) for ₹${product.price1kg}.`} 
+                                          target="_blank" 
+                                          rel="noopener noreferrer"
+                                          className="btn-add-royal"
+                                          style={{ textDecoration: 'none', textAlign: 'center' }}
+                                        >
+                                          Order on WhatsApp
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -85,7 +93,7 @@ export default function Collection() {
 
             {activeModal === 'policy' && <PolicyModal onClose={() => setActiveModal(null)} />}
             {activeModal === 'support' && <SupportModal onClose={() => setActiveModal(null)} />}
-            {activeModal === 'orders' && <OrdersModal onClose={() => setActiveModal(null)} />}
+
 
             <style jsx>{`
                 .collection-hero {

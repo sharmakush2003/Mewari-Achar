@@ -3,10 +3,9 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { products } from '@/lib/products-data';
-import { useCart } from './CartContext';
+
 
 export default function FlavorQuiz() {
-    const { addToCart } = useCart();
     const [step, setStep] = useState(0); // 0: Start, 1: Spice, 2: Tangy, 3: Vibe, 4: Result
     const [answers, setAnswers] = useState({ spicy: 0, tangy: 0, vibe: '' });
     const [match, setMatch] = useState(null);
@@ -189,9 +188,15 @@ export default function FlavorQuiz() {
                                     <p className="match-desc">{match.desc}</p>
                                     
                                     <div className="match-actions-stack">
-                                        <button className="btn-royal-gold full" onClick={() => addToCart(match.id, '500g', products)}>
-                                            Add to Basket / टोकरी में डालें
-                                        </button>
+                                        <a 
+                                          href={`https://wa.me/917014102742?text=Hello! My quiz result was ${match.name}. I want to order it (500g) for ₹${match.price500g}.`} 
+                                          target="_blank" 
+                                          rel="noopener noreferrer"
+                                          className="btn-royal-gold full"
+                                          style={{ textDecoration: 'none', textAlign: 'center' }}
+                                        >
+                                            Order on WhatsApp / अभी ऑर्डर करें
+                                        </a>
                                         <button className="quiz-restart-link" onClick={() => setStep(0)}>
                                             Not what you expected? Take Quiz Again
                                         </button>

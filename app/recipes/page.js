@@ -65,6 +65,7 @@ export default function RecipesPage() {
                 <div className="footer-grain"></div>
                 <div className="footer-content">
                     <p>Crafted with Heritage in the Heart of Rajasthan</p>
+                    <p style={{ color: '#8B0000', fontWeight: 'bold', marginTop: '10px' }}>mewariachar@gmail.com</p>
                 </div>
             </footer>
 

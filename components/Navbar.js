@@ -12,45 +12,15 @@ export default function Navbar({ onOpenOrders, onOpenSample }) {
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
   
-  // Secret Trigger Logic
-  const clickCount = useRef(0);
-  const lastClickTime = useRef(0);
-
   useEffect(() => {
     setMounted(true);
     const handleScroll = () => setScrolled(window.scrollY > 50);
-    
-    // Keyboard Shortcut Trigger: Alt + Shift + A
-    const handleKeyDown = (e) => {
-      if (e.altKey && e.shiftKey && e.code === 'KeyA') {
-        router.push('/admin');
-      }
-    };
-
     window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('keydown', handleKeyDown);
     
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [router]);
-
-  const handleSecretLogoClick = (e) => {
-    const now = Date.now();
-    if (now - lastClickTime.current > 1000) {
-      clickCount.current = 1;
-    } else {
-      clickCount.current += 1;
-    }
-    lastClickTime.current = now;
-
-    if (clickCount.current === 3) {
-      e.preventDefault();
-      router.push('/admin');
-      clickCount.current = 0;
-    }
-  };
+  }, []);
 
   // Sync scroll lock
   useEffect(() => {
@@ -63,9 +33,8 @@ export default function Navbar({ onOpenOrders, onOpenSample }) {
   const navItems = [
     { name: 'Home', href: '/', icon: '🏠' },
     { name: 'Collection', href: '/collection', icon: '🍯' },
-    { name: 'Order Now', href: '/order', icon: '🛒' },
+    { name: 'WhatsApp Shop', href: 'https://wa.me/c/917014102742', icon: '💬' },
     { name: 'Recipes', href: '/recipes', icon: '📜' },
-    { name: 'Cart', href: '/cart', icon: '🛍️' },
   ];
 
   return (
@@ -84,10 +53,7 @@ export default function Navbar({ onOpenOrders, onOpenSample }) {
 
       <nav className={`mewari-nav-fixed ${scrolled ? 'is-scrolled' : ''}`} style={{ display: menuOpen ? 'none' : 'flex' }}>
         <div className="mewari-nav-container">
-          <Link href="/" className="mewari-logo-link" onClick={(e) => { 
-            handleSecretLogoClick(e);
-            if (clickCount.current !== 3) setMenuOpen(false); 
-          }}>
+          <Link href="/" className="mewari-logo-link" onClick={() => setMenuOpen(false)}>
             <img src="/favicon.png" alt="Mewari Achaar" style={{ 
               height: '55px', 
               width: 'auto', 
@@ -103,14 +69,24 @@ export default function Navbar({ onOpenOrders, onOpenSample }) {
           </div>
 
           <ul className="mewari-desktop-nav">
-            {navItems.map((item) => (
-              <li key={item.name}>
-                <Link href={item.href} className="mewari-nav-item">
-                  <span>{item.icon}</span>
-                  <span>{item.name}</span>
-                </Link>
-              </li>
-            ))}
+            {navItems.map((item) => {
+              const isExternal = item.href.startsWith('http');
+              return (
+                <li key={item.name}>
+                  {isExternal ? (
+                    <a href={item.href} target="_blank" rel="noopener noreferrer" className="mewari-nav-item" style={{ textDecoration: 'none' }}>
+                      <span>{item.icon}</span>
+                      <span>{item.name}</span>
+                    </a>
+                  ) : (
+                    <Link href={item.href} className="mewari-nav-item">
+                      <span>{item.icon}</span>
+                      <span>{item.name}</span>
+                    </Link>
+                  )}
+                </li>
+              );
+            })}
             
             {mounted && (
               <li>
@@ -118,7 +94,6 @@ export default function Navbar({ onOpenOrders, onOpenSample }) {
                   <Link href="/login" className="drawer-action-btn" style={{ padding: '10px 25px', fontSize: '0.85rem', borderRadius: '8px' }}>Login</Link>
                 ) : (
                   <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                    <span onClick={() => onOpenOrders?.()} style={{ cursor: 'pointer', fontWeight: '700', color: '#2c1810', fontSize: '0.9rem' }}>Orders</span>
                     <button onClick={logout} style={{ background: 'none', border: '1px solid #8B0000', color: '#8B0000', padding: '5px 12px', borderRadius: '5px', cursor: 'pointer', fontWeight: '600' }}>Logout</button>
                   </div>
                 )}
@@ -137,23 +112,99 @@ export default function Navbar({ onOpenOrders, onOpenSample }) {
       {/* DRAWER */}
       {menuOpen && (
         <div className="mewari-mobile-drawer">
-          <div className="drawer-header" style={{ marginBottom: '2rem' }}>
-            <Link href="/" onClick={(e) => {
-              handleSecretLogoClick(e);
-              if (clickCount.current === 3) setMenuOpen(false);
-            }}>
-              <img src="/favicon.png" alt="Logo" style={{ height: '70px' }} />
+          <div className="drawer-header" style={{ marginBottom: '1rem' }}>
+            <Link href="/" onClick={() => setMenuOpen(false)}>
+              <img src="/favicon.png" alt="Logo" style={{ height: '60px' }} />
             </Link>
             <button onClick={() => setMenuOpen(false)} style={{ background: 'none', border: 'none', color: '#8B0000', fontSize: '2.5rem', cursor: 'pointer', lineHeight: 1 }}>&times;</button>
           </div>
 
           <div className="drawer-links-box">
-            {navItems.map((item) => (
-              <Link key={item.name} href={item.href} onClick={() => setMenuOpen(false)} className="drawer-link-item">
-                <span style={{ fontSize: '1.6rem' }}>{item.icon}</span>
-                <span>{item.name}</span>
-              </Link>
-            ))}
+            {navItems.map((item) => {
+              const isExternal = item.href.startsWith('http');
+              return isExternal ? (
+                <a 
+                  key={item.name} 
+                  href={item.href} 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setMenuOpen(false)} 
+                  className="drawer-link-item" 
+                  style={{ padding: '8px 0', textDecoration: 'none' }}
+                >
+                  <span style={{ fontSize: '1.4rem' }}>{item.icon}</span>
+                  <span style={{ fontSize: '0.95rem' }}>{item.name}</span>
+                </a>
+              ) : (
+                <Link key={item.name} href={item.href} onClick={() => setMenuOpen(false)} className="drawer-link-item" style={{ padding: '8px 0' }}>
+                  <span style={{ fontSize: '1.4rem' }}>{item.icon}</span>
+                  <span style={{ fontSize: '0.95rem' }}>{item.name}</span>
+                </Link>
+              );
+            })}
+            
+            <div className="drawer-promo-box" style={{ 
+              marginTop: '1rem', 
+              padding: '12px 15px', 
+              background: 'linear-gradient(135deg, #2c1810 0%, #1a0f0a 100%)', 
+              borderRadius: '12px', 
+              border: '1px solid rgba(212, 175, 55, 0.4)',
+              position: 'relative',
+              overflow: 'hidden',
+              boxShadow: '0 8px 25px rgba(0,0,0,0.2)'
+            }}>
+              {/* Decorative Ornament */}
+              <div style={{ position: 'absolute', top: '-10px', right: '-10px', opacity: 0.1 }}>
+                 <svg width="60" height="60" viewBox="0 0 40 40" fill="#D4AF37"><path d="M20 5L24 13H16L20 5Z"/></svg>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                <span style={{ fontSize: '1rem', color: '#D4AF37' }}>👑</span>
+                <span style={{ 
+                  color: '#D4AF37', 
+                  fontSize: '0.6rem', 
+                  fontWeight: '700', 
+                  letterSpacing: '1.5px', 
+                  textTransform: 'uppercase',
+                  fontFamily: 'var(--font-main)'
+                }}>Royal Privileges</span>
+              </div>
+
+              <p style={{ 
+                fontSize: '0.75rem', 
+                color: 'rgba(255, 255, 255, 0.9)', 
+                lineHeight: '1.5', 
+                margin: '0 0 10px 0', 
+                fontWeight: '400',
+                fontFamily: 'var(--font-royal, serif)',
+                fontStyle: 'italic'
+              }}>
+                Hukum, Royal Family ka hissa banein! Naye launches aur discounts sabse pehle paane ke liye sign up karein.
+              </p>
+
+              {!user && (
+                <Link 
+                  href="/signup" 
+                  onClick={() => setMenuOpen(false)}
+                  style={{ 
+                    display: 'inline-block',
+                    background: '#D4AF37',
+                    color: '#2c1810',
+                    padding: '6px 12px',
+                    borderRadius: '5px',
+                    fontSize: '0.7rem',
+                    fontWeight: '700',
+                    textDecoration: 'none',
+                    textAlign: 'center',
+                    width: '100%',
+                    textTransform: 'uppercase',
+                    letterSpacing: '1px'
+                  }}
+                >
+                  Family Join Karein
+                </Link>
+              )}
+            </div>
           </div>
 
           <div className="drawer-footer-profile">
@@ -180,9 +231,7 @@ export default function Navbar({ onOpenOrders, onOpenSample }) {
                         <span>Registered Member</span>
                       </div>
                     </div>
-                    <button onClick={() => { onOpenOrders?.(); setMenuOpen(false); }} className="drawer-action-btn">
-                      📦 View My Orders
-                    </button>
+
                     <button onClick={logout} className="drawer-action-btn drawer-logout-btn">
                       Logout From Account
                     </button>

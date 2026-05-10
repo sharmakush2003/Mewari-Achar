@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { db } from '@/lib/firebase';
-import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
+import { collection } from 'firebase/firestore';
 
-// 1. Sample Modal (Matches exact HTML structure/classes)
+// 1. Sample Modal
 export const SampleModal = ({ active, onClose }) => {
   if (!active) return null;
   
@@ -22,15 +22,12 @@ export const SampleModal = ({ active, onClose }) => {
           <p style={{ fontSize: '0.9rem', color: '#8B0000', marginBottom: '0.5rem', fontWeight: 600 }}>
             *Sample is free, but delivery charges apply based on distance.
           </p>
-          <p style={{ fontSize: '0.8rem', color: '#666', marginBottom: '1.5rem', opacity: 0.8 }}>
-            ℹ️ Sample delivery date will be provided by the owner on WhatsApp.
-          </p>
           <form className="order-form" onSubmit={(e) => {
               e.preventDefault();
               const phone = e.target.phone.value;
               const addr = e.target.address.value;
               const type = e.target.type.value;
-              window.open(`https://wa.me/919785054474?text=Free Sample Request!%0AType: ${type}%0APhone: ${phone}%0AAddress: ${addr}`, '_blank');
+              window.open(`https://wa.me/917014102742?text=Free Sample Request!%0AType: ${type}%0APhone: ${phone}%0AAddress: ${addr}`, '_blank');
               onClose();
           }}>
             <div className="form-group">
@@ -91,74 +88,7 @@ export const PolicyModal = ({ active = true, onClose }) => {
   );
 };
 
-// 3. Orders Modal (History)
-export const OrdersModal = ({ active = true, onClose, user }) => {
-  const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (active && user) {
-        setLoading(true);
-        // Query only by UID to avoid needing a composite index
-        const q = query(
-            collection(db, "orders"), 
-            where("uid", "==", user.uid)
-        );
-        getDocs(q).then(snap => {
-            const data = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            // Sort by timestamp descending on the client side
-            data.sort((a, b) => {
-                const timeA = a.timestamp?.seconds || 0;
-                const timeB = b.timestamp?.seconds || 0;
-                return timeB - timeA;
-            });
-            setOrders(data);
-            setLoading(false);
-        }).catch(err => {
-            console.error("Order fetch error:", err);
-            setLoading(false);
-        });
-    }
-  }, [active, user]);
-
-  if (!active) return null;
-
-  return (
-    <div className={`modal-overlay active`} onClick={(e) => { 
-        if (e.target.className.includes('modal-overlay')) onClose(); 
-    }}>
-      <div className="modal-content" style={{ maxWidth: '800px' }}>
-        <button className="close-modal" onClick={onClose}>&times;</button>
-        <div className="modal-header">
-          <span className="modal-icon">📜</span>
-          <h2>Your Order History</h2>
-        </div>
-        <div className="orders-list">
-          {loading ? <div className="loading-spinner">Loading your orders...</div> : 
-           orders.length === 0 ? <p style={{ textAlign: 'center', padding: '2rem' }}>No orders found.</p> :
-           orders.map(order => (
-             <div key={order.id} className="order-history-card">
-               <div className="order-history-header">
-                 <div>
-                   <div className="order-history-id">Order ID: #{order.id.slice(0,6)}</div>
-                   <div className="order-history-date">{order.timestamp?.toDate().toLocaleDateString()}</div>
-                 </div>
-                 <div className="order-history-status">{order.status || 'Received'}</div>
-               </div>
-               <div className="order-history-items">
-                 {order.items?.map((item, idx) => (
-                   <div key={idx}>{item.name} ({item.size}) x{item.qty}</div>
-                 ))}
-               </div>
-               <div className="order-history-total">Total: ₹{order.total}</div>
-             </div>
-           ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-// 4. Support Modal
+// 3. Support Modal
 export const SupportModal = ({ active = true, onClose }) => {
   if (!active) return null;
   
@@ -181,7 +111,7 @@ export const SupportModal = ({ active = true, onClose }) => {
               Email Us
             </a>
             
-            <a href="https://wa.me/919785054474" target="_blank" className="btn-outline-royal" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', borderColor: '#25D366', color: '#25D366' }}>
+            <a href="https://wa.me/917014102742" target="_blank" className="btn-outline-royal" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', borderColor: '#25D366', color: '#25D366' }}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.3.149-1.777.877-2.049.976-.272.1-.471.149-.669.449-.198.3-.765.976-.938 1.173-.173.197-.347.223-.647.074-.3-.149-1.268-.468-2.416-1.492-.894-.798-1.5-1.783-1.675-2.081-.173-.298-.018-.46.132-.609.135-.133.3-.348.451-.522.15-.174.199-.298.299-.497.1-.198.05-.373-.025-.522-.075-.149-.669-1.612-.916-2.212-.24-.582-.485-.504-.669-.513-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.373-.272.299-1.04 1.018-1.04 2.484s1.017 2.883 1.166 3.081c.148.199 2.002 3.056 4.848 4.286.677.293 1.206.469 1.616.598.68.216 1.298.185 1.785.115.542-.078 1.666-.68 1.901-1.336.236-.657.236-1.221.165-1.337-.07-.116-.264-.197-.563-.347zM12 2C6.477 2 2 6.477 2 12c0 2.01.593 3.882 1.613 5.451L2 22l4.685-1.564A10.02 10.02 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18c-1.745 0-3.376-.57-4.703-1.536l-.338-.246-2.774.925.942-2.715-.27-.432A7.95 7.95 0 0 1 4 12c0-4.418 3.582-8 8-8s8 3.582 8 8-3.582 8-8 8z"/></svg>
               WhatsApp Us
             </a>
@@ -189,8 +119,101 @@ export const SupportModal = ({ active = true, onClose }) => {
           
           <div style={{ marginTop: '30px', borderTop: '1px solid #eee', paddingTop: '20px' }}>
             <p style={{ fontSize: '0.8rem', opacity: 0.6 }}>Owner: Vijay Laxmi Sharma</p>
-            <p style={{ fontSize: '0.8rem', opacity: 0.6 }}>Address: Chittorgarh, Rajasthan</p>
+            <p style={{ fontSize: '0.8rem', opacity: 0.6, color: '#8B0000', fontWeight: 'bold' }}>Contact: mewariachar@gmail.com</p>
           </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// 4. Perks Modal (Popup on load)
+export const PerksModal = ({ active, onClose }) => {
+  if (!active) return null;
+
+  return (
+    <div className={`modal-overlay active`} onClick={(e) => { 
+        if (e.target.className.includes('modal-overlay')) onClose(); 
+    }}>
+      <div className="modal-content" style={{ maxWidth: '450px', background: '#2c1810', color: '#fff', border: '1px solid #D4AF37', padding: '25px' }}>
+        <button className="close-modal" onClick={onClose} style={{ color: '#D4AF37', top: '10px', right: '15px' }}>&times;</button>
+        <div className="modal-header" style={{ borderBottom: '1px solid rgba(212, 175, 55, 0.2)', paddingBottom: '15px' }}>
+          <span className="perks-badge" style={{ 
+              background: 'rgba(212, 175, 55, 0.1)',
+              color: '#D4AF37',
+              border: '1px solid #D4AF37',
+              padding: '3px 12px',
+              borderRadius: '100px',
+              fontSize: '0.65rem',
+              fontWeight: '700',
+              letterSpacing: '1.5px',
+              textTransform: 'uppercase'
+          }}>Elite Membership Benefits</span>
+          <h2 style={{ fontFamily: 'serif', marginTop: '12px', fontSize: '1.5rem' }}>WhatsApp Order, <span style={{ color: '#D4AF37', fontStyle: 'italic' }}>Account Faide</span></h2>
+        </div>
+        <div className="modal-body" style={{ padding: '15px 0' }}>
+          <p style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '0.85rem', lineHeight: '1.5', marginBottom: '20px' }}>
+            Hukum, Mewari Achaar account hone ke dheron faide hain:
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <div style={{ display: 'flex', gap: '12px', alignItems: 'center', background: 'rgba(255, 255, 255, 0.03)', padding: '10px', borderRadius: '8px' }}>
+              <span style={{ fontSize: '1.2rem' }}>📧</span>
+              <div style={{ textAlign: 'left' }}>
+                <h4 style={{ color: '#D4AF37', margin: 0, fontSize: '0.9rem' }}>Exclusive Updates</h4>
+                <p style={{ fontSize: '0.75rem', margin: 0, opacity: 0.7 }}>Naye batches ki jankari sabse pehle.</p>
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: '12px', alignItems: 'center', background: 'rgba(255, 255, 255, 0.03)', padding: '10px', borderRadius: '8px' }}>
+              <span style={{ fontSize: '1.2rem' }}>🏷️</span>
+              <div style={{ textAlign: 'left' }}>
+                <h4 style={{ color: '#D4AF37', margin: 0, fontSize: '0.9rem' }}>Member Discounts</h4>
+                <p style={{ fontSize: '0.75rem', margin: 0, opacity: 0.7 }}>Khaas discounts sirf registered users ke liye.</p>
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: '12px', alignItems: 'center', background: 'rgba(255, 255, 255, 0.03)', padding: '10px', borderRadius: '8px' }}>
+              <span style={{ fontSize: '1.2rem' }}>📄</span>
+              <div style={{ textAlign: 'left' }}>
+                <h4 style={{ color: '#D4AF37', margin: 0, fontSize: '0.9rem' }}>Automated Billing</h4>
+                <p style={{ fontSize: '0.75rem', margin: 0, opacity: 0.7 }}>Order summary aur bills seedha email par.</p>
+              </div>
+            </div>
+          </div>
+          
+          <div style={{ marginTop: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+            <input 
+              type="checkbox" 
+              id="dontShowAgain" 
+              style={{ cursor: 'pointer' }} 
+              onChange={(e) => {
+                if (e.target.checked) {
+                  // Set dismissal for 7 days
+                  const expiry = new Date().getTime() + (7 * 24 * 60 * 60 * 1000);
+                  localStorage.setItem('mewari_perks_dismissed_until', expiry.toString());
+                } else {
+                  localStorage.removeItem('mewari_perks_dismissed_until');
+                }
+              }}
+            />
+            <label htmlFor="dontShowAgain" style={{ fontSize: '0.75rem', opacity: 0.7, cursor: 'pointer' }}>7 dino tak dobara mat dikhayein</label>
+          </div>
+
+          <button 
+            onClick={onClose}
+            style={{ 
+                marginTop: '15px', 
+                width: '100%', 
+                padding: '10px', 
+                background: '#D4AF37', 
+                color: '#2c1810', 
+                border: 'none', 
+                borderRadius: '8px', 
+                fontWeight: 'bold',
+                cursor: 'pointer',
+                fontSize: '0.9rem'
+            }}
+          >
+            Shopping Shuru Karein
+          </button>
         </div>
       </div>
     </div>

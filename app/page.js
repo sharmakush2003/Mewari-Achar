@@ -6,25 +6,37 @@ import Footer from '@/components/Footer';
 import { useAuth } from '@/components/AuthContext';
 import { products as allProducts } from '@/lib/products-data';
 import FlavorBars from '@/components/FlavorBars';
-import { useCart } from '@/components/CartContext';
-import { SampleModal, PolicyModal, OrdersModal, SupportModal } from '@/components/Modals';
+import { SampleModal, PolicyModal, SupportModal, PerksModal } from '@/components/Modals';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import { motion, useScroll, useTransform } from 'framer-motion';
 import FlavorQuiz from '@/components/FlavorQuiz';
-
 import Link from 'next/link';
 
 export default function Home() {
   const { user } = useAuth();
-  const { addToCart, notification } = useCart();
   const [activeModal, setActiveModal] = useState(null);
-
-  const { scrollY } = useScroll();
-  const yParallax = useTransform(scrollY, [0, 1000], [0, 100]);
 
   useEffect(() => {
     AOS.init({ duration: 1000, once: true });
+
+    // Show Perks Modal logic
+    const now = new Date().getTime();
+    const dismissedUntil = localStorage.getItem('mewari_perks_dismissed_until');
+    const lastShown = localStorage.getItem('mewari_perks_last_shown');
+    
+    // 1. Check if user dismissed it for 7 days
+    if (dismissedUntil && now < parseInt(dismissedUntil)) return;
+
+    // 2. Check if shown in the last 24 hours
+    const oneDay = 24 * 60 * 60 * 1000;
+    if (lastShown && (now - parseInt(lastShown) < oneDay)) return;
+
+    // Trigger modal
+    const timer = setTimeout(() => {
+      setActiveModal('perks');
+      localStorage.setItem('mewari_perks_last_shown', now.toString());
+    }, 1500);
+    return () => clearTimeout(timer);
   }, []);
 
   // Show only top 3 products for the homepage
@@ -34,15 +46,8 @@ export default function Home() {
     <div className="main-wrapper">
       <Navbar 
         onOpenSample={() => setActiveModal('sample')} 
-        onOpenOrders={() => setActiveModal('orders')} 
       />
 
-      {notification ? (
-        <div className="royal-notification">
-          {notification}
-        </div>
-      ) : null}
-      
       <section id="home" className="royal-hero">
         <div className="hero-texture"></div>
         <div className="hero-soft-glow"></div>
@@ -69,15 +74,26 @@ export default function Home() {
             and matured in the heat of the Rajasthan desert.
           </p>
 
-          <div className="hero-cta">
+          <div className="hero-cta" style={{ marginBottom: '15px' }}>
             <Link href="/collection" className="btn-royal">Explore Collection</Link>
             <button className="btn-link-royal" onClick={() => setActiveModal('sample')}>Claim Free Sample</button>
           </div>
-        </div>
-
-        <div className="hero-visual-center">
-          <div className="img-frame-accent"></div>
-          <img src="/Images/Mango Achar.jpg" alt="Premium Mango Achaar" className="hero-main-img" />
+          
+          <button 
+            onClick={() => setActiveModal('perks')} 
+            style={{ 
+              background: 'none', 
+              border: 'none', 
+              color: '#D4AF37', 
+              fontSize: '0.75rem', 
+              textDecoration: 'underline', 
+              cursor: 'pointer',
+              opacity: 0.8,
+              letterSpacing: '1px'
+            }}
+          >
+            View Elite Membership Benefits
+          </button>
         </div>
       </section>
 
@@ -105,12 +121,28 @@ export default function Home() {
                   <div className="price-box">
                     <span className="weight">500g</span>
                     <span className="cost">₹{product.price500g}</span>
-                    <button className="btn-add-royal" onClick={() => addToCart(product.id, '500g', allProducts)}>Add to Basket</button>
+                    <a 
+                      href={`https://wa.me/917014102742?text=Hello! I want to order ${product.name} (500g) for ₹${product.price500g}.`} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="btn-add-royal"
+                      style={{ textDecoration: 'none', textAlign: 'center' }}
+                    >
+                      Order on WhatsApp
+                    </a>
                   </div>
                   <div className="price-box">
                     <span className="weight">1kg</span>
                     <span className="cost">₹{product.price1kg}</span>
-                    <button className="btn-add-royal" onClick={() => addToCart(product.id, '1kg', allProducts)}>Add to Basket</button>
+                    <a 
+                      href={`https://wa.me/917014102742?text=Hello! I want to order ${product.name} (1kg) for ₹${product.price1kg}.`} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="btn-add-royal"
+                      style={{ textDecoration: 'none', textAlign: 'center' }}
+                    >
+                      Order on WhatsApp
+                    </a>
                   </div>
                 </div>
               </div>
@@ -166,27 +198,22 @@ export default function Home() {
         </div>
       </section>
       
-      {/* Flavor Discovery Quiz Section */}
       <section className="royal-section flavor-discovery-hub" data-aos="fade-up">
         <div className="discovery-container">
           <FlavorQuiz />
         </div>
       </section>
 
-      {/* MSME Trust Section */}
       <section className="royal-msme-trust" data-aos="fade-up">
         <div className="msme-container">
            <div className="msme-badge-lockup">
              <div className="msme-seal">
                <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
-                 {/* Outer ring */}
                  <circle cx="45" cy="45" r="43" stroke="#D4AF37" strokeWidth="1.5" fill="#fff"/>
                  <circle cx="45" cy="45" r="38" stroke="rgba(212,175,55,0.3)" strokeWidth="0.5" fill="none"/>
-                 {/* Tricolor stripe */}
                  <path d="M10 35 Q45 32 80 35 L80 38 Q45 41 10 38 Z" fill="#FF9933" opacity="0.85"/>
                  <path d="M10 38 Q45 41 80 38 L80 41 Q45 44 10 41 Z" fill="#fff" stroke="#ccc" strokeWidth="0.3"/>
                  <path d="M10 41 Q45 44 80 41 L80 44 Q45 47 10 44 Z" fill="#138808" opacity="0.85"/>
-                 {/* Ashoka Chakra */}
                  <circle cx="45" cy="40" r="5" stroke="#00008B" strokeWidth="1" fill="none"/>
                  <circle cx="45" cy="40" r="1.2" fill="#00008B"/>
                  {[...Array(24)].map((_, i) => {
@@ -197,7 +224,6 @@ export default function Home() {
                    const y2 = 40 + 4.5 * Math.sin(angle);
                    return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#00008B" strokeWidth="0.5"/>;
                  })}
-                 {/* Bottom text */}
                  <text x="45" y="62" textAnchor="middle" fontSize="5.5" fontWeight="700" fill="#8B0000" fontFamily="serif" letterSpacing="1">GOVT OF INDIA</text>
                  <text x="45" y="70" textAnchor="middle" fontSize="7" fontWeight="900" fill="#8B0000" fontFamily="serif" letterSpacing="2">MSME</text>
                  <text x="45" y="77" textAnchor="middle" fontSize="4.5" fontWeight="600" fill="#5a4a42" fontFamily="serif" letterSpacing="1">MINISTRY</text>
@@ -220,15 +246,16 @@ export default function Home() {
       {Boolean(activeModal === 'sample') && <SampleModal active={true} onClose={() => setActiveModal(null)} />}
       {Boolean(activeModal === 'policy') && <PolicyModal active={true} onClose={() => setActiveModal(null)} />}
       {Boolean(activeModal === 'support') && <SupportModal active={true} onClose={() => setActiveModal(null)} />}
-      {Boolean(activeModal === 'orders') && <OrdersModal active={true} user={user} onClose={() => setActiveModal(null)} />}
+      {Boolean(activeModal === 'perks') && <PerksModal active={true} onClose={() => setActiveModal(null)} />}
 
       <style jsx>{`
         .hero-content {
           position: relative;
           z-index: 2;
           max-width: 850px;
-          margin-bottom: 40px;
+          margin: 0 auto;
           width: 100%;
+          text-align: center;
         }
         .hero-crown-seal {
           display: flex;
@@ -296,137 +323,8 @@ export default function Home() {
           margin-top: 80px;
           text-align: center;
         }
-        .story-container {
-          max-width: 1200px;
-          margin: 0 auto;
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 100px;
-          align-items: center;
-        }
-        .story-text { text-align: left; }
-        .story-text p {
-          font-size: 1.25rem;
-          line-height: 1.95;
-          color: #5a4a42;
-          margin-bottom: 30px;
-          opacity: 0.9;
-        }
-        .visual-frame {
-          position: relative;
-          padding: 25px;
-          background: white;
-          box-shadow: 0 40px 80px rgba(44, 24, 16, 0.1);
-          border: 1px solid rgba(212, 175, 55, 0.2);
-        }
-        .visual-frame img {
-          width: 100%;
-          height: 580px;
-          object-fit: cover;
-        }
-        @media (max-width: 968px) {
-          .visual-frame img {
-            height: 320px;
-          }
-          .visual-frame {
-            padding: 15px;
-          }
-        }
-        @media (max-width: 480px) {
-          .visual-frame img {
-            height: 240px;
-          }
-          .visual-frame {
-            padding: 10px;
-          }
-        }
-        .order-cta-banner {
-          background: linear-gradient(135deg, #6b0000 0%, #8B0000 50%, #7a0000 100%);
-          padding: 120px 20px;
-          text-align: center;
-          color: #fff;
-          position: relative;
-          overflow: hidden;
-        }
-        .order-cta-banner::before {
-          content: '';
-          position: absolute;
-          top: 0; left: 0; right: 0; bottom: 0;
-          background: radial-gradient(ellipse at center top, rgba(212,175,55,0.12) 0%, transparent 65%);
-          pointer-events: none;
-        }
-        .order-cta-banner::after {
-          content: '';
-          position: absolute;
-          top: 0; left: 0; right: 0; bottom: 0;
-          background-image: url("https://www.transparenttextures.com/patterns/paper.png");
-          opacity: 0.06;
-          pointer-events: none;
-        }
-        .banner-content {
-          position: relative;
-          z-index: 2;
-          max-width: 780px;
-          margin: 0 auto;
-        }
-        .banner-ornament {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 14px;
-          margin-bottom: 30px;
-        }
-        .banner-ornament-line {
-          width: 60px;
-          height: 1px;
-          background: linear-gradient(to right, transparent, rgba(212,175,55,0.7));
-        }
-        .banner-ornament-line.right {
-          background: linear-gradient(to left, transparent, rgba(212,175,55,0.7));
-        }
-        .banner-ornament-diamond {
-          width: 6px;
-          height: 6px;
-          border: 1px solid rgba(212,175,55,0.8);
-          transform: rotate(45deg);
-        }
-        .order-cta-banner h2 {
-          color: #fff !important;
-          font-size: clamp(1.8rem, 6vw, 3rem);
-          margin-bottom: 0;
-        }
-        .order-cta-banner h2 span {
-          color: #D4AF37 !important;
-          font-style: italic;
-          opacity: 1;
-        }
-        .order-cta-banner p {
-          font-size: clamp(1rem, 3vw, 1.3rem);
-          opacity: 0.85;
-          margin: 25px auto 45px;
-          max-width: 600px;
-          color: #fff;
-          line-height: 1.7;
-        }
-        .banner-buttons {
-          display: flex;
-          gap: 20px;
-          justify-content: center;
-          flex-wrap: wrap;
-        }
-        .btn-royal.gold {
-          background: #D4AF37;
-          color: #2c1810;
-          box-shadow: 0 10px 35px rgba(212,175,55,0.35);
-        }
-        .btn-royal.gold:hover {
-          background: #e8c84a;
-          box-shadow: 0 18px 45px rgba(212,175,55,0.5);
-        }
         @media (max-width: 968px) {
           .hero-cta { flex-direction: column; gap: 20px; }
-          .banner-buttons { flex-direction: column; align-items: center; }
-          .order-cta-banner { padding: 80px 24px; }
         }
       `}</style>
     </div>

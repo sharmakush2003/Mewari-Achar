@@ -29,6 +29,7 @@ export default function Footer({ onOpenPolicy, onOpenSupport }) {
             </div>
             
             <div className="footer-bottom">
+                <div style={{ marginBottom: '10px', color: '#8B0000', fontWeight: '700', fontSize: '0.9rem' }}>mewariachar@gmail.com</div>
                 <div className="footer-copyright">© 2026 Mewari Homemade Achaar. All Rights Reserved.</div>
             </div>
 
