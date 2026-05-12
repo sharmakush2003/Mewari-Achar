@@ -25,15 +25,15 @@ export default function RecipesPage() {
                             <circle cx="20" cy="20" r="15" stroke="#D4AF37" strokeWidth="0.5" strokeDasharray="2 2" />
                         </svg>
                     </div>
-                    <h1 className="hero-display">The Recipes of <br/><span>Mewari Achaar</span></h1>
+                    <h1 className="hero-display">मेवाड़ी अचार की <br/><span>पारंपरिक विधियाँ</span></h1>
                     <div className="hero-accents">
                         <div className="accent-line"></div>
                         <div className="accent-diamond"></div>
                         <div className="accent-line"></div>
                     </div>
                     <p className="hero-lead">
-                        In our kitchen, a meal is never just food—it is a sequence of sacred pairings. 
-                        Explore the artisanal traditions that have graced royal Mewari tables.
+                        हुकुम, हमारी रसोई में भोजन केवल आहार नहीं, बल्कि एक परंपरा है। 
+                        मेवाड़ के शाही स्वादों की इन अनोखी विधियों को जानें।
                     </p>
                 </motion.div>
             </section>
@@ -64,7 +64,7 @@ export default function RecipesPage() {
             <footer className="rituals-footer">
                 <div className="footer-grain"></div>
                 <div className="footer-content">
-                    <p>Crafted with Heritage in the Heart of Rajasthan</p>
+                    <p>राजस्थान की मिट्टी और मेवाड़ की विरासत से निर्मित</p>
                     <p style={{ color: '#8B0000', fontWeight: 'bold', marginTop: '10px' }}>mewariachar@gmail.com</p>
                 </div>
             </footer>

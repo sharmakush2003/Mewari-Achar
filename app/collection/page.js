@@ -13,10 +13,14 @@ import 'aos/dist/aos.css';
 export default function Collection() {
     const { user } = useAuth();
     const [activeModal, setActiveModal] = useState(null);
+    const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
+        setMounted(true);
         AOS.init({ duration: 1000, once: true });
     }, []);
+
+    if (!mounted) return null;
 
     return (
         <main className="main-wrapper">
