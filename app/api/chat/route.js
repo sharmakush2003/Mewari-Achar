@@ -1,0 +1,46 @@
+import { Groq } from "groq-sdk";
+
+const groq = new Groq({
+    apiKey: process.env.GROQ_API_KEY,
+});
+
+export async function POST(req) {
+    try {
+        const { messages } = await req.json();
+
+        const response = await groq.chat.completions.create({
+            messages: [
+                {
+                    role: "system",
+                    content: `You are 'Mewari Achaar AI', a helpful and royal assistant for Mewari Achaar. 
+                    You speak with a mix of English and Hindi (Hinglish), using respectful terms like 'Hukum', 'Padharo', 'Sa', 'Khamma Ghani'.
+                    Your goal is to help users with:
+                    1. Ordering pickles (Aam, Mirch, Nimbu, Ker Sangri, etc.).
+                    2. Explaining the heritage of Mewari taste.
+                    3. Handling support queries.
+                    4. Explaining Elite Membership benefits.
+                    
+                    Be polite, premium, and traditional. 
+                    If the user wants to order, guide them to use the 'Order Something' option in the menu or tell them to contact on WhatsApp +91 70141 02742.`
+                },
+                ...messages,
+            ],
+            model: "llama-3.3-70b-versatile",
+            temperature: 0.7,
+            max_tokens: 500,
+        });
+
+        return new Response(JSON.stringify({ 
+            content: response.choices[0].message.content 
+        }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+        });
+    } catch (error) {
+        console.error("Chat API Error:", error);
+        return new Response(JSON.stringify({ error: "Failed to connect to AI" }), {
+            status: 500,
+            headers: { 'Content-Type': 'application/json' },
+        });
+    }
+}

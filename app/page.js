@@ -58,10 +58,10 @@ export default function Home() {
               <path d="M20 5L24 13H16L20 5Z" fill="#8B0000"/>
               <circle cx="20" cy="20" r="15" stroke="#D4AF37" strokeWidth="0.8" strokeDasharray="3 3"/>
             </svg>
-            <span>Legacy of Mewar</span>
+            <span>Mewar ki Virasat</span>
           </div>
 
-          <h1 className="hero-display">Taste the <br/><span>Heritage of Flavour</span></h1>
+          <h1 className="hero-display">Mewar ka <br/><span>Shahi Swad</span></h1>
           
           <div className="hero-accents">
             <div className="accent-line"></div>
@@ -70,13 +70,13 @@ export default function Home() {
           </div>
 
           <p className="hero-lead">
-            Experience the authentic taste of tradition. Handcrafted, sun-dried,
-            and matured in the heat of the Rajasthan desert.
+            Padharo Hukum! Swad aisa jo aapko Mewar ki galiyon ki yaad dila de. 
+            Shuddh desi masalon se bana, dhoop mein pakka asli Achaar.
           </p>
 
           <div className="hero-cta" style={{ marginBottom: '15px' }}>
-            <Link href="/collection" className="btn-royal">Explore Collection</Link>
-            <button className="btn-link-royal" onClick={() => setActiveModal('sample')}>Claim Free Sample</button>
+            <Link href="/collection" className="btn-royal">संग्रह देखें</Link>
+            <button className="btn-link-royal" onClick={() => setActiveModal('sample')}>मुफ्त सैंपल मंगवाएं</button>
           </div>
           
           <button 
@@ -89,10 +89,11 @@ export default function Home() {
               textDecoration: 'underline', 
               cursor: 'pointer',
               opacity: 0.8,
-              letterSpacing: '1px'
+              letterSpacing: '0.5px',
+              fontFamily: 'var(--font-devanagari)'
             }}
           >
-            View Elite Membership Benefits
+            राजसी सदस्यता के लाभ देखें
           </button>
         </div>
       </section>
@@ -100,8 +101,8 @@ export default function Home() {
       {/* Featured Masterpieces */}
       <section id="products" className="royal-section">
         <div className="section-header" data-aos="fade-up">
-          <span className="section-label">Masterpieces</span>
-          <h2 className="section-display">Featured <span>Collection</span></h2>
+          <span className="section-label">Rajwadi Swaad</span>
+          <h2 className="section-display">Khaas <span>Sangrah</span></h2>
           <div className="section-accent"></div>
         </div>
 
@@ -144,6 +145,19 @@ export default function Home() {
                       Order on WhatsApp
                     </a>
                   </div>
+                  <div className="price-box custom-tier">
+                    <span className="weight">Custom</span>
+                    <span className="cost">संपर्क करें</span>
+                    <a 
+                      href={`https://wa.me/917014102742?text=Hello Hukum! I want to order ${product.name} in a custom quantity. Please let me know the rates.`} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="btn-add-royal custom-btn"
+                      style={{ textDecoration: 'none', textAlign: 'center' }}
+                    >
+                      Contact Team
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -151,15 +165,15 @@ export default function Home() {
         </div>
 
         <div className="section-cta-footer" data-aos="fade-up">
-          <Link href="/collection" className="btn-royal">View Full Collection</Link>
+          <Link href="/collection" className="btn-royal">पूरा संग्रह देखें</Link>
         </div>
       </section>
 
       {/* Philosophy Section */}
       <section className="royal-section alt-cream">
         <div className="section-header" data-aos="fade-up">
-           <span className="section-wide-label">OUR PHILOSOPHY</span>
-           <h2 className="section-display">The Art of <span>Achaar</span></h2>
+           <span className="section-wide-label">Hamari Parampara</span>
+           <h2 className="section-display">Achaar ka Asli <span>Hunar</span></h2>
            <div className="red-divider"></div>
         </div>
         
@@ -171,8 +185,8 @@ export default function Home() {
                     <path d="M20 14C20 14 15 18 15 23C15 25.76 17.24 28 20 28" stroke="#D4AF37" strokeWidth="1" strokeLinecap="round"/>
                   </svg>
                 </div>
-                <h3>Artisanal Integrity</h3>
-                <p>Pure ingredients, no preservatives. Just nature's goodness in a jar.</p>
+                <h3>शुद्धता और सत्यनिष्ठा</h3>
+                <p>बिना किसी मिलावट के, प्रकृति की शुद्धता हर जार में।</p>
             </div>
             <div className="royal-feature-card" data-aos="fade-up" data-aos-delay="100">
                 <div className="feature-symbol">
@@ -182,8 +196,8 @@ export default function Home() {
                     <path d="M16 14C16 14 17 10 20 10" stroke="#D4AF37" strokeWidth="1" strokeLinecap="round"/>
                   </svg>
                 </div>
-                <h3>Clay Pot Matured</h3>
-                <p>Traditional slow-aging methods that allow flavors to deepen naturally.</p>
+                <h3>मिट्टी के बर्तनों में पकाया हुआ</h3>
+                <p>पुरानी पद्धतियों से धीरे-धीरे तैयार, ताकि स्वाद गहराई तक उतर जाए।</p>
             </div>
             <div className="royal-feature-card" data-aos="fade-up" data-aos-delay="200">
                 <div className="feature-symbol">
@@ -192,8 +206,8 @@ export default function Home() {
                     <path d="M14 18C14 15 16 13 18 13" stroke="#D4AF37" strokeWidth="1" strokeLinecap="round"/>
                   </svg>
                 </div>
-                <h3>Small Batches</h3>
-                <p>Handcrafted in limited quantities to ensure perfection in every drop.</p>
+                <h3>सीमित मात्रा में निर्माण</h3>
+                <p>हाथों से बना, ताकि हर बूंद में परफेक्शन बना रहे।</p>
             </div>
         </div>
       </section>
@@ -226,9 +240,9 @@ export default function Home() {
                </svg>
              </div>
              <div className="msme-info-editorial">
-                <h4 className="msme-title-editorial">Government Recognized Enterprise</h4>
-                <div className="msme-number">Reg No: UDYAM-RJ-10-0076393</div>
-                <p className="msme-nic">NIC Code 10306: Manufacture of pickles, chutney etc.</p>
+                <h4 className="msme-title-editorial">भारत सरकार द्वारा मान्यता प्राप्त उद्यम</h4>
+                <div className="msme-number">पंजीकरण संख्या: UDYAM-RJ-10-0076393</div>
+                <p className="msme-nic">NIC कोड 10306: अचार और चटनी का निर्माण।</p>
              </div>
            </div>
         </div>
@@ -321,6 +335,17 @@ export default function Home() {
         }
         @media (max-width: 968px) {
           .hero-cta { flex-direction: column; gap: 20px; }
+        }
+        .price-tiers {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            width: 100%;
+        }
+        @media (max-width: 768px) {
+            .price-tiers {
+                grid-template-columns: 1fr;
+            }
         }
       `}</style>
     </div>

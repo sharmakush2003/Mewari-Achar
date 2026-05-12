@@ -11,6 +11,7 @@
     --shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
     --font-main: var(--font-main);
     --font-royal: var(--font-royal);
+    --font-devanagari: var(--font-devanagari);
     --transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
@@ -260,7 +261,7 @@ body {
 /* ── SECTIONS ── */
 .royal-section {
     width: 100%;
-    padding: 60px 5%;
+    padding: 20px 5% 60px;
     position: relative;
 }
 
@@ -337,12 +338,12 @@ body {
 
 .price-tiers {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 25px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
 }
 
 .price-box {
-    padding: 25px;
+    padding: 15px 10px;
     background: #fff;
     border: 1px solid rgba(139, 0, 0, 0.05);
     text-align: center;
@@ -355,15 +356,15 @@ body {
     text-transform: uppercase;
     letter-spacing: 2px;
     color: #8B0000;
-    margin-bottom: 10px;
+    margin-bottom: 6px;
     font-weight: 700;
 }
 
 .price-box .cost {
     display: block;
-    font-size: 1.8rem;
+    font-size: 1.4rem;
     color: #2c1810;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
     font-family: var(--font-royal, serif);
 }
 
@@ -371,7 +372,7 @@ body {
     background: #fff;
     border: 1.5px solid #8B0000;
     color: #8B0000;
-    padding: 10px 20px;
+    padding: 8px 12px;
     font-size: 0.75rem;
     text-transform: uppercase;
     font-weight: 700;
@@ -775,7 +776,8 @@ h4 {
     text-decoration: none;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
+    font-family: var(--font-devanagari);
     font-size: 0.95rem;
     transition: var(--transition);
     border: none;
@@ -821,7 +823,8 @@ h4 {
     color: var(--primary-color);
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 2.5px;
+    letter-spacing: 1px;
+    font-family: var(--font-devanagari);
     font-size: 0.85rem;
     cursor: pointer;
     padding-bottom: 5px;
@@ -841,7 +844,6 @@ h4 {
 .btn-link-premium:hover,
 .btn-link-royal:hover {
     border-bottom-color: var(--primary-color);
-    letter-spacing: 3.5px;
     opacity: 1;
 }
 
@@ -908,17 +910,27 @@ h4 {
 
 .product-image-container {
     width: 100%;
-    max-width: 380px;
-    height: 320px;
+    max-width: 500px;
+    height: 400px;
     margin: 0 auto;
     background: #fff;
-    padding: 15px;
-    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.06);
-    border-radius: 8px;
+    padding: 0;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(139, 0, 0, 0.05);
+}
+
+.product-image-container::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    box-shadow: inset 0 0 40px rgba(0,0,0,0.05);
+    pointer-events: none;
 }
 
 .responsive-img-premium {
@@ -929,7 +941,7 @@ h4 {
 
 .product-info-editorial {
     width: 100%;
-    max-width: 320px;
+    max-width: 600px;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -979,7 +991,7 @@ h4 {
 
 .section-display {
     font-family: var(--font-royal, serif);
-    font-size: 3.8rem;
+    font-size: clamp(2.5rem, 10vw, 4.5rem);
     line-height: 1.1;
     color: var(--primary-color);
     margin-top: 10px;
@@ -992,11 +1004,72 @@ h4 {
 
 /* --- Flavor Bars / Taste Meter (Surgical Restoration) --- */
 .flavor-profile-section {
-    margin-top: 40px;
-    padding: 30px;
-    background: rgba(255, 255, 255, 0.4);
-    border-radius: 12px;
-    border: 1px solid rgba(139, 0, 0, 0.05);
+    margin-top: 30px;
+    padding: 25px;
+    background: #fffdf8;
+    border-radius: 16px;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    width: 100%;
+}
+
+.flavor-section-title {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #8B0000;
+    margin-bottom: 20px;
+    font-weight: 800;
+}
+
+.flavor-bars-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    width: 100%;
+}
+
+@media (max-width: 600px) {
+    .flavor-bars-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+.flavor-bar-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.flavor-label-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.flavor-name {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #2c1810;
+}
+
+.hindi-label {
+    opacity: 0.5;
+    font-weight: 400;
+    font-size: 0.7rem;
+}
+
+.flavor-bar-track {
+    height: 6px;
+    background: rgba(139, 0, 0, 0.05);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.flavor-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #D4AF37, #8B0000);
+    border-radius: 10px;
 }
 
 .flavor-section-title {
@@ -1293,13 +1366,13 @@ h4 {
 
 .royal-hero {
     position: relative;
-    min-height: 100vh;
+    min-height: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 120px 20px 60px;
+    padding: 140px 20px 60px;
     overflow: hidden;
     background: #faf9f2;
 }
@@ -1322,7 +1395,7 @@ h4 {
     transform: translate(-50%, -50%);
     width: 100%;
     max-width: 1200px;
-    height: 90vh;
+    height: 100%;
     background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%);
     pointer-events: none;
 }
@@ -1362,7 +1435,7 @@ h4 {
 
 .royal-section {
     background: #faf9f2;
-    padding: 120px 24px;
+    padding: 40px 24px 120px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -2658,3 +2731,95 @@ footer a {
         font-size: 1.8rem;
     }
 }
+
+/* ==========================================================================
+   GLOBAL LOADING SCREEN STYLES (PREVENT FOUC)
+   ========================================================================== */
+.loading-container {
+    position: fixed;
+    inset: 0;
+    background-color: #faf9f2;
+    z-index: 9999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+}
+
+.loading-content {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.royal-logo-pulse {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 40px;
+    animation: logoPulse 2.5s ease-in-out infinite;
+}
+
+.loader-logo {
+    height: 100px;
+    width: auto;
+    filter: drop-shadow(0 10px 20px rgba(139, 0, 0, 0.15));
+}
+
+.logo-text-stack {
+    display: flex;
+    flex-direction: column;
+    line-height: 0.9;
+    font-family: var(--font-heading, serif);
+}
+
+.mewari-text {
+    font-size: 2.2rem;
+    color: #2c1810;
+    font-weight: 500;
+}
+
+.achar-text {
+    font-size: 2.2rem;
+    color: #8B0000;
+    font-weight: 700;
+}
+
+.royal-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(139, 0, 0, 0.05);
+    border-top: 3px solid #8B0000;
+    border-radius: 50%;
+    margin-bottom: 25px;
+    animation: spin 0.8s linear infinite;
+}
+
+.loading-tagline {
+    font-family: var(--font-devanagari, sans-serif);
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    color: #5a4a42;
+    text-transform: uppercase;
+    opacity: 0.8;
+    font-weight: 500;
+    padding: 0 20px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes logoPulse {
+    0%, 100% { transform: scale(1); filter: brightness(1); }
+    50% { transform: scale(1.05); filter: brightness(1.1); }
+}
+
+@media (max-width: 768px) {
+    .loader-logo { height: 80px; }
+    .mewari-text, .achar-text { font-size: 1.8rem; }
+    .loading-tagline { font-size: 0.75rem; letter-spacing: 2px; }
+}

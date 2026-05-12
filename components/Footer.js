@@ -4,7 +4,7 @@ export default function Footer({ onOpenPolicy, onOpenSupport }) {
             <div className="footer-main-content">
                 <div className="footer-brand">
                     <h2 className="footer-logo">Mewari <br/>Achaar</h2>
-                    <p className="footer-tagline">Preserving the legacy of Rajasthani <br/>flavors, one jar at a time.</p>
+                    <p className="footer-tagline">मेवाड़ी स्वाद की विरासत को संभाले हुए, <br/>हर घर तक असली अचार।</p>
                 </div>
                 
                 <div className="footer-trust-badge">
@@ -15,30 +15,36 @@ export default function Footer({ onOpenPolicy, onOpenSupport }) {
                         </svg>
                       </div>
                       <div className="trust-text">
-                         <span className="trust-label">MSME CERTIFIED ENTERPRISE</span>
+                         <span className="trust-label">MSME प्रमाणित उद्यम</span>
                          <span className="trust-val">UDYAM-RJ-10-0076393</span>
                       </div>
                    </div>
                 </div>
 
                 <div className="footer-nav">
-                    <button onClick={onOpenPolicy} className="footer-btn">POLICIES</button>
+                    <button onClick={onOpenPolicy} className="footer-btn">नीति</button>
                     <div className="gold-dot"></div>
-                    <button onClick={onOpenSupport} className="footer-btn">CONTACT SUPPORT</button>
+                    <button onClick={onOpenSupport} className="footer-btn">संपर्क सहायता</button>
                 </div>
             </div>
             
             <div className="footer-bottom">
+                <div className="dev-credit-wrapper">
+                    <a href="https://chittortech.online" target="_blank" rel="noopener noreferrer" className="dev-credit-pill">
+                        <img src="/ct-logo.png" alt="ChittorTech Logo" />
+                        <p>Developed & Maintained by <span>ChittorTech</span></p>
+                    </a>
+                </div>
                 <div style={{ marginBottom: '10px', color: '#8B0000', fontWeight: '700', fontSize: '0.9rem' }}>mewariachar@gmail.com</div>
                 <div className="footer-copyright">© 2026 Mewari Homemade Achaar. All Rights Reserved.</div>
             </div>
 
             <style jsx>{`
                 .royal-footer {
-                    background: #fff;
-                    padding: 80px 20px 40px;
+                    background: #faf9f2;
+                    padding: 80px 20px 60px;
                     text-align: center;
-                    border-top: 1px solid rgba(0,0,0,0.03);
+                    border-top: 1px solid rgba(139, 0, 0, 0.05);
                 }
                 .footer-logo {
                     font-family: var(--font-royal, serif);
@@ -48,13 +54,14 @@ export default function Footer({ onOpenPolicy, onOpenSupport }) {
                     margin-bottom: 25px;
                 }
                 .footer-tagline {
-                    font-family: var(--font-royal, serif);
+                    font-family: var(--font-devanagari), serif;
                     font-style: italic;
                     color: #5a4a42;
                     opacity: 0.7;
                     font-size: 1.15rem;
                     line-height: 1.6;
                     margin-bottom: 45px;
+                    letter-spacing: 0.5px;
                 }
                 .footer-trust-badge {
                     display: flex;
@@ -62,13 +69,13 @@ export default function Footer({ onOpenPolicy, onOpenSupport }) {
                     margin-bottom: 50px;
                 }
                 .trust-inner {
-                    background: #fdfdfa;
+                    background: #fff;
                     padding: 15px 35px;
                     border-radius: 60px;
                     display: flex;
                     align-items: center;
                     gap: 15px;
-                    border: 1px solid rgba(212, 175, 55, 0.15);
+                    border: 1px solid rgba(139, 0, 0, 0.1);
                 }
                 .trust-text {
                     display: flex;
@@ -81,6 +88,7 @@ export default function Footer({ onOpenPolicy, onOpenSupport }) {
                     font-weight: 800;
                     font-size: 0.75rem;
                     letter-spacing: 1px;
+                    font-family: var(--font-devanagari);
                 }
                 .trust-val {
                     font-weight: 700;
@@ -101,10 +109,11 @@ export default function Footer({ onOpenPolicy, onOpenSupport }) {
                     color: #5a4a42;
                     font-weight: 800;
                     text-transform: uppercase;
-                    letter-spacing: 2px;
+                    letter-spacing: 1px;
                     font-size: 0.85rem;
                     cursor: pointer;
                     text-decoration: none;
+                    font-family: var(--font-devanagari);
                 }
                 .gold-dot {
                     width: 5px;
@@ -112,10 +121,60 @@ export default function Footer({ onOpenPolicy, onOpenSupport }) {
                     background: #D4AF37;
                     border-radius: 50%;
                 }
+                
+                /* Developer Credit Pill Style */
+                .dev-credit-wrapper {
+                    display: flex;
+                    justify-content: center;
+                    margin-bottom: 2.5rem;
+                    margin-top: 1rem;
+                }
+
+                .dev-credit-pill {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    background: #2c1810;
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    padding: 12px 24px;
+                    border-radius: 50px;
+                    text-decoration: none;
+                    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                    backdrop-filter: blur(15px);
+                }
+
+                .dev-credit-pill:hover {
+                    background: #3d2419;
+                    border-color: #8B0000;
+                    transform: translateY(-3px) scale(1.02);
+                    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+                }
+
+                .dev-credit-pill img {
+                    height: 28px;
+                    width: auto;
+                    border-radius: 6px;
+                    object-fit: contain;
+                }
+
+                .dev-credit-pill p {
+                    margin: 0;
+                    font-size: 0.9rem;
+                    color: #ffffff;
+                    font-weight: 500;
+                    letter-spacing: 0.5px;
+                }
+
+                .dev-credit-pill p span {
+                    color: #2ecc71;
+                    font-weight: 700;
+                    margin-left: 4px;
+                }
+
                 .footer-copyright {
                     font-size: 0.75rem;
                     color: #5a4a42;
-                    opacity: 0.4;
+                    opacity: 0.5;
                     letter-spacing: 0.5px;
                 }
             `}</style>

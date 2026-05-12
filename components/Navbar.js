@@ -32,9 +32,9 @@ export default function Navbar({ onOpenOrders, onOpenSample }) {
 
   const navItems = [
     { name: 'Home', href: '/', icon: '🏠' },
-    { name: 'Collection', href: '/collection', icon: '🍯' },
-    { name: 'WhatsApp Shop', href: 'https://wa.me/c/917014102742', icon: '💬' },
-    { name: 'Recipes', href: '/recipes', icon: '📜' },
+    { name: 'संग्रह', href: '/collection', icon: '🍯' },
+    { name: 'व्हाट्सएप दुकान', href: 'https://wa.me/c/917014102742', icon: '💬' },
+    { name: 'पारंपरिक विधियाँ', href: '/recipes', icon: '📜' },
   ];
 
   return (
@@ -46,9 +46,10 @@ export default function Navbar({ onOpenOrders, onOpenSample }) {
         padding: '10px 5%', 
         fontWeight: '600', 
         fontSize: '0.85rem',
+        fontFamily: 'var(--font-devanagari)',
         display: menuOpen ? 'none' : 'block'
       }}>
-        🚩 Free Sample Available at Your Doorstep! Click to learn more.
+        🚩 हुकुम! घर बैठे मुफ्त सैंपल मंगवाएं। अभी क्लिक करें।
       </div>
 
       <nav className={`mewari-nav-fixed ${scrolled ? 'is-scrolled' : ''}`} style={{ display: menuOpen ? 'none' : 'flex' }}>
@@ -212,7 +213,7 @@ export default function Navbar({ onOpenOrders, onOpenSample }) {
               <>
                 {!user ? (
                   <Link href="/login" onClick={() => setMenuOpen(false)} className="drawer-action-btn">
-                    Login / Create Account
+                    प्रवेश / खाता बनाएं
                   </Link>
                 ) : (
                   <>
@@ -223,17 +224,16 @@ export default function Navbar({ onOpenOrders, onOpenSample }) {
                           const rawName = user.displayName;
                           if (!rawName || rawName === 'Valued Guest' || rawName === 'Guest') {
                             const emailPrefix = user.email?.split('@')[0] || '';
-                            // Format kushsharma.cor to Kush Sharma
                             return `हुकुम ${emailPrefix.split(/[._]/).map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ')}`;
                           }
                           return `हुकुम ${rawName}`;
                         })()}</h4>
-                        <span>Registered Member</span>
+                        <span>पंजीकृत सदस्य</span>
                       </div>
                     </div>
 
                     <button onClick={logout} className="drawer-action-btn drawer-logout-btn">
-                      Logout From Account
+                      खाते से बाहर निकलें
                     </button>
                   </> 
                 )}
