@@ -67,7 +67,7 @@ export default function Collection() {
                                         <span className="weight">500g Jar</span>
                                         <span className="cost">₹{product.price500g}</span>
                                         <a 
-                                          href={`https://wa.me/917014102742?text=Hello! I want to order ${product.name} (500g) for ₹${product.price500g}.`} 
+                                          href={`https://wa.me/917014102742?text=${encodeURIComponent(`Khamma Ghani Hukum! I would like to order ${product.name} (500g).`)}`} 
                                           target="_blank" 
                                           rel="noopener noreferrer"
                                           className="btn-add-royal"
@@ -80,7 +80,7 @@ export default function Collection() {
                                         <span className="weight">1kg Jar</span>
                                         <span className="cost">₹{product.price1kg}</span>
                                         <a 
-                                          href={`https://wa.me/917014102742?text=Hello! I want to order ${product.name} (1kg) for ₹${product.price1kg}.`} 
+                                          href={`https://wa.me/917014102742?text=${encodeURIComponent(`Khamma Ghani Hukum! I would like to order ${product.name} (1kg).`)}`} 
                                           target="_blank" 
                                           rel="noopener noreferrer"
                                           className="btn-add-royal"
@@ -93,7 +93,7 @@ export default function Collection() {
                                         <span className="weight">Custom</span>
                                         <span className="cost" style={{ fontSize: '1.2rem' }}>Bulk Rates</span>
                                         <a 
-                                          href={`https://wa.me/917014102742?text=Hello Hukum! I want to order ${product.name} in a custom quantity.`} 
+                                          href={`https://wa.me/917014102742?text=${encodeURIComponent(`Khamma Ghani Hukum! I want to inquire about custom/bulk rates for ${product.name}.`)}`} 
                                           target="_blank" 
                                           rel="noopener noreferrer"
                                           className="btn-add-royal"

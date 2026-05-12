@@ -123,7 +123,7 @@ export default function Home() {
                     <span className="weight">500g</span>
                     <span className="cost">₹{product.price500g}</span>
                     <a 
-                      href={`https://wa.me/917014102742?text=Hello! I want to order ${product.name} (500g) for ₹${product.price500g}.`} 
+                      href={`https://wa.me/917014102742?text=${encodeURIComponent(`Khamma Ghani Hukum! I would like to order ${product.name} (500g).`)}`} 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="btn-add-royal"
@@ -136,7 +136,7 @@ export default function Home() {
                     <span className="weight">1kg</span>
                     <span className="cost">₹{product.price1kg}</span>
                     <a 
-                      href={`https://wa.me/917014102742?text=Hello! I want to order ${product.name} (1kg) for ₹${product.price1kg}.`} 
+                      href={`https://wa.me/917014102742?text=${encodeURIComponent(`Khamma Ghani Hukum! I would like to order ${product.name} (1kg).`)}`} 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="btn-add-royal"
@@ -149,7 +149,7 @@ export default function Home() {
                     <span className="weight">Custom</span>
                     <span className="cost">संपर्क करें</span>
                     <a 
-                      href={`https://wa.me/917014102742?text=Hello Hukum! I want to order ${product.name} in a custom quantity. Please let me know the rates.`} 
+                      href={`https://wa.me/917014102742?text=${encodeURIComponent(`Khamma Ghani Hukum! I want to inquire about custom/bulk rates for ${product.name}.`)}`} 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="btn-add-royal custom-btn"
@@ -181,7 +181,7 @@ export default function Home() {
             <div className="royal-feature-card" data-aos="fade-up">
                 <div className="feature-symbol">
                   <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M20 5C20 5 10 12 10 22C10 27.52 14.48 32 20 32C25.52 32 30 27.52 30 22C30 12 20 5Z" stroke="#8B0000" strokeWidth="1.5" fill="none"/>
+                    <path d="M20 5C20 5 10 12 10 22C10 27.52 14.48 32 20 32C25.52 32 30 27.52 30 22C30 12 20 5 20 5Z" stroke="#8B0000" strokeWidth="1.5" fill="none"/>
                     <path d="M20 14C20 14 15 18 15 23C15 25.76 17.24 28 20 28" stroke="#D4AF37" strokeWidth="1" strokeLinecap="round"/>
                   </svg>
                 </div>

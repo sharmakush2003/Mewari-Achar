@@ -27,7 +27,11 @@ export const SampleModal = ({ active, onClose }) => {
               const phone = e.target.phone.value;
               const addr = e.target.address.value;
               const type = e.target.type.value;
-              window.open(`https://wa.me/917014102742?text=Free Sample Request!%0AType: ${type}%0APhone: ${phone}%0AAddress: ${addr}`, '_blank');
+              const message = `Khamma Ghani Hukum! I would like to request a Free Sample.
+Type: ${type}
+Phone: ${phone}
+Address: ${addr}`;
+              window.open(`https://wa.me/917014102742?text=${encodeURIComponent(message)}`, '_blank');
               onClose();
           }}>
             <div className="form-group">
@@ -106,12 +110,22 @@ export const SupportModal = ({ active = true, onClose }) => {
           <p style={{ color: '#5a4a42', marginBottom: '2rem' }}>We are here to help you with your order or any queries about our heritage achaar.</p>
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-            <a href="mailto:mewariachar@gmail.com" className="btn-outline-royal" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-              Email Us
+            <a 
+              href="https://www.instagram.com/mewariachar/" 
+              target="_blank" 
+              className="btn-outline-royal" 
+              style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', borderColor: '#E1306C', color: '#E1306C' }}
+            >
+              <i className="fab fa-instagram" style={{ fontSize: '20px' }}></i>
+              Instagram
             </a>
             
-            <a href="https://wa.me/917014102742" target="_blank" className="btn-outline-royal" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', borderColor: '#25D366', color: '#25D366' }}>
+            <a 
+              href={`https://wa.me/917014102742?text=${encodeURIComponent('Khamma Ghani Hukum! I need some support with my order.')}`} 
+              target="_blank" 
+              className="btn-outline-royal" 
+              style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', borderColor: '#25D366', color: '#25D366' }}
+            >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.3.149-1.777.877-2.049.976-.272.1-.471.149-.669.449-.198.3-.765.976-.938 1.173-.173.197-.347.223-.647.074-.3-.149-1.268-.468-2.416-1.492-.894-.798-1.5-1.783-1.675-2.081-.173-.298-.018-.46.132-.609.135-.133.3-.348.451-.522.15-.174.199-.298.299-.497.1-.198.05-.373-.025-.522-.075-.149-.669-1.612-.916-2.212-.24-.582-.485-.504-.669-.513-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.373-.272.299-1.04 1.018-1.04 2.484s1.017 2.883 1.166 3.081c.148.199 2.002 3.056 4.848 4.286.677.293 1.206.469 1.616.598.68.216 1.298.185 1.785.115.542-.078 1.666-.68 1.901-1.336.236-.657.236-1.221.165-1.337-.07-.116-.264-.197-.563-.347zM12 2C6.477 2 2 6.477 2 12c0 2.01.593 3.882 1.613 5.451L2 22l4.685-1.564A10.02 10.02 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18c-1.745 0-3.376-.57-4.703-1.536l-.338-.246-2.774.925.942-2.715-.27-.432A7.95 7.95 0 0 1 4 12c0-4.418 3.582-8 8-8s8 3.582 8 8-3.582 8-8 8z"/></svg>
               WhatsApp Us
             </a>

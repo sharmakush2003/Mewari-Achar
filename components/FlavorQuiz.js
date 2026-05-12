@@ -189,7 +189,7 @@ export default function FlavorQuiz() {
                                     
                                     <div className="match-actions-stack">
                                         <a 
-                                          href={`https://wa.me/917014102742?text=Hello! My quiz result was ${match.name}. I want to order it (500g) for ₹${match.price500g}.`} 
+                                          href={`https://wa.me/917014102742?text=${encodeURIComponent(`Khamma Ghani Hukum! My flavor quiz result was ${match.name}. I would like to order it (500g).`)}`} 
                                           target="_blank" 
                                           rel="noopener noreferrer"
                                           className="btn-royal-gold full"
