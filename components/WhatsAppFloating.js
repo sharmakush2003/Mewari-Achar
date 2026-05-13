@@ -1195,19 +1195,30 @@ Address: ${sampleData.address}`;
           line-height: 1.4;
         }
 
-        .wa-complete-btn {
+        .wa-complete-btn,
+        .wa-submit-btn {
           width: 100%;
-          padding: 15px;
-          background: #25D366;
+          padding: 16px;
+          background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
           color: white;
           border: none;
-          border-radius: 8px;
-          font-weight: 700;
+          border-radius: 12px;
+          font-weight: 800;
           cursor: pointer;
           display: flex;
           align-items: center;
           justify-content: center;
           gap: 10px;
+          box-shadow: 0 10px 25px rgba(37, 211, 102, 0.25);
+          transition: all 0.3s;
+          font-size: 0.95rem;
+          font-family: inherit;
+        }
+
+        .wa-complete-btn:hover,
+        .wa-submit-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 15px 30px rgba(37, 211, 102, 0.35);
         }
 
         .wa-chat-body {
