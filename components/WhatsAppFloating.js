@@ -312,6 +312,7 @@ Looking forward to the royal taste!`;
         setView('order');
       }
     }
+    else if (view === 'about') setView('menu');
     else setView('menu');
   };
 
@@ -363,6 +364,10 @@ Looking forward to the royal taste!`;
                   </button>
                   <button className="wa-link-btn" onClick={() => setView('contact')}>
                     <span>📞 Contact Team</span>
+                    <i className="fas fa-chevron-right"></i>
+                  </button>
+                  <button className="wa-link-btn" onClick={() => setView('about')}>
+                    <span>👨‍💻 About the Developer</span>
                     <i className="fas fa-chevron-right"></i>
                   </button>
                   <button className="wa-link-btn" onClick={() => { window.open('/login', '_blank'); }}>
@@ -708,6 +713,127 @@ Address: ${sampleData.address}`;
                     <span><i className="fab fa-whatsapp" style={{ color: '#25D366', marginRight: '10px' }}></i> WhatsApp</span>
                     <i className="fas fa-chevron-right"></i>
                   </button>
+                </div>
+              </div>
+            )}
+
+            {/* About Developer View */}
+            {view === 'about' && (
+              <div className="wa-menu-body">
+                <div className="shahi-delivery-container" style={{ padding: '30px 20px', textAlign: 'center' }}>
+                  <div className="shahi-header-banner">
+                    <span className="shahi-motif">✦ ✧ ✦</span>
+                    <h3 className="shahi-main-title">चित्तौड़-टेक</h3>
+                    <p className="shahi-sub-title">Chittor-Tech Engineers</p>
+                    <div className="shahi-divider"></div>
+                  </div>
+
+                  <div className="wa-section-content" style={{ padding: '0 10px' }}>
+                    <p style={{ 
+                      fontSize: '0.95rem', 
+                      color: '#2c1810', 
+                      lineHeight: '1.6', 
+                      marginBottom: '20px',
+                      fontFamily: 'var(--font-royal, serif)',
+                      fontWeight: '500'
+                    }}>
+                      "Top IT Startup in Chittorgarh. Crafted for India."
+                    </p>
+                    
+                    <p style={{ 
+                      fontSize: '0.85rem', 
+                      color: '#5a4a42', 
+                      lineHeight: '1.5', 
+                      marginBottom: '25px' 
+                    }}>
+                      Chittor-Tech engineers premium digital products focused on high-performance architecture and modern user experiences.
+                    </p>
+
+                    <div className="shahi-form-section" style={{ textAlign: 'left', gap: '15px' }}>
+                      <div className="shahi-section-title">Expertise & Solutions</div>
+                      
+                      <div className="expertise-list" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                        {[
+                          {
+                            title: 'AI Content & NotebookLLM',
+                            desc: 'Advanced NotebookLLM pipelines for automated content. Generate professional audio, mind maps, and reports.',
+                            link: 'https://drive.google.com/file/d/1polbf5zGzOwzVBNmBs6SmXXqyosOBlKR/view?usp=sharing'
+                          },
+                          {
+                            title: 'Custom AI Chatbots (RAG)',
+                            desc: 'Custom AI assistants with Retrieval-Augmented Generation for domain-specific queries and smart UI integration.',
+                            link: 'https://www.mewari-achar.shop/'
+                          },
+                          {
+                            title: 'Hospitality & Admin Hubs',
+                            desc: 'Management systems for Hotels/Dharamshalas with real-time inventory, billing, and secure guest verification.',
+                            link: 'https://dharamsala-admin-portal.vercel.app/'
+                          },
+                          {
+                            title: 'Tourism & Cultural UX',
+                            desc: 'Scalable tech portals for heritage discovery featuring multi-lingual guides and emergency SOS systems.',
+                            link: 'https://chittorgarh-tourism.in/'
+                          },
+                          {
+                            title: 'MailPulse Bulk Email',
+                            desc: 'Next-gen bulk email engines for mission-critical dispatch with real-time node processing.',
+                            link: 'https://smtp-server-kohl.vercel.app/'
+                          },
+                          {
+                            title: 'Smart QR Infrastructure',
+                            desc: 'Dynamic QR-based identification and asset tracking with secure contactless protocols.',
+                            link: 'https://smart-qr-token.vercel.app/login'
+                          },
+                          {
+                            title: 'Event Management Software',
+                            desc: 'Bespoke SaaS for high-end event planners. Centralize vendor coordination and client CRMs.',
+                            link: 'https://shaadi-sutra.vercel.app/'
+                          }
+                        ].map((service, idx) => (
+                          <div key={idx} style={{ 
+                            background: 'rgba(212, 175, 55, 0.03)', 
+                            border: '1px solid rgba(212, 175, 55, 0.15)', 
+                            borderRadius: '12px', 
+                            padding: '15px',
+                            transition: 'all 0.3s'
+                          }}>
+                            <h4 style={{ color: '#8B0000', margin: '0 0 5px 0', fontSize: '0.9rem' }}>{service.title}</h4>
+                            <p style={{ fontSize: '0.75rem', color: '#5a4a42', margin: '0 0 12px 0', lineHeight: '1.4' }}>{service.desc}</p>
+                            <button 
+                              onClick={() => window.open(service.link, '_blank')}
+                              style={{ 
+                                background: 'none', 
+                                border: '1px solid #D4AF37', 
+                                color: '#8B0000', 
+                                padding: '6px 12px', 
+                                borderRadius: '6px', 
+                                fontSize: '0.7rem', 
+                                fontWeight: '700',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '5px'
+                              }}
+                            >
+                              Live Experience <i className="fas fa-external-link-alt" style={{ fontSize: '0.6rem' }}></i>
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="shahi-disclaimer-card" style={{ margin: '30px 0 25px', fontSize: '0.7rem' }}>
+                      <i className="fas fa-award"></i>
+                      <span>Recognized by iStart Rajasthan | Registered MSME | Made in India</span>
+                    </div>
+
+                    <button 
+                      className="shahi-complete-btn"
+                      onClick={() => window.open('https://www.chittortech.online', '_blank')}
+                    >
+                      Visit Main Website <i className="fas fa-arrow-right"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
