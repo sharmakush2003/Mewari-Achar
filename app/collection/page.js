@@ -111,7 +111,7 @@ export default function Collection() {
                                     </div>
                                     <div className="price-box custom-tier">
                                         <span className="weight">BULK ORDERS</span>
-                                        <span className="cost" style={{ fontSize: '0.8rem' }}>(More than 1 KG)</span>
+                                        <span className="cost" style={{ fontSize: '0.6rem', lineHeight: '1.2', marginTop: '5px' }}>Price depending upon the order size & availability</span>
                                         <a 
                                           href={`https://wa.me/917014102742?text=${encodeURIComponent(`Khamma Ghani Hukum! I want to inquire about custom/bulk rates for ${product.name}.`)}`} 
                                           target="_blank" 
