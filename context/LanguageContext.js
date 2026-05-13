@@ -15,6 +15,10 @@ export function LanguageProvider({ children }) {
     }
   }, []);
 
+  useEffect(() => {
+    document.documentElement.lang = language;
+  }, [language]);
+
   const toggleLanguage = () => {
     const newLang = language === 'hi' ? 'en' : 'hi';
     setLanguage(newLang);

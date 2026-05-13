@@ -271,19 +271,19 @@ export default function Home() {
         }
         .hero-crown-seal span {
           font-size: 0.65rem;
-          text-transform: uppercase;
-          letter-spacing: 4px;
+          text-transform: ${language === 'hi' ? 'none' : 'uppercase'};
+          letter-spacing: ${language === 'hi' ? '0' : '4px'};
           color: #8B0000;
           font-weight: 700;
         }
         .hero-display {
           font-family: var(--font-royal, serif);
           font-size: clamp(2.5rem, 8vw, 5.5rem);
-          line-height: 1.1;
+          line-height: 1.2;
           margin-bottom: 20px;
           color: #2c1810;
           font-weight: 500;
-          letter-spacing: -1px;
+          letter-spacing: ${language === 'hi' ? '0' : '-1px'};
         }
         .hero-display span {
           color: #8B0000;

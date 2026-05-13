@@ -2822,4 +2822,17 @@ footer a {
     .loader-logo { height: 80px; }
     .mewari-text, .achar-text { font-size: 1.8rem; }
     .loading-tagline { font-size: 0.75rem; letter-spacing: 2px; }
-}
+}
+
+/* ── HINDI LOCALIZATION FIXES ── */
+[lang="hi"] *:not(i):not(.fas):not(.fab):not(.far) {
+    letter-spacing: normal !important;
+    text-transform: none !important;
+    font-family: var(--font-devanagari), var(--font-main), sans-serif !important;
+}
+
+[lang="hi"] .royal-hero .hero-display,
+[lang="hi"] h1, [lang="hi"] h2, [lang="hi"] h3 {
+    line-height: 1.3 !important;
+}
+
