@@ -4,8 +4,10 @@ import { motion } from "framer-motion";
 import { recipes } from "@/lib/recipes-data";
 import RecipeCard from "@/components/RecipeCard";
 import Navbar from "@/components/Navbar";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function RecipesPage() {
+    const { t } = useLanguage();
     return (
         <main className="rituals-container">
             <Navbar />
@@ -25,15 +27,14 @@ export default function RecipesPage() {
                             <circle cx="20" cy="20" r="15" stroke="#D4AF37" strokeWidth="0.5" strokeDasharray="2 2" />
                         </svg>
                     </div>
-                    <h1 className="hero-display">मेवाड़ी अचार की <br/><span>पारंपरिक विधियाँ</span></h1>
+                    <h1 className="hero-display">{t('traditionTitle').split(' ').slice(0, -1).join(' ')} <br/><span>{t('traditionTitle').split(' ').slice(-1).join(' ')}</span></h1>
                     <div className="hero-accents">
                         <div className="accent-line"></div>
                         <div className="accent-diamond"></div>
                         <div className="accent-line"></div>
                     </div>
                     <p className="hero-lead">
-                        हुकुम, हमारी रसोई में भोजन केवल आहार नहीं, बल्कि एक परंपरा है। 
-                        मेवाड़ के शाही स्वादों की इन अनोखी विधियों को जानें।
+                        {t('heroLead')}
                     </p>
                 </motion.div>
             </section>
@@ -64,7 +65,7 @@ export default function RecipesPage() {
             <footer className="rituals-footer">
                 <div className="footer-grain"></div>
                 <div className="footer-content">
-                    <p>राजस्थान की मिट्टी और मेवाड़ की विरासत से निर्मित</p>
+                    <p>{t('footerTagline')}</p>
                     <p style={{ color: '#8B0000', fontWeight: 'bold', marginTop: '10px' }}>mewariachar@gmail.com</p>
                 </div>
             </footer>

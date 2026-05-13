@@ -35,6 +35,7 @@ export const metadata = {
 };
 
 import ClientWrapper from '@/components/ClientWrapper';
+import { LanguageProvider } from '@/context/LanguageContext';
 
 export default function RootLayout({ children }) {
   return (
@@ -44,10 +45,12 @@ export default function RootLayout({ children }) {
       </head>
       <body>
           <AuthProvider>
-            <ClientWrapper>
-              {children}
-            </ClientWrapper>
-            <WhatsAppFloating />
+            <LanguageProvider>
+              <ClientWrapper>
+                {children}
+              </ClientWrapper>
+              <WhatsAppFloating />
+            </LanguageProvider>
           </AuthProvider>
       </body>
     </html>

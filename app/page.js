@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { useAuth } from '@/components/AuthContext';
+import { useLanguage } from '@/context/LanguageContext';
 import { products as allProducts } from '@/lib/products-data';
 import Link from 'next/link';
 import FlavorSlider from '@/components/FlavorSlider';
@@ -11,6 +12,7 @@ import { PolicyModal, SupportModal, PerksModal } from '@/components/Modals';
 
 export default function Home() {
   const { user } = useAuth();
+  const { t, language } = useLanguage();
   const [activeModal, setActiveModal] = useState(null);
 
   useEffect(() => {
@@ -48,7 +50,7 @@ export default function Home() {
   const getWhatsAppLink = (product, size) => {
     const profile = product.flavorProfile;
     const profileText = `\n- Spicy: ${profile.spicy}/10\n- Tangy: ${profile.tangy}/10\n- Earthy: ${profile.earthy}/10\n- Pungent: ${profile.pungent}/10`;
-    const message = `Khamma Ghani Hukum! I would like to order ${product.name} (${size}).\n\n*My Custom Taste Settings:*${profileText}`;
+    const message = `${t('supportTitle')}! I would like to order ${product.translations[language].name} (${size}).\n\n*My Custom Taste Settings:*${profileText}`;
     return `https://wa.me/917014102742?text=${encodeURIComponent(message)}`;
   };
 
@@ -68,10 +70,10 @@ export default function Home() {
               <path d="M20 5L24 13H16L20 5Z" fill="#8B0000"/>
               <circle cx="20" cy="20" r="15" stroke="#D4AF37" strokeWidth="0.8" strokeDasharray="3 3"/>
             </svg>
-            <span>Mewar ki Virasat</span>
+            <span>{t('traditionLabel')}</span>
           </div>
 
-          <h1 className="hero-display">Mewar ka <br/><span>Shahi Swad</span></h1>
+          <h1 className="hero-display">{t('heroTitle').split(' ').slice(0, -2).join(' ')} <br/><span>{t('heroTitle').split(' ').slice(-2).join(' ')}</span></h1>
           
           <div className="hero-accents">
             <div className="accent-line"></div>
@@ -80,38 +82,20 @@ export default function Home() {
           </div>
 
           <p className="hero-lead">
-            Padharo Hukum! Swad aisa jo aapko Mewar ki galiyon ki yaad dila de. 
-            Shuddh desi masalon se bana, dhoop mein pakka asli Achaar.
+            {t('heroLead')}
           </p>
 
-          <div className="hero-cta" style={{ marginBottom: '15px' }}>
-            <Link href="/collection" className="btn-royal">संग्रह देखें</Link>
+          <div className="hero-cta">
+            <Link href="/collection" className="btn-royal">{t('heroCta')}</Link>
           </div>
-          
-          <button 
-            onClick={() => setActiveModal('perks')} 
-            style={{ 
-              background: 'none', 
-              border: 'none', 
-              color: '#D4AF37', 
-              fontSize: '0.75rem', 
-              textDecoration: 'underline', 
-              cursor: 'pointer',
-              opacity: 0.8,
-              letterSpacing: '0.5px',
-              fontFamily: 'var(--font-devanagari)'
-            }}
-          >
-            राजसी सदस्यता के लाभ देखें
-          </button>
         </div>
       </section>
 
       {/* Featured Masterpieces */}
       <section id="products" className="royal-section">
         <div className="section-header" >
-          <span className="section-label">Rajwadi Swaad</span>
-          <h2 className="section-display">Khaas <span>Sangrah</span></h2>
+          <span className="section-label">{t('featuredLabel')}</span>
+          <h2 className="section-display">{t('featuredTitle').split(' ').slice(0, -1).join(' ')} <span>{t('featuredTitle').split(' ').slice(-1).join(' ')}</span></h2>
           <div className="section-accent"></div>
         </div>
 
@@ -122,8 +106,8 @@ export default function Home() {
                 <img src={product.image} alt={product.name} className="product-img" />
               </div>
               <div className="product-info">
-                <h3 className="product-name">{product.name}</h3>
-                <p className="product-desc">{product.desc}</p>
+                <h3 className="product-name">{product.translations[language].name}</h3>
+                <p className="product-desc">{product.translations[language].desc}</p>
                 
                 <FlavorSlider 
                   profile={product.flavorProfile} 
@@ -141,7 +125,7 @@ export default function Home() {
                       className="btn-add-royal"
                       style={{ textDecoration: 'none', textAlign: 'center' }}
                     >
-                      Order on WhatsApp
+                      {t('orderWhatsApp')}
                     </a>
                   </div>
                   <div className="price-box">
@@ -154,12 +138,12 @@ export default function Home() {
                       className="btn-add-royal"
                       style={{ textDecoration: 'none', textAlign: 'center' }}
                     >
-                      Order on WhatsApp
+                      {t('orderWhatsApp')}
                     </a>
                   </div>
                   <div className="price-box custom-tier">
-                    <span className="weight">BULK ORDERS</span>
-                    <span className="cost" style={{ fontSize: '0.6rem', lineHeight: '1.2', marginTop: '5px' }}>Price depending upon the order size & availability</span>
+                    <span className="weight">{t('bulkOrders')}</span>
+                    <span className="cost" style={{ fontSize: '0.6rem', lineHeight: '1.2', marginTop: '5px' }}>{t('bulkPriceDesc')}</span>
                     <a 
                       href={`https://wa.me/917014102742?text=${encodeURIComponent(`Khamma Ghani Hukum! I want to inquire about custom/bulk rates for ${product.name}.`)}`} 
                       target="_blank" 
@@ -167,7 +151,7 @@ export default function Home() {
                       className="btn-add-royal custom-btn"
                       style={{ textDecoration: 'none', textAlign: 'center' }}
                     >
-                      Contact Team
+                      {t('contactTeam')}
                     </a>
                   </div>
                 </div>
@@ -177,15 +161,15 @@ export default function Home() {
         </div>
 
         <div className="section-cta-footer" >
-          <Link href="/collection" className="btn-royal">पूरा संग्रह देखें</Link>
+          <Link href="/collection" className="btn-royal">{t('heroCta')}</Link>
         </div>
       </section>
 
       {/* Philosophy Section */}
       <section className="royal-section alt-cream">
         <div className="section-header" >
-           <span className="section-wide-label">Hamari Parampara</span>
-           <h2 className="section-display">Achaar ka Asli <span>Hunar</span></h2>
+           <span className="section-wide-label">{t('traditionLabel')}</span>
+           <h2 className="section-display">{t('traditionTitle').split(' ').slice(0, -1).join(' ')} <span>{t('traditionTitle').split(' ').slice(-1).join(' ')}</span></h2>
            <div className="red-divider"></div>
         </div>
         
@@ -197,8 +181,8 @@ export default function Home() {
                     <path d="M20 14C20 14 15 18 15 23C15 25.76 17.24 28 20 28" stroke="#D4AF37" strokeWidth="1" strokeLinecap="round"/>
                   </svg>
                 </div>
-                <h3>शुद्धता और सत्यनिष्ठा</h3>
-                <p>बिना किसी मिलावट के, प्रकृति की शुद्धता हर जार में।</p>
+                <h3>{t('pureTitle')}</h3>
+                <p>{t('pureDesc')}</p>
             </div>
             <div className="royal-feature-card"  data-aos-delay="100">
                 <div className="feature-symbol">
@@ -208,8 +192,8 @@ export default function Home() {
                     <path d="M16 14C16 14 17 10 20 10" stroke="#D4AF37" strokeWidth="1" strokeLinecap="round"/>
                   </svg>
                 </div>
-                <h3>मिट्टी के बर्तनों में पकाया हुआ</h3>
-                <p>पुरानी पद्धतियों से धीरे-धीरे तैयार, ताकि स्वाद गहराई तक उतर जाए।</p>
+                <h3>{t('clayPotTitle')}</h3>
+                <p>{t('clayPotDesc')}</p>
             </div>
             <div className="royal-feature-card"  data-aos-delay="200">
                 <div className="feature-symbol">
@@ -218,8 +202,8 @@ export default function Home() {
                     <path d="M14 18C14 15 16 13 18 13" stroke="#D4AF37" strokeWidth="1" strokeLinecap="round"/>
                   </svg>
                 </div>
-                <h3>सीमित मात्रा में निर्माण</h3>
-                <p>हाथों से बना, ताकि हर बूंद में परफेक्शन बना रहे।</p>
+                <h3>{t('handcraftedTitle')}</h3>
+                <p>{t('handcraftedDesc')}</p>
             </div>
         </div>
       </section>
@@ -252,9 +236,9 @@ export default function Home() {
                </svg>
              </div>
              <div className="msme-info-editorial">
-                <h4 className="msme-title-editorial">भारत सरकार द्वारा मान्यता प्राप्त उद्यम</h4>
-                <div className="msme-number">पंजीकरण संख्या: UDYAM-RJ-10-0076393</div>
-                <p className="msme-nic">NIC कोड 10306: अचार और चटनी का निर्माण।</p>
+                <h4 className="msme-title-editorial">{t('govtRecognized')}</h4>
+                <div className="msme-number">{t('regNum')}</div>
+                <p className="msme-nic">{t('nicCode')}</p>
              </div>
            </div>
         </div>

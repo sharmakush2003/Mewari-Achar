@@ -4,10 +4,12 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useAuth } from './AuthContext';
 import { useRouter } from 'next/navigation';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function Navbar({ onOpenOrders, onOpenSample }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const { user, logout } = useAuth();
+  const { language, toggleLanguage, t } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
@@ -31,10 +33,10 @@ export default function Navbar({ onOpenOrders, onOpenSample }) {
   }, [menuOpen, mounted]);
 
   const navItems = [
-    { name: 'Home', href: '/', icon: '🏠' },
-    { name: 'संग्रह', href: '/collection', icon: '🍯' },
-    { name: 'व्हाट्सएप दुकान', href: 'https://wa.me/c/917014102742', icon: '💬' },
-    { name: 'पारंपरिक विधियाँ', href: '/recipes', icon: '📜' },
+    { name: t('home'), href: '/', icon: '🏠' },
+    { name: t('collection'), href: '/collection', icon: '🍯' },
+    { name: t('shop'), href: 'https://wa.me/c/917014102742', icon: '💬' },
+    { name: t('recipes'), href: '/recipes', icon: '📜' },
   ];
 
   return (
@@ -54,7 +56,7 @@ export default function Navbar({ onOpenOrders, onOpenSample }) {
           cursor: 'pointer'
         }}
       >
-        🚩 हुकुम! घर बैठे मुफ्त सैंपल मंगवाएं। अभी क्लिक करें।
+        {t('alertBar')}
       </div>
 
       <nav className={`mewari-nav-fixed ${scrolled ? 'is-scrolled' : ''}`} style={{ display: menuOpen ? 'none' : 'flex' }}>
@@ -95,7 +97,27 @@ export default function Navbar({ onOpenOrders, onOpenSample }) {
             })}
             
             {mounted && (
-              <li>
+              <li style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                <button 
+                  onClick={toggleLanguage}
+                  className="lang-toggle-btn"
+                  style={{
+                    background: 'rgba(139, 0, 0, 0.05)',
+                    border: '1px solid #D4AF37',
+                    color: '#8B0000',
+                    padding: '8px 12px',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    fontWeight: '700',
+                    fontSize: '0.8rem',
+                    transition: '0.3s',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '5px'
+                  }}
+                >
+                  <i className="fas fa-globe"></i> {language === 'hi' ? 'EN' : 'HI'}
+                </button>
                 {!user ? (
                   <Link href="/login" className="drawer-action-btn" style={{ padding: '10px 25px', fontSize: '0.85rem', borderRadius: '8px' }}>Login</Link>
                 ) : (
@@ -149,68 +171,22 @@ export default function Navbar({ onOpenOrders, onOpenSample }) {
               );
             })}
             
-            <div className="drawer-promo-box" style={{ 
-              marginTop: '1rem', 
-              padding: '12px 15px', 
-              background: 'linear-gradient(135deg, #2c1810 0%, #1a0f0a 100%)', 
-              borderRadius: '12px', 
-              border: '1px solid rgba(212, 175, 55, 0.4)',
-              position: 'relative',
-              overflow: 'hidden',
-              boxShadow: '0 8px 25px rgba(0,0,0,0.2)'
-            }}>
-              {/* Decorative Ornament */}
-              <div style={{ position: 'absolute', top: '-10px', right: '-10px', opacity: 0.1 }}>
-                 <svg width="60" height="60" viewBox="0 0 40 40" fill="#D4AF37"><path d="M20 5L24 13H16L20 5Z"/></svg>
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                <span style={{ fontSize: '1rem', color: '#D4AF37' }}>👑</span>
-                <span style={{ 
-                  color: '#D4AF37', 
-                  fontSize: '0.6rem', 
-                  fontWeight: '700', 
-                  letterSpacing: '1.5px', 
-                  textTransform: 'uppercase',
-                  fontFamily: 'var(--font-main)'
-                }}>Royal Privileges</span>
-              </div>
-
-              <p style={{ 
-                fontSize: '0.75rem', 
-                color: 'rgba(255, 255, 255, 0.9)', 
-                lineHeight: '1.5', 
-                margin: '0 0 10px 0', 
-                fontWeight: '400',
-                fontFamily: 'var(--font-royal, serif)',
-                fontStyle: 'italic'
-              }}>
-                Hukum, Royal Family ka hissa banein! Naye launches aur discounts sabse pehle paane ke liye sign up karein.
-              </p>
-
-              {!user && (
-                <Link 
-                  href="/signup" 
-                  onClick={() => setMenuOpen(false)}
-                  style={{ 
-                    display: 'inline-block',
-                    background: '#D4AF37',
-                    color: '#2c1810',
-                    padding: '6px 12px',
-                    borderRadius: '5px',
-                    fontSize: '0.7rem',
-                    fontWeight: '700',
-                    textDecoration: 'none',
-                    textAlign: 'center',
-                    width: '100%',
-                    textTransform: 'uppercase',
-                    letterSpacing: '1px'
-                  }}
-                >
-                  Family Join Karein
-                </Link>
-              )}
-            </div>
+            <button 
+              onClick={toggleLanguage}
+              className="drawer-link-item"
+              style={{ 
+                padding: '12px 0', 
+                background: 'none', 
+                border: 'none', 
+                width: '100%', 
+                textAlign: 'left',
+                borderTop: '1px solid rgba(139, 0, 0, 0.1)',
+                marginTop: '10px'
+              }}
+            >
+              <span style={{ fontSize: '1.4rem' }}>🌐</span>
+              <span style={{ fontSize: '0.95rem' }}>{t('changeLanguage')} ({language === 'hi' ? 'English' : 'Hindi'})</span>
+            </button>
           </div>
 
           <div className="drawer-footer-profile">
@@ -218,7 +194,7 @@ export default function Navbar({ onOpenOrders, onOpenSample }) {
               <>
                 {!user ? (
                   <Link href="/login" onClick={() => setMenuOpen(false)} className="drawer-action-btn">
-                    प्रवेश / खाता बनाएं
+                    {t('loginRegister')}
                   </Link>
                 ) : (
                   <>
@@ -229,16 +205,16 @@ export default function Navbar({ onOpenOrders, onOpenSample }) {
                           const rawName = user.displayName;
                           if (!rawName || rawName === 'Valued Guest' || rawName === 'Guest') {
                             const emailPrefix = user.email?.split('@')[0] || '';
-                            return `हुकुम ${emailPrefix.split(/[._]/).map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ')}`;
+                            return `${t('hukum')} ${emailPrefix.split(/[._]/).map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ')}`;
                           }
-                          return `हुकुम ${rawName}`;
+                          return `${t('hukum')} ${rawName}`;
                         })()}</h4>
-                        <span>पंजीकृत सदस्य</span>
+                        <span>{t('registeredMember')}</span>
                       </div>
                     </div>
 
                     <button onClick={logout} className="drawer-action-btn drawer-logout-btn">
-                      खाते से बाहर निकलें
+                      {t('logout')}
                     </button>
                   </> 
                 )}

@@ -1,10 +1,13 @@
+import { useLanguage } from '@/context/LanguageContext';
+
 export default function Footer({ onOpenPolicy, onOpenSupport }) {
+    const { t } = useLanguage();
     return (
         <footer className="royal-footer">
             <div className="footer-main-content">
                 <div className="footer-brand">
                     <h2 className="footer-logo">Mewari <br/>Achaar</h2>
-                    <p className="footer-tagline">मेवाड़ी स्वाद की विरासत को संभाले हुए, <br/>हर घर तक असली अचार।</p>
+                    <p className="footer-tagline">{t('footerTagline')}</p>
                 </div>
                 
                 <div className="footer-trust-badge">
@@ -15,16 +18,16 @@ export default function Footer({ onOpenPolicy, onOpenSupport }) {
                         </svg>
                       </div>
                       <div className="trust-text">
-                         <span className="trust-label">MSME प्रमाणित उद्यम</span>
+                         <span className="trust-label">{t('msmeCertified')}</span>
                          <span className="trust-val">UDYAM-RJ-10-0076393</span>
                       </div>
                    </div>
                 </div>
 
                 <div className="footer-nav">
-                    <button onClick={onOpenPolicy} className="footer-btn">नीति</button>
+                    <button onClick={onOpenPolicy} className="footer-btn">{t('policy')}</button>
                     <div className="gold-dot"></div>
-                    <button onClick={onOpenSupport} className="footer-btn">संपर्क सहायता</button>
+                    <button onClick={onOpenSupport} className="footer-btn">{t('supportContact')}</button>
                 </div>
             </div>
             

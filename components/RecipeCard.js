@@ -1,8 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function RecipeCard({ recipe, index, align = 'left' }) {
+    const { language, t } = useLanguage();
     const isRight = align === 'right';
 
     return (
@@ -17,7 +19,7 @@ export default function RecipeCard({ recipe, index, align = 'left' }) {
                 <div className="image-reveal-wrapper">
                     <img 
                         src={recipe.image} 
-                        alt={recipe.dish} 
+                        alt={recipe.translations[language].dish} 
                         className="recipe-main-image"
                     />
                     <div className="image-overlay-tint"></div>
@@ -27,18 +29,18 @@ export default function RecipeCard({ recipe, index, align = 'left' }) {
             <div className="card-content">
                 <div className="chapter-marker">
                     <div className="marker-line"></div>
-                    <span>Chapter 0{index + 1}</span>
+                    <span>{t('chapter')} 0{index + 1}</span>
                 </div>
 
                 <div className="content-main">
-                    <h3 className="pairing-category">{recipe.pairing}</h3>
-                    <h2 className="dish-display-name">{recipe.dish}</h2>
-                    <p className="dish-description">{recipe.description}</p>
+                    <h3 className="pairing-category">{recipe.translations[language].pairing}</h3>
+                    <h2 className="dish-display-name">{recipe.translations[language].dish}</h2>
+                    <p className="dish-description">{recipe.translations[language].description}</p>
                     
                     <div className="heritage-footer">
                         <div className="wisdom-box">
-                            <span className="wisdom-label">Heritage Wisdom</span>
-                            <p className="wisdom-text">{recipe.tip}</p>
+                            <span className="wisdom-label">{t('heritageWisdom')}</span>
+                            <p className="wisdom-text">{recipe.translations[language].tip}</p>
                         </div>
                     </div>
                 </div>

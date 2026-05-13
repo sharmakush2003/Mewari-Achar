@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { useAuth } from '@/components/AuthContext';
+import { useLanguage } from '@/context/LanguageContext';
 import { products as allProducts } from '@/lib/products-data';
 import FlavorSlider from '@/components/FlavorSlider';
 import { PolicyModal, OrdersModal, SupportModal } from '@/components/Modals';
@@ -12,6 +13,7 @@ import 'aos/dist/aos.css';
 
 export default function Collection() {
     const { user } = useAuth();
+    const { t, language } = useLanguage();
     const [activeModal, setActiveModal] = useState(null);
     const [mounted, setMounted] = useState(false);
 
@@ -33,7 +35,7 @@ export default function Collection() {
     const getWhatsAppLink = (product, size) => {
         const profile = product.flavorProfile;
         const profileText = `\n- Spicy: ${profile.spicy}/10\n- Tangy: ${profile.tangy}/10\n- Earthy: ${profile.earthy}/10\n- Pungent: ${profile.pungent}/10`;
-        const message = `Khamma Ghani Hukum! I would like to order ${product.name} (${size}).\n\n*My Custom Taste Settings:*${profileText}`;
+        const message = `${t('supportTitle')}! I would like to order ${product.translations[language].name} (${size}).\n\n*My Custom Taste Settings:*${profileText}`;
         return `https://wa.me/917014102742?text=${encodeURIComponent(message)}`;
     };
 
@@ -50,12 +52,11 @@ export default function Collection() {
 
             <section className="royal-section collection-hero">
                 <div className="section-header" data-aos="fade-up">
-                    <span className="section-label">Mewar ki Virasat</span>
-                    <h1 className="section-display">Asli Swad ka <span>Sangrah</span></h1>
+                    <span className="section-label">{t('traditionLabel')}</span>
+                    <h1 className="section-display">{t('featuredTitle').split(' ').slice(0, -1).join(' ')} <span>{t('featuredTitle').split(' ').slice(-1).join(' ')}</span></h1>
                     <div className="section-accent"></div>
                     <p className="section-intro">
-                        Hukum, hamare har jar mein hai Mewar ki purani parampara. 
-                        Mathania ki mirch ho ya parampara se judi haldi, har ek swad hai bemisaal.
+                        {t('collectionIntro')}
                     </p>
                 </div>
             </section>
@@ -74,8 +75,8 @@ export default function Collection() {
                             
                             <div className="product-info">
                                 <span className="heritage-tag">Legacy of Mewar</span>
-                                <h3 className="product-name">{product.name}</h3>
-                                <p className="product-desc">{product.desc}</p>
+                                <h3 className="product-name">{product.translations[language].name}</h3>
+                                <p className="product-desc">{product.translations[language].desc}</p>
                                 
                                 <FlavorSlider 
                                     profile={product.flavorProfile} 
@@ -93,7 +94,7 @@ export default function Collection() {
                                           className="btn-add-royal"
                                           style={{ textDecoration: 'none' }}
                                         >
-                                          Order on WhatsApp
+                                          {t('orderWhatsApp')}
                                         </a>
                                     </div>
                                     <div className="price-box">
@@ -106,12 +107,12 @@ export default function Collection() {
                                           className="btn-add-royal"
                                           style={{ textDecoration: 'none' }}
                                         >
-                                          Order on WhatsApp
+                                          {t('orderWhatsApp')}
                                         </a>
                                     </div>
                                     <div className="price-box custom-tier">
-                                        <span className="weight">BULK ORDERS</span>
-                                        <span className="cost" style={{ fontSize: '0.6rem', lineHeight: '1.2', marginTop: '5px' }}>Price depending upon the order size & availability</span>
+                                        <span className="weight">{t('bulkOrders')}</span>
+                                        <span className="cost" style={{ fontSize: '0.6rem', lineHeight: '1.2', marginTop: '5px' }}>{t('bulkPriceDesc')}</span>
                                         <a 
                                           href={`https://wa.me/917014102742?text=${encodeURIComponent(`Khamma Ghani Hukum! I want to inquire about custom/bulk rates for ${product.name}.`)}`} 
                                           target="_blank" 
@@ -119,7 +120,7 @@ export default function Collection() {
                                           className="btn-add-royal"
                                           style={{ textDecoration: 'none', borderColor: '#D4AF37', color: '#D4AF37' }}
                                         >
-                                          Contact Team
+                                          {t('contactTeam')}
                                         </a>
                                     </div>
                                 </div>

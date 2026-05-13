@@ -4,17 +4,25 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { indiaData } from '../lib/india-data';
+import { products as productsData } from '../lib/products-data';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function WhatsAppFloating() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [view, setView] = useState('menu'); 
+  const { language, t } = useLanguage(); 
   const [sampleData, setSampleData] = useState({ phone: '', address: '', type: '' });
   const [mounted, setMounted] = useState(false);
   const [chatInput, setChatInput] = useState('');
-  const [chatMessages, setChatMessages] = useState([
-    { role: 'assistant', content: 'Khamma Ghani Hukum! How can I help you today? Would you like to order some pickles or know more about our heritage?' }
-  ]);
+  const [chatMessages, setChatMessages] = useState([]);
+  
+  useEffect(() => {
+    // Initialize or update the first message based on language
+    setChatMessages([
+      { role: 'assistant', content: t('aiInitialMsg') }
+    ]);
+  }, [language]);
   const [isTyping, setIsTyping] = useState(false);
   
   // Checkout State
@@ -209,13 +217,19 @@ export default function WhatsAppFloating() {
   }, []);
 
   const products = [
-    { id: 1, name: 'Mango Achaar', oldPrice: 449, price: 359, price500g: 180, image: '/Images/Mango Achar.jpg' },
-    { id: 2, name: 'Ginger (Adrak) Achaar', oldPrice: 629, price: 579, price500g: 290, image: '/Images/Adrak Achar.jpg' },
-    { id: 3, name: 'Mirchi Achaar', oldPrice: 349, price: 299, price500g: 150, image: '/Images/Mirchi Achar.jpg' },
-    { id: 4, name: 'Garlic (Lahsun) Achaar', oldPrice: 549, price: 479, price500g: 240, image: '/Images/Yellow_Garlic_Achaar.jpg' },
-    { id: 5, name: 'Turmeric (Haldi) Achaar', oldPrice: 459, price: 399, price500g: 200, image: '/Images/Haldi Achar.jpg' },
-    { id: 6, name: 'Amla Achaar', oldPrice: 409, price: 349, price500g: 175, image: '/Images/Amla Achar.jpg' },
-    { id: 'custom', name: 'Custom Achaar Blend', oldPrice: 0, price: 'Variable', price500g: 'N/A', image: '/Images/CustomBlend.png' }
+    ...productsData.map(p => ({
+      ...p,
+      name: language === 'hi' ? p.translations.hi.name : p.translations.en.name,
+      price: p.price1kg // mapping price1kg to price for compatibility
+    })),
+    { 
+      id: 'custom', 
+      name: language === 'hi' ? 'कस्टम अचार ब्लेंड' : 'Custom Achaar Blend', 
+      oldPrice: 0, 
+      price: 'Variable', 
+      price500g: 'N/A', 
+      image: '/Images/CustomBlend.png' 
+    }
   ];
 
   // Handlers
@@ -334,8 +348,8 @@ Looking forward to the royal taste!`;
                   <img src="/favicon.png" alt="Logo" />
                 </div>
                 <div className="wa-header-text">
-                   <h4 style={{ color: '#8B0000', margin: 0 }}>Mewari Achaar Support</h4>
-                   <span style={{ fontSize: '0.65rem', opacity: 0.7 }}>Traditional Mewari Service</span>
+                   <h4 style={{ color: '#8B0000', margin: 0 }}>{t('supportTitle')}</h4>
+                   <span style={{ fontSize: '0.65rem', opacity: 0.7 }}>{t('supportSubtitle')}</span>
                 </div>
              </div>
              <button className="wa-close-top" onClick={() => setIsOpen(false)}>
@@ -347,35 +361,35 @@ Looking forward to the royal taste!`;
             {/* Menu View */}
             {view === 'menu' && (
               <div className="wa-menu-body">
-                <h3 className="wa-welcome-msg">Khamma Ghani Hukum! 🙏</h3>
+                <div className="wa-welcome-msg">{t('waGreeting')}</div>
                 <div className="wa-links">
                   <button className="wa-link-btn" onClick={() => setView('sample')} style={{ border: '2px solid #D4AF37', background: 'rgba(212, 175, 55, 0.05)', borderRadius: '12px', marginBottom: '15px' }}>
-                    <span style={{ color: '#8B0000', fontWeight: '800' }}>🎁 Get a Free Sample</span>
+                    <span style={{ color: '#8B0000', fontWeight: '800' }}>🎁 {t('getSample')}</span>
                     <i className="fas fa-chevron-right" style={{ color: '#D4AF37' }}></i>
                   </button>
 
                   <button className="wa-link-btn" onClick={() => setView('order')}>
-                    <span>🛍️ Order Something</span>
+                    <span>🛍️ {t('orderSomething')}</span>
                     <i className="fas fa-chevron-right"></i>
                   </button>
                   <button className="wa-link-btn" onClick={() => setView('chat')}>
-                    <span>💬 Chat with our Bot</span>
+                    <span>💬 {t('chatBot')}</span>
                     <i className="fas fa-chevron-right"></i>
                   </button>
                   <button className="wa-link-btn" onClick={() => setView('contact')}>
-                    <span>📞 Contact Team</span>
+                    <span>📞 {t('contactUs')}</span>
                     <i className="fas fa-chevron-right"></i>
                   </button>
                   <button className="wa-link-btn" onClick={() => setView('about')}>
-                    <span>👨‍💻 About the Developer</span>
+                    <span>👨‍💻 {t('aboutDeveloper')}</span>
                     <i className="fas fa-chevron-right"></i>
                   </button>
                   <button className="wa-link-btn" onClick={() => { window.open('/login', '_blank'); }}>
-                    <span>🔐 Login to Account</span>
+                    <span>🔐 {t('login')}</span>
                     <i className="fas fa-chevron-right"></i>
                   </button>
                   <button className="wa-link-btn" onClick={() => { window.open('/signup', '_blank'); }}>
-                    <span>✍️ Register (New Customer)</span>
+                    <span>✍️ {t('register')}</span>
                     <i className="fas fa-chevron-right"></i>
                   </button>
                 </div>
@@ -387,17 +401,17 @@ Looking forward to the royal taste!`;
               <div className="wa-menu-body">
                 <div className="wa-section-header" style={{ textAlign: 'center', padding: '10px 0 20px' }}>
                   <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: '5px' }}>🎁</span>
-                  <h3 style={{ fontFamily: 'var(--font-devanagari)', color: '#8B0000', fontSize: '1.4rem', margin: 0 }}>मुफ्त सैंपल मंगवाएं</h3>
+                  <h3 style={{ fontFamily: 'var(--font-devanagari)', color: '#8B0000', fontSize: '1.4rem', margin: 0 }}>{t('freeSampleTitle')}</h3>
                   <p style={{ fontSize: '0.65rem', color: '#D4AF37', letterSpacing: '1.5px', textTransform: 'uppercase', fontWeight: 600 }}>Royal Taste At Your Doorstep</p>
                 </div>
 
                 <div className="wa-form-container" style={{ padding: '0 5px' }}>
                   <p style={{ fontSize: '0.75rem', color: '#8B0000', textAlign: 'center', marginBottom: '20px', fontWeight: '600', padding: '12px', background: 'rgba(139, 0, 0, 0.05)', borderRadius: '10px', lineHeight: '1.4', fontFamily: 'var(--font-devanagari)' }}>
-                    *हुकुम, सैंपल मुफ्त है, लेकिन दूरी के अनुसार डिलीवरी शुल्क लागू होगा।
+                    {t('deliveryFeeNote')}
                   </p>
 
                   <div className="wa-input-group" style={{ marginBottom: '15px' }}>
-                    <label style={{ display: 'block', fontSize: '0.65rem', fontWeight: '800', color: '#5a4a42', marginBottom: '8px', textTransform: 'uppercase' }}>आपका फोन नंबर</label>
+                    <label style={{ display: 'block', fontSize: '0.65rem', fontWeight: '800', color: '#5a4a42', marginBottom: '8px', textTransform: 'uppercase' }}>{t('yourPhone')}</label>
                     <div style={{ display: 'flex', border: '1px solid rgba(139, 0, 0, 0.1)', borderRadius: '10px', overflow: 'hidden', background: '#fdfdfa' }}>
                       <span style={{ padding: '12px', background: 'rgba(139, 0, 0, 0.02)', borderRight: '1px solid rgba(139, 0, 0, 0.1)', color: '#8B0000', fontWeight: '700', fontSize: '0.85rem' }}>+91</span>
                       <input 
@@ -411,9 +425,9 @@ Looking forward to the royal taste!`;
                   </div>
 
                   <div className="wa-input-group" style={{ marginBottom: '15px' }}>
-                    <label style={{ display: 'block', fontSize: '0.65rem', fontWeight: '800', color: '#5a4a42', marginBottom: '8px', textTransform: 'uppercase' }}>पूरा पता (पिनकोड के साथ)</label>
+                    <label style={{ display: 'block', fontSize: '0.65rem', fontWeight: '800', color: '#5a4a42', marginBottom: '8px', textTransform: 'uppercase' }}>{t('fullAddress')}</label>
                     <textarea 
-                      placeholder="अपना पूरा पता यहाँ लिखें..." 
+                      placeholder={t('addressPlaceholder')} 
                       style={{ width: '100%', padding: '12px', border: '1px solid rgba(139, 0, 0, 0.1)', borderRadius: '10px', outline: 'none', minHeight: '70px', background: '#fdfdfa', fontSize: '0.9rem', fontFamily: 'inherit' }}
                       value={sampleData.address}
                       onChange={(e) => setSampleData({...sampleData, address: e.target.value})}
@@ -421,19 +435,19 @@ Looking forward to the royal taste!`;
                   </div>
 
                   <div className="wa-input-group" style={{ marginBottom: '25px' }}>
-                    <label style={{ display: 'block', fontSize: '0.65rem', fontWeight: '800', color: '#5a4a42', marginBottom: '8px', textTransform: 'uppercase' }}>अचार का प्रकार चुनें</label>
+                    <label style={{ display: 'block', fontSize: '0.65rem', fontWeight: '800', color: '#5a4a42', marginBottom: '8px', textTransform: 'uppercase' }}>{t('selectPickleType')}</label>
                     <select 
                       style={{ width: '100%', padding: '12px', border: '1px solid rgba(139, 0, 0, 0.1)', borderRadius: '10px', outline: 'none', background: '#fdfdfa', fontSize: '0.9rem' }}
                       value={sampleData.type}
                       onChange={(e) => setSampleData({...sampleData, type: e.target.value})}
                     >
-                      <option value="">अचार चुनें...</option>
-                      <option value="Mango Achaar">आम का अचार (Mango)</option>
-                      <option value="Mirchi Achaar">मिर्च का अचार (Mirchi)</option>
-                      <option value="Adrak Achaar">अदरक का अचार (Ginger)</option>
-                      <option value="Amla Achaar">आंवला का अचार (Amla)</option>
-                      <option value="Haldi Achaar">हल्दी का अचार (Turmeric)</option>
-                      <option value="Garlic Achaar">लहसुन का अचार (Garlic)</option>
+                      <option value="">{t('choosePickle')}</option>
+                      <option value="Mango Achaar">{t('mangoPickle')}</option>
+                      <option value="Mirchi Achaar">{t('mirchiPickle')}</option>
+                      <option value="Adrak Achaar">{t('gingerPickle')}</option>
+                      <option value="Amla Achaar">{t('amlaPickle')}</option>
+                      <option value="Haldi Achaar">{t('haldiPickle')}</option>
+                      <option value="Garlic Achaar">{t('garlicPickle')}</option>
                     </select>
                   </div>
 
@@ -453,7 +467,7 @@ Looking forward to the royal taste!`;
                     }}
                     onClick={() => {
                       if (!sampleData.phone || !sampleData.address || !sampleData.type) {
-                        alert('कृपया सभी जानकारी भरें।');
+                        alert(t('fillAllInfo'));
                         return;
                       }
                       const message = `Khamma Ghani Hukum! I would like to request a Free Sample.
@@ -463,7 +477,7 @@ Address: ${sampleData.address}`;
                       handleWhatsApp(message);
                     }}
                   >
-                    व्हाट्सएप पर सैंपल मंगवाएं <i className="fab fa-whatsapp" style={{ marginLeft: '8px' }}></i>
+                    {t('requestSampleWA')} <i className="fab fa-whatsapp" style={{ marginLeft: '8px' }}></i>
                   </button>
                 </div>
               </div>
@@ -474,7 +488,7 @@ Address: ${sampleData.address}`;
               <div className="wa-menu-body">
                 <div className="wa-disclaimer">
                   <i className="fas fa-info-circle"></i>
-                  <span>Select your favorite pickle to order, Hukum:</span>
+                  <span>{t('selectToOrder')}</span>
                 </div>
                 <p style={{ 
                   fontSize: '0.75rem', 
@@ -488,7 +502,7 @@ Address: ${sampleData.address}`;
                   textAlign: 'center',
                   border: '1px dashed rgba(212, 175, 55, 0.3)'
                 }}>
-                  🚩 हुकुम, बल्क (थोक) आर्डर के लिए कृपया हमें व्हाट्सएप (+91 70141 02742) पर संपर्क करें।
+                  {t('bulkOrderNote')}
                 </p>
                 <div className="wa-product-list-compact">
                   {products.map(product => (
@@ -526,7 +540,7 @@ Address: ${sampleData.address}`;
                 <div className="shahi-delivery-container">
                   <div className="shahi-header-banner">
                     <span className="shahi-motif">✦ ✧ ✦</span>
-                    <h3 className="shahi-main-title">शाही वितरण विवरण</h3>
+                    <h3 className="shahi-main-title">{t('royalDeliveryDetails')}</h3>
                     <p className="shahi-sub-title">Royal Delivery Particulars</p>
                     <div className="shahi-divider"></div>
                   </div>
@@ -534,10 +548,10 @@ Address: ${sampleData.address}`;
                   {selectedProduct.id === 'custom' && currentStep === 1 ? (
                     <form className="shahi-royal-form" onSubmit={(e) => { e.preventDefault(); setCurrentStep(2); }}>
                       <div className="shahi-form-section">
-                        <div className="shahi-section-title">स्वाद और पसंद (Preferences)</div>
+                        <div className="shahi-section-title">{t('preferences')}</div>
                         
                         <div className="shahi-field">
-                          <label><i className="fas fa-leaf"></i> मुख्य सामग्री</label>
+                          <label><i className="fas fa-leaf"></i> {t('mainIngredient')}</label>
                           <select 
                             className="shahi-royal-input"
                             value={customerDetails.mainIngredient}
@@ -554,7 +568,7 @@ Address: ${sampleData.address}`;
 
                         <div className="shahi-row-grid">
                           <div className="shahi-field">
-                            <label><i className="fas fa-pepper-hot"></i> तीखापन (Spice)</label>
+                            <label><i className="fas fa-pepper-hot"></i> {t('spiceLevelLabel')}</label>
                             <select 
                               className="shahi-royal-input"
                               value={customerDetails.spiceLevel}
@@ -566,7 +580,7 @@ Address: ${sampleData.address}`;
                             </select>
                           </div>
                           <div className="shahi-field">
-                            <label><i className="fas fa-tint"></i> तेल (Oil)</label>
+                            <label><i className="fas fa-tint"></i> {t('oilTypeLabel')}</label>
                             <select 
                               className="shahi-royal-input"
                               value={customerDetails.oilType}
@@ -580,7 +594,7 @@ Address: ${sampleData.address}`;
                         </div>
 
                         <div className="shahi-field">
-                          <label><i className="fas fa-pen-fancy"></i> विशेष निर्देश</label>
+                          <label><i className="fas fa-pen-fancy"></i> {t('specialInstructions')}</label>
                           <textarea 
                             className="shahi-royal-input textarea-fixed"
                             rows="2"
@@ -598,10 +612,10 @@ Address: ${sampleData.address}`;
                   ) : (
                     <form className="shahi-royal-form" onSubmit={handleFinalOrder}>
                       <div className="shahi-form-section">
-                        <div className="shahi-section-title">संपर्क सूत्र (Contact)</div>
+                        <div className="shahi-section-title">{t('contactInfo')}</div>
                         
                         <div className="shahi-field">
-                          <label><i className="fas fa-envelope"></i> ईमेल</label>
+                          <label><i className="fas fa-envelope"></i> {t('emailLabel')}</label>
                           <input 
                             type="email" 
                             required 
@@ -613,7 +627,7 @@ Address: ${sampleData.address}`;
                         </div>
 
                         <div className="shahi-field">
-                          <label><i className="fas fa-phone"></i> फोन नंबर</label>
+                          <label><i className="fas fa-phone"></i> {t('phoneLabel')}</label>
                           <div className="shahi-phone-input-box">
                             <span className="shahi-phone-code">+91</span>
                             <input 
@@ -629,28 +643,28 @@ Address: ${sampleData.address}`;
                       </div>
 
                       <div className="shahi-form-section">
-                        <div className="shahi-section-title">वितरण पता (Address)</div>
+                        <div className="shahi-section-title">{t('deliveryAddress')}</div>
                         
                         <div className="shahi-row-grid">
                           <div className="shahi-field">
-                            <label><i className="fas fa-map-marker-alt"></i> राज्य (State)</label>
+                            <label><i className="fas fa-map-marker-alt"></i> {t('stateLabel')}</label>
                             <input 
                               type="text" 
                               required 
                               className="shahi-royal-input"
-                              placeholder="जैसे: Rajasthan"
+                              placeholder={t('statePlaceholder')}
                               value={customerDetails.state}
                               onChange={(e) => setCustomerDetails({...customerDetails, state: e.target.value})}
                             />
                           </div>
 
                           <div className="shahi-field">
-                            <label><i className="fas fa-city"></i> ज़िला (District)</label>
+                            <label><i className="fas fa-city"></i> {t('districtLabel')}</label>
                             <input 
                               type="text" 
                               required 
                               className="shahi-royal-input"
-                              placeholder="जैसे: Udaipur"
+                              placeholder={t('districtPlaceholder')}
                               value={customerDetails.district}
                               onChange={(e) => setCustomerDetails({...customerDetails, district: e.target.value})}
                             />
@@ -658,19 +672,19 @@ Address: ${sampleData.address}`;
                         </div>
 
                         <div className="shahi-field">
-                          <label><i className="fas fa-home"></i> पूरा पता (Full Address)</label>
+                          <label><i className="fas fa-home"></i> {t('fullAddressLabel')}</label>
                           <textarea 
                             required 
                             className="shahi-royal-input textarea-fixed"
                             rows="2"
-                            placeholder="मकान नंबर, गली, लैंडमार्क..."
+                            placeholder={t('detailedAddressPlaceholder')}
                             value={customerDetails.address}
                             onChange={(e) => setCustomerDetails({...customerDetails, address: e.target.value})}
                           ></textarea>
                         </div>
 
                         <div className="shahi-field">
-                          <label><i className="fas fa-thumbtack"></i> पिनकोड (PIN Code)</label>
+                          <label><i className="fas fa-thumbtack"></i> {t('pincodeLabel')}</label>
                           <input 
                             type="text" 
                             required 
@@ -684,11 +698,11 @@ Address: ${sampleData.address}`;
 
                       <div className="shahi-disclaimer-card">
                         <i className="fas fa-info-circle"></i>
-                        <span>हुकुम, कृपया सुनिश्चित करें कि जानकारी सही है।</span>
+                        <span>{t('ensureCorrectInfo')}</span>
                       </div>
 
                       <button type="submit" className="shahi-complete-btn">
-                        व्हाट्सएप पर ऑर्डर करें <i className="fab fa-whatsapp"></i>
+                        {t('orderWhatsApp')} <i className="fab fa-whatsapp"></i>
                       </button>
                     </form>
                   )}
@@ -699,18 +713,18 @@ Address: ${sampleData.address}`;
             {/* Contact View */}
             {view === 'contact' && (
               <div className="wa-menu-body">
-                <div className="wa-welcome-msg">How would you like to reach out to us, Hukum?</div>
+                <div className="wa-welcome-msg">{t('contactGreeting')}</div>
                 <div className="wa-links">
                   <button className="wa-link-btn" onClick={() => setView('callback')}>
-                    <span><i className="fas fa-headset" style={{ color: '#E1306C', marginRight: '10px' }}></i> Request a Callback</span>
+                    <span><i className="fas fa-headset" style={{ color: '#E1306C', marginRight: '10px' }}></i> {t('requestCallback')}</span>
                     <i className="fas fa-chevron-right"></i>
                   </button>
                   <a href={phoneUrl} className="wa-link-btn" style={{ textDecoration: 'none', color: 'inherit' }}>
-                    <span><i className="fas fa-phone" style={{ color: '#34a853', marginRight: '10px' }}></i> Phone Call</span>
+                    <span><i className="fas fa-phone" style={{ color: '#34a853', marginRight: '10px' }}></i> {t('phoneCall')}</span>
                     <i className="fas fa-chevron-right"></i>
                   </a>
                   <button className="wa-link-btn" onClick={() => handleWhatsApp('Hello!')}>
-                    <span><i className="fab fa-whatsapp" style={{ color: '#25D366', marginRight: '10px' }}></i> WhatsApp</span>
+                    <span><i className="fab fa-whatsapp" style={{ color: '#25D366', marginRight: '10px' }}></i> {t('whatsapp')}</span>
                     <i className="fas fa-chevron-right"></i>
                   </button>
                 </div>
@@ -723,8 +737,8 @@ Address: ${sampleData.address}`;
                 <div className="shahi-delivery-container" style={{ padding: '30px 20px', textAlign: 'center' }}>
                   <div className="shahi-header-banner">
                     <span className="shahi-motif">✦ ✧ ✦</span>
-                    <h3 className="shahi-main-title">चित्तौड़-टेक</h3>
-                    <p className="shahi-sub-title">Chittor-Tech Engineers</p>
+                    <h3 className="shahi-main-title">{t('aboutChittorTech')}</h3>
+                    <p className="shahi-sub-title">{t('aboutChittorTechTitle')}</p>
                     <div className="shahi-divider"></div>
                   </div>
 
@@ -737,7 +751,7 @@ Address: ${sampleData.address}`;
                       fontFamily: 'var(--font-royal, serif)',
                       fontWeight: '500'
                     }}>
-                      "Top IT Startup in Chittorgarh. Crafted for India."
+                      "{t('startupTagline')}"
                     </p>
                     
                     <p style={{ 
@@ -746,47 +760,47 @@ Address: ${sampleData.address}`;
                       lineHeight: '1.5', 
                       marginBottom: '25px' 
                     }}>
-                      Chittor-Tech engineers premium digital products focused on high-performance architecture and modern user experiences.
+                      {t('aboutDesc')}
                     </p>
 
                     <div className="shahi-form-section" style={{ textAlign: 'left', gap: '15px' }}>
-                      <div className="shahi-section-title">Expertise & Solutions</div>
+                      <div className="shahi-section-title">{t('expertiseSolutions')}</div>
                       
                       <div className="expertise-list" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                         {[
                           {
-                            title: 'AI Content & NotebookLLM',
-                            desc: 'Advanced NotebookLLM pipelines for automated content. Generate professional audio, mind maps, and reports.',
+                            title: t('aiContentTitle'),
+                            desc: t('aiContentDesc'),
                             link: 'https://drive.google.com/file/d/1polbf5zGzOwzVBNmBs6SmXXqyosOBlKR/view?usp=sharing'
                           },
                           {
-                            title: 'Custom AI Chatbots (RAG)',
-                            desc: 'Custom AI assistants with Retrieval-Augmented Generation for domain-specific queries and smart UI integration.',
+                            title: t('customChatbotsTitle'),
+                            desc: t('customChatbotsDesc'),
                             link: 'https://www.mewari-achar.shop/'
                           },
                           {
-                            title: 'Hospitality & Admin Hubs',
-                            desc: 'Management systems for Hotels/Dharamshalas with real-time inventory, billing, and secure guest verification.',
+                            title: t('hospitalityTitle'),
+                            desc: t('hospitalityDesc'),
                             link: 'https://dharamsala-admin-portal.vercel.app/'
                           },
                           {
-                            title: 'Tourism & Cultural UX',
-                            desc: 'Scalable tech portals for heritage discovery featuring multi-lingual guides and emergency SOS systems.',
+                            title: t('tourismTitle'),
+                            desc: t('tourismDesc'),
                             link: 'https://chittorgarh-tourism.in/'
                           },
                           {
-                            title: 'MailPulse Bulk Email',
-                            desc: 'Next-gen bulk email engines for mission-critical dispatch with real-time node processing.',
+                            title: t('mailPulseTitle'),
+                            desc: t('mailPulseDesc'),
                             link: 'https://smtp-server-kohl.vercel.app/'
                           },
                           {
-                            title: 'Smart QR Infrastructure',
-                            desc: 'Dynamic QR-based identification and asset tracking with secure contactless protocols.',
+                            title: t('smartQrTitle'),
+                            desc: t('smartQrDesc'),
                             link: 'https://smart-qr-token.vercel.app/login'
                           },
                           {
-                            title: 'Event Management Software',
-                            desc: 'Bespoke SaaS for high-end event planners. Centralize vendor coordination and client CRMs.',
+                            title: t('eventMgmtTitle'),
+                            desc: t('eventMgmtDesc'),
                             link: 'https://shaadi-sutra.vercel.app/'
                           }
                         ].map((service, idx) => (
@@ -815,7 +829,7 @@ Address: ${sampleData.address}`;
                                 gap: '5px'
                               }}
                             >
-                              Live Experience <i className="fas fa-external-link-alt" style={{ fontSize: '0.6rem' }}></i>
+                              {t('liveExperience')} <i className="fas fa-external-link-alt" style={{ fontSize: '0.6rem' }}></i>
                             </button>
                           </div>
                         ))}
@@ -824,14 +838,14 @@ Address: ${sampleData.address}`;
 
                     <div className="shahi-disclaimer-card" style={{ margin: '30px 0 25px', fontSize: '0.7rem' }}>
                       <i className="fas fa-award"></i>
-                      <span>Recognized by iStart Rajasthan | Registered MSME | Made in India</span>
+                      <span>{t('govtBadges')}</span>
                     </div>
 
                     <button 
                       className="shahi-complete-btn"
                       onClick={() => window.open('https://www.chittortech.online', '_blank')}
                     >
-                      Visit Main Website <i className="fas fa-arrow-right"></i>
+                      {t('visitMainWebsite')} <i className="fas fa-arrow-right"></i>
                     </button>
                   </div>
                 </div>
@@ -842,13 +856,13 @@ Address: ${sampleData.address}`;
             {view === 'callback' && (
               <div className="wa-menu-body">
                 <div className="wa-checkout-header">
-                    <h5>Request a Callback</h5>
-                    <p>Hukum, please let us know when to call you:</p>
+                    <h5>{t('requestCallback')}</h5>
+                    <p>{t('callbackSubtitle')}</p>
                 </div>
                 
                 <form className="wa-checkout-form" onSubmit={handleCallbackSubmit}>
                   <div className="input-group">
-                    <label>Phone Number</label>
+                    <label>{t('phoneLabel')}</label>
                     <div className="phone-input-wrapper">
                       <span className="phone-prefix">+91</span>
                       <input 
@@ -863,7 +877,7 @@ Address: ${sampleData.address}`;
 
                   <div className="wa-form-row">
                     <div className="input-group">
-                      <label>Preferred Date</label>
+                      <label>{t('prefDate')}</label>
                       <input 
                         type="date" 
                         required 
@@ -873,7 +887,7 @@ Address: ${sampleData.address}`;
                       />
                     </div>
                     <div className="input-group">
-                      <label>Preferred Time</label>
+                      <label>{t('prefTime')}</label>
                       <input 
                         type="time" 
                         required 
@@ -885,11 +899,11 @@ Address: ${sampleData.address}`;
 
                   <div className="wa-disclaimer">
                     <i className="fas fa-info-circle"></i>
-                    <span>Our team will contact you on your preferred time.</span>
+                    <span>{t('callbackDisclaimer')}</span>
                   </div>
 
                   <button type="submit" className="wa-submit-btn">
-                    Request via WhatsApp <i className="fab fa-whatsapp"></i>
+                    {t('requestViaWA')} <i className="fab fa-whatsapp"></i>
                   </button>
                 </form>
               </div>
@@ -928,7 +942,7 @@ Address: ${sampleData.address}`;
                                     }
                                   }}
                                 >
-                                  <i className="fab fa-whatsapp"></i> Order {productName} Now
+                                  <i className="fab fa-whatsapp"></i> {t('orderNow')} {productName}
                                 </button>
                               </div>
                             </div>
@@ -938,10 +952,10 @@ Address: ${sampleData.address}`;
                       })}</div>
                     </div>
                   ))}
-                  {isTyping && <div className="msg-bubble assistant typing">Hukum is thinking...</div>}
+                  {isTyping && <div className="msg-bubble assistant typing">{t('thinkingMsg')}</div>}
                 </div>
                 <form className="wa-chat-input" onSubmit={handleSendMessage}>
-                  <input type="text" placeholder="Type your message..." value={chatInput} onChange={(e) => setChatInput(e.target.value)} />
+                  <input type="text" placeholder={t('typeMessage')} value={chatInput} onChange={(e) => setChatInput(e.target.value)} />
                   <button type="submit"><i className="fas fa-paper-plane"></i></button>
                 </form>
               </div>
