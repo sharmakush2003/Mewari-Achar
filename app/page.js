@@ -7,9 +7,6 @@ import { useAuth } from '@/components/AuthContext';
 import { products as allProducts } from '@/lib/products-data';
 import FlavorBars from '@/components/FlavorBars';
 import { SampleModal, PolicyModal, SupportModal, PerksModal } from '@/components/Modals';
-import AOS from 'aos';
-import 'aos/dist/aos.css';
-
 import Link from 'next/link';
 
 export default function Home() {
@@ -17,8 +14,6 @@ export default function Home() {
   const [activeModal, setActiveModal] = useState(null);
 
   useEffect(() => {
-    AOS.init({ duration: 1000, once: true });
-
     // Show Perks Modal logic
     const now = new Date().getTime();
     const dismissedUntil = localStorage.getItem('mewari_perks_dismissed_until');
@@ -52,7 +47,7 @@ export default function Home() {
         <div className="hero-texture"></div>
         <div className="hero-soft-glow"></div>
         
-        <div className="hero-content" data-aos="fade-up">
+        <div className="hero-content" >
           <div className="hero-crown-seal">
             <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
               <path d="M20 5L24 13H16L20 5Z" fill="#8B0000"/>
@@ -100,7 +95,7 @@ export default function Home() {
 
       {/* Featured Masterpieces */}
       <section id="products" className="royal-section">
-        <div className="section-header" data-aos="fade-up">
+        <div className="section-header" >
           <span className="section-label">Rajwadi Swaad</span>
           <h2 className="section-display">Khaas <span>Sangrah</span></h2>
           <div className="section-accent"></div>
@@ -108,7 +103,7 @@ export default function Home() {
 
         <div className="gallery-stack">
           {featuredProducts.map(product => (
-            <div key={product.id} className="royal-product-card" data-aos="fade-up">
+            <div key={product.id} className="royal-product-card" >
               <div className="product-visual">
                 <img src={product.image} alt={product.name} className="product-img" />
               </div>
@@ -164,21 +159,21 @@ export default function Home() {
           ))}
         </div>
 
-        <div className="section-cta-footer" data-aos="fade-up">
+        <div className="section-cta-footer" >
           <Link href="/collection" className="btn-royal">पूरा संग्रह देखें</Link>
         </div>
       </section>
 
       {/* Philosophy Section */}
       <section className="royal-section alt-cream">
-        <div className="section-header" data-aos="fade-up">
+        <div className="section-header" >
            <span className="section-wide-label">Hamari Parampara</span>
            <h2 className="section-display">Achaar ka Asli <span>Hunar</span></h2>
            <div className="red-divider"></div>
         </div>
         
         <div className="royal-features-grid">
-            <div className="royal-feature-card" data-aos="fade-up">
+            <div className="royal-feature-card" >
                 <div className="feature-symbol">
                   <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M20 5C20 5 10 12 10 22C10 27.52 14.48 32 20 32C25.52 32 30 27.52 30 22C30 12 20 5 20 5Z" stroke="#8B0000" strokeWidth="1.5" fill="none"/>
@@ -188,7 +183,7 @@ export default function Home() {
                 <h3>शुद्धता और सत्यनिष्ठा</h3>
                 <p>बिना किसी मिलावट के, प्रकृति की शुद्धता हर जार में।</p>
             </div>
-            <div className="royal-feature-card" data-aos="fade-up" data-aos-delay="100">
+            <div className="royal-feature-card"  data-aos-delay="100">
                 <div className="feature-symbol">
                   <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <ellipse cx="20" cy="28" rx="12" ry="6" stroke="#8B0000" strokeWidth="1.5" fill="none"/>
@@ -199,7 +194,7 @@ export default function Home() {
                 <h3>मिट्टी के बर्तनों में पकाया हुआ</h3>
                 <p>पुरानी पद्धतियों से धीरे-धीरे तैयार, ताकि स्वाद गहराई तक उतर जाए।</p>
             </div>
-            <div className="royal-feature-card" data-aos="fade-up" data-aos-delay="200">
+            <div className="royal-feature-card"  data-aos-delay="200">
                 <div className="feature-symbol">
                   <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M20 34C20 34 8 26 8 18C8 13.58 11.58 10 16 10C18 10 20 11 20 11C20 11 22 10 24 10C28.42 10 32 13.58 32 18C32 26 20 34 20 34Z" stroke="#8B0000" strokeWidth="1.5" fill="none"/>
@@ -214,7 +209,7 @@ export default function Home() {
       
 
 
-      <section className="royal-msme-trust" data-aos="fade-up">
+      <section className="royal-msme-trust" >
         <div className="msme-container">
            <div className="msme-badge-lockup">
              <div className="msme-seal">
