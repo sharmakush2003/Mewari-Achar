@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { useAuth } from '@/components/AuthContext';
-import { products } from '@/lib/products-data';
-import FlavorBars from '@/components/FlavorBars';
+import { products as allProducts } from '@/lib/products-data';
+import FlavorSlider from '@/components/FlavorSlider';
 import { PolicyModal, OrdersModal, SupportModal } from '@/components/Modals';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -15,10 +15,27 @@ export default function Collection() {
     const [activeModal, setActiveModal] = useState(null);
     const [mounted, setMounted] = useState(false);
 
+    const [productsList, setProductsList] = useState(allProducts);
+
     useEffect(() => {
         setMounted(true);
         AOS.init({ duration: 1000, once: true });
     }, []);
+
+    const handleFlavorChange = (productId, key, value) => {
+        setProductsList(prev => prev.map(p => 
+          p.id === productId 
+            ? { ...p, flavorProfile: { ...p.flavorProfile, [key]: value } }
+            : p
+        ));
+    };
+
+    const getWhatsAppLink = (product, size) => {
+        const profile = product.flavorProfile;
+        const profileText = `\n- Spicy: ${profile.spicy}/10\n- Tangy: ${profile.tangy}/10\n- Earthy: ${profile.earthy}/10\n- Pungent: ${profile.pungent}/10`;
+        const message = `Khamma Ghani Hukum! I would like to order ${product.name} (${size}).\n\n*My Custom Taste Settings:*${profileText}`;
+        return `https://wa.me/917014102742?text=${encodeURIComponent(message)}`;
+    };
 
     if (!mounted) return null;
 
@@ -45,7 +62,7 @@ export default function Collection() {
 
             <section id="products" className="royal-section">
                 <div className="collection-stack">
-                    {products.map((product, index) => (
+                    {productsList.map((product, index) => (
                         <div 
                             key={product.id} 
                             className={`royal-product-card ${index % 2 === 1 ? 'reverse' : ''}`} 
@@ -60,14 +77,17 @@ export default function Collection() {
                                 <h3 className="product-name">{product.name}</h3>
                                 <p className="product-desc">{product.desc}</p>
                                 
-                                <FlavorBars profile={product.flavorProfile} />
+                                <FlavorSlider 
+                                    profile={product.flavorProfile} 
+                                    onChange={(key, value) => handleFlavorChange(product.id, key, value)} 
+                                />
                                 
                                 <div className="price-tiers">
                                     <div className="price-box">
                                         <span className="weight">500g Jar</span>
                                         <span className="cost">₹{product.price500g}</span>
                                         <a 
-                                          href={`https://wa.me/917014102742?text=${encodeURIComponent(`Khamma Ghani Hukum! I would like to order ${product.name} (500g).`)}`} 
+                                          href={getWhatsAppLink(product, '500g')} 
                                           target="_blank" 
                                           rel="noopener noreferrer"
                                           className="btn-add-royal"
@@ -80,7 +100,7 @@ export default function Collection() {
                                         <span className="weight">1kg Jar</span>
                                         <span className="cost">₹{product.price1kg}</span>
                                         <a 
-                                          href={`https://wa.me/917014102742?text=${encodeURIComponent(`Khamma Ghani Hukum! I would like to order ${product.name} (1kg).`)}`} 
+                                          href={getWhatsAppLink(product, '1kg')} 
                                           target="_blank" 
                                           rel="noopener noreferrer"
                                           className="btn-add-royal"

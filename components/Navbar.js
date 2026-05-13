@@ -39,16 +39,21 @@ export default function Navbar({ onOpenOrders, onOpenSample }) {
 
   return (
     <>
-      <div className="nav-alert-bar" style={{ 
-        background: '#8B0000', 
-        color: 'white', 
-        textAlign: 'center', 
-        padding: '10px 5%', 
-        fontWeight: '600', 
-        fontSize: '0.85rem',
-        fontFamily: 'var(--font-devanagari)',
-        display: menuOpen ? 'none' : 'block'
-      }}>
+      <div 
+        className="nav-alert-bar" 
+        onClick={onOpenSample}
+        style={{ 
+          background: '#8B0000', 
+          color: 'white', 
+          textAlign: 'center', 
+          padding: '10px 5%', 
+          fontWeight: '600', 
+          fontSize: '0.85rem',
+          fontFamily: 'var(--font-devanagari)',
+          display: menuOpen ? 'none' : 'block',
+          cursor: 'pointer'
+        }}
+      >
         🚩 हुकुम! घर बैठे मुफ्त सैंपल मंगवाएं। अभी क्लिक करें।
       </div>
 

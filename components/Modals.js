@@ -15,12 +15,13 @@ export const SampleModal = ({ active, onClose }) => {
       <div className="modal-content">
         <button className="close-modal" onClick={onClose}>&times;</button>
         <div className="modal-header">
-          <span className="modal-icon">🎁</span>
-          <h2>Get a Free Sample</h2>
+          <span className="modal-icon" style={{ fontSize: '2.5rem', marginBottom: '10px' }}>🎁</span>
+          <h2 style={{ fontFamily: 'var(--font-devanagari)', fontSize: '1.8rem', color: '#8B0000' }}>मुफ्त सैंपल प्राप्त करें</h2>
+          <p style={{ color: '#D4AF37', fontWeight: '700', letterSpacing: '2px', fontSize: '0.65rem', textTransform: 'uppercase', marginTop: '5px' }}>Royal Taste At Your Doorstep</p>
         </div>
         <div className="modal-body">
-          <p style={{ fontSize: '0.9rem', color: '#8B0000', marginBottom: '0.5rem', fontWeight: 600 }}>
-            *Sample is free, but delivery charges apply based on distance.
+          <p style={{ fontSize: '0.8rem', color: '#8B0000', marginBottom: '1.5rem', fontWeight: 600, textAlign: 'center', lineHeight: '1.5', fontFamily: 'var(--font-devanagari)', background: 'rgba(139, 0, 0, 0.05)', padding: '10px', borderRadius: '8px' }}>
+            *हुकुम, सैंपल मुफ्त है, लेकिन दूरी के अनुसार डिलीवरी शुल्क लागू होगा।
           </p>
           <form className="order-form" onSubmit={(e) => {
               e.preventDefault();
@@ -35,26 +36,31 @@ Address: ${addr}`;
               onClose();
           }}>
             <div className="form-group">
-              <label>Phone Number</label>
-              <input type="tel" name="phone" required placeholder="e.g. 98765 43210" />
+              <label style={{ fontFamily: 'var(--font-devanagari)', fontSize: '0.7rem', color: '#2c1810' }}>आपका फोन नंबर</label>
+              <div style={{ display: 'flex', alignItems: 'center', background: '#fdfdfa', border: '1px solid rgba(139, 0, 0, 0.15)', borderRadius: '10px', overflow: 'hidden' }}>
+                <span style={{ padding: '0 12px', color: '#8B0000', fontWeight: '700', borderRight: '1px solid rgba(139, 0, 0, 0.1)', fontSize: '0.85rem', background: 'rgba(139, 0, 0, 0.02)', height: '48px', display: 'flex', alignItems: 'center' }}>+91</span>
+                <input type="tel" name="phone" required placeholder="00000 00000" style={{ border: 'none', background: 'none', height: '48px', flex: 1, padding: '0 15px' }} />
+              </div>
             </div>
             <div className="form-group">
-              <label>Delivery Address</label>
-              <textarea name="address" rows="3" required placeholder="Full address with pincode"></textarea>
+              <label style={{ fontFamily: 'var(--font-devanagari)', fontSize: '0.7rem', color: '#2c1810' }}>पूरा पता (पिनकोड के साथ)</label>
+              <textarea name="address" rows="2" required placeholder="अपना पूरा पता यहाँ लिखें..." style={{ fontSize: '0.9rem', borderRadius: '10px' }}></textarea>
             </div>
             <div className="form-group">
-              <label>Which Achaar would you like to sample?</label>
-              <select name="type" required defaultValue="">
-                <option value="" disabled>Select Achaar Type</option>
-                <option value="Mango Achaar">Mango Achaar (आम)</option>
-                <option value="Mirchi Achaar">Mirchi Achaar (मिर्च)</option>
-                <option value="Adrak Achaar">Adrak Achaar (अदरक)</option>
-                <option value="Amla Achaar">Amla Achaar (आंवला)</option>
-                <option value="Haldi Achaar">Haldi Achaar (हल्दी)</option>
-                <option value="Garlic Achaar">Garlic Achaar (लहसुन)</option>
+              <label style={{ fontFamily: 'var(--font-devanagari)', fontSize: '0.7rem', color: '#2c1810' }}>अचार का प्रकार चुनें</label>
+              <select name="type" required defaultValue="" style={{ fontSize: '0.9rem', height: '48px', borderRadius: '10px' }}>
+                <option value="" disabled>चुनें...</option>
+                <option value="Mango Achaar">आम का अचार (Mango)</option>
+                <option value="Mirchi Achaar">मिर्च का अचार (Mirchi)</option>
+                <option value="Adrak Achaar">अदरक का अचार (Ginger)</option>
+                <option value="Amla Achaar">आंवला का अचार (Amla)</option>
+                <option value="Haldi Achaar">हल्दी का अचार (Turmeric)</option>
+                <option value="Garlic Achaar">लहसुन का अचार (Garlic)</option>
               </select>
             </div>
-            <button type="submit" className="btn-primary full-width" style={{ marginTop: '1.5rem' }}>Request Sample via WhatsApp</button>
+            <button type="submit" className="btn-royal full-width" style={{ marginTop: '0.5rem', padding: '16px' }}>
+              व्हाट्सएप पर सैंपल मंगवाएं <i className="fab fa-whatsapp" style={{ marginLeft: '8px' }}></i>
+            </button>
           </form>
         </div>
       </div>

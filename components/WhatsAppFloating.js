@@ -9,6 +9,7 @@ export default function WhatsAppFloating() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [view, setView] = useState('menu'); 
+  const [sampleData, setSampleData] = useState({ phone: '', address: '', type: '' });
   const [mounted, setMounted] = useState(false);
   const [chatInput, setChatInput] = useState('');
   const [chatMessages, setChatMessages] = useState([
@@ -171,7 +172,22 @@ export default function WhatsAppFloating() {
     }
   }, [chatMessages, view]);
 
-  if (!mounted) return null;
+  useEffect(() => {
+    const handleTrigger = (e) => {
+      setIsOpen(true);
+      if (e.detail) setView(e.detail);
+    };
+    const handleExternal = () => {
+      setIsOpen(true);
+      setView('sample');
+    };
+    window.addEventListener('wa-trigger-view', handleTrigger);
+    window.addEventListener('open-wa-sample', handleExternal);
+    return () => {
+      window.removeEventListener('wa-trigger-view', handleTrigger);
+      window.removeEventListener('open-wa-sample', handleExternal);
+    };
+  }, []);
 
   const products = [
     { id: 1, name: 'Mango Achaar', oldPrice: 449, price: 359, price500g: 180, image: '/Images/Mango Achar.jpg' },
@@ -183,6 +199,7 @@ export default function WhatsAppFloating() {
     { id: 'custom', name: 'Custom Achaar Blend', oldPrice: 0, price: 'Variable', price500g: 'N/A', image: '/Images/CustomBlend.png' }
   ];
 
+  // Handlers
   const handleWhatsApp = (text) => {
     const url = `https://wa.me/917014102742?text=${encodeURIComponent(text || 'Khamma Ghani Hukum! I would like to know more about Mewari Achaar.')}`;
     window.open(url, '_blank');
@@ -279,6 +296,8 @@ Looking forward to the royal taste!`;
     else setView('menu');
   };
 
+  if (!mounted) return null;
+
   return (
     <div className="wa-floating-container">
       {isOpen && (
@@ -310,6 +329,11 @@ Looking forward to the royal taste!`;
               <div className="wa-menu-body">
                 <h3 className="wa-welcome-msg">Khamma Ghani Hukum! 🙏</h3>
                 <div className="wa-links">
+                  <button className="wa-link-btn" onClick={() => setView('sample')} style={{ border: '2px solid #D4AF37', background: 'rgba(212, 175, 55, 0.05)', borderRadius: '12px', marginBottom: '15px' }}>
+                    <span style={{ color: '#8B0000', fontWeight: '800' }}>🎁 Get a Free Sample</span>
+                    <i className="fas fa-chevron-right" style={{ color: '#D4AF37' }}></i>
+                  </button>
+
                   <button className="wa-link-btn" onClick={() => setView('order')}>
                     <span>🛍️ Order Something</span>
                     <i className="fas fa-chevron-right"></i>
@@ -334,6 +358,93 @@ Looking forward to the royal taste!`;
               </div>
             )}
 
+            {/* Sample View */}
+            {view === 'sample' && (
+              <div className="wa-menu-body">
+                <div className="wa-section-header" style={{ textAlign: 'center', padding: '10px 0 20px' }}>
+                  <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: '5px' }}>🎁</span>
+                  <h3 style={{ fontFamily: 'var(--font-devanagari)', color: '#8B0000', fontSize: '1.4rem', margin: 0 }}>मुफ्त सैंपल मंगवाएं</h3>
+                  <p style={{ fontSize: '0.65rem', color: '#D4AF37', letterSpacing: '1.5px', textTransform: 'uppercase', fontWeight: 600 }}>Royal Taste At Your Doorstep</p>
+                </div>
+
+                <div className="wa-form-container" style={{ padding: '0 5px' }}>
+                  <p style={{ fontSize: '0.75rem', color: '#8B0000', textAlign: 'center', marginBottom: '20px', fontWeight: '600', padding: '12px', background: 'rgba(139, 0, 0, 0.05)', borderRadius: '10px', lineHeight: '1.4', fontFamily: 'var(--font-devanagari)' }}>
+                    *हुकुम, सैंपल मुफ्त है, लेकिन दूरी के अनुसार डिलीवरी शुल्क लागू होगा।
+                  </p>
+
+                  <div className="wa-input-group" style={{ marginBottom: '15px' }}>
+                    <label style={{ display: 'block', fontSize: '0.65rem', fontWeight: '800', color: '#5a4a42', marginBottom: '8px', textTransform: 'uppercase' }}>आपका फोन नंबर</label>
+                    <div style={{ display: 'flex', border: '1px solid rgba(139, 0, 0, 0.1)', borderRadius: '10px', overflow: 'hidden', background: '#fdfdfa' }}>
+                      <span style={{ padding: '12px', background: 'rgba(139, 0, 0, 0.02)', borderRight: '1px solid rgba(139, 0, 0, 0.1)', color: '#8B0000', fontWeight: '700', fontSize: '0.85rem' }}>+91</span>
+                      <input 
+                        type="tel" 
+                        placeholder="00000 00000" 
+                        style={{ flex: 1, border: 'none', padding: '12px', outline: 'none', background: 'none', fontSize: '0.9rem' }}
+                        value={sampleData.phone}
+                        onChange={(e) => setSampleData({...sampleData, phone: e.target.value})}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="wa-input-group" style={{ marginBottom: '15px' }}>
+                    <label style={{ display: 'block', fontSize: '0.65rem', fontWeight: '800', color: '#5a4a42', marginBottom: '8px', textTransform: 'uppercase' }}>पूरा पता (पिनकोड के साथ)</label>
+                    <textarea 
+                      placeholder="अपना पूरा पता यहाँ लिखें..." 
+                      style={{ width: '100%', padding: '12px', border: '1px solid rgba(139, 0, 0, 0.1)', borderRadius: '10px', outline: 'none', minHeight: '70px', background: '#fdfdfa', fontSize: '0.9rem', fontFamily: 'inherit' }}
+                      value={sampleData.address}
+                      onChange={(e) => setSampleData({...sampleData, address: e.target.value})}
+                    />
+                  </div>
+
+                  <div className="wa-input-group" style={{ marginBottom: '25px' }}>
+                    <label style={{ display: 'block', fontSize: '0.65rem', fontWeight: '800', color: '#5a4a42', marginBottom: '8px', textTransform: 'uppercase' }}>अचार का प्रकार चुनें</label>
+                    <select 
+                      style={{ width: '100%', padding: '12px', border: '1px solid rgba(139, 0, 0, 0.1)', borderRadius: '10px', outline: 'none', background: '#fdfdfa', fontSize: '0.9rem' }}
+                      value={sampleData.type}
+                      onChange={(e) => setSampleData({...sampleData, type: e.target.value})}
+                    >
+                      <option value="">अचार चुनें...</option>
+                      <option value="Mango Achaar">आम का अचार (Mango)</option>
+                      <option value="Mirchi Achaar">मिर्च का अचार (Mirchi)</option>
+                      <option value="Adrak Achaar">अदरक का अचार (Ginger)</option>
+                      <option value="Amla Achaar">आंवला का अचार (Amla)</option>
+                      <option value="Haldi Achaar">हल्दी का अचार (Turmeric)</option>
+                      <option value="Garlic Achaar">लहसुन का अचार (Garlic)</option>
+                    </select>
+                  </div>
+
+                  <button 
+                    className="wa-final-btn"
+                    style={{ 
+                      width: '100%', 
+                      padding: '16px', 
+                      background: 'linear-gradient(135deg, #8B0000 0%, #a50000 100%)', 
+                      color: 'white', 
+                      border: 'none', 
+                      borderRadius: '12px', 
+                      fontWeight: '800',
+                      cursor: 'pointer',
+                      boxShadow: '0 10px 25px rgba(139, 0, 0, 0.25)',
+                      fontSize: '0.9rem'
+                    }}
+                    onClick={() => {
+                      if (!sampleData.phone || !sampleData.address || !sampleData.type) {
+                        alert('कृपया सभी जानकारी भरें।');
+                        return;
+                      }
+                      const message = `Khamma Ghani Hukum! I would like to request a Free Sample.
+Type: ${sampleData.type}
+Phone: +91 ${sampleData.phone}
+Address: ${sampleData.address}`;
+                      handleWhatsApp(message);
+                    }}
+                  >
+                    व्हाट्सएप पर सैंपल मंगवाएं <i className="fab fa-whatsapp" style={{ marginLeft: '8px' }}></i>
+                  </button>
+                </div>
+              </div>
+            )}
+
             {/* Order Selection */}
             {view === 'order' && (
               <div className="wa-menu-body">
@@ -341,6 +452,20 @@ Looking forward to the royal taste!`;
                   <i className="fas fa-info-circle"></i>
                   <span>Select your favorite pickle to order, Hukum:</span>
                 </div>
+                <p style={{ 
+                  fontSize: '0.75rem', 
+                  color: '#8B0000', 
+                  background: 'rgba(212, 175, 55, 0.1)', 
+                  padding: '10px 15px', 
+                  borderRadius: '8px',
+                  marginBottom: '15px',
+                  fontFamily: 'var(--font-devanagari)',
+                  fontWeight: '600',
+                  textAlign: 'center',
+                  border: '1px dashed rgba(212, 175, 55, 0.3)'
+                }}>
+                  🚩 हुकुम, बल्क (थोक) आर्डर के लिए कृपया हमें व्हाट्सएप (+91 70141 02742) पर संपर्क करें।
+                </p>
                 <div className="wa-product-list-compact">
                   {products.map(product => (
                     <button 

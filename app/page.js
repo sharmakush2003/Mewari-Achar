@@ -5,9 +5,9 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { useAuth } from '@/components/AuthContext';
 import { products as allProducts } from '@/lib/products-data';
-import FlavorBars from '@/components/FlavorBars';
-import { SampleModal, PolicyModal, SupportModal, PerksModal } from '@/components/Modals';
 import Link from 'next/link';
+import FlavorSlider from '@/components/FlavorSlider';
+import { PolicyModal, SupportModal, PerksModal } from '@/components/Modals';
 
 export default function Home() {
   const { user } = useAuth();
@@ -35,12 +35,27 @@ export default function Home() {
   }, []);
 
   // Show only top 3 products for the homepage
-  const featuredProducts = allProducts.slice(0, 3);
+  const [featuredProducts, setFeaturedProducts] = useState(allProducts.slice(0, 3));
+
+  const handleFlavorChange = (productId, key, value) => {
+    setFeaturedProducts(prev => prev.map(p => 
+      p.id === productId 
+        ? { ...p, flavorProfile: { ...p.flavorProfile, [key]: value } }
+        : p
+    ));
+  };
+
+  const getWhatsAppLink = (product, size) => {
+    const profile = product.flavorProfile;
+    const profileText = `\n- Spicy: ${profile.spicy}/10\n- Tangy: ${profile.tangy}/10\n- Earthy: ${profile.earthy}/10\n- Pungent: ${profile.pungent}/10`;
+    const message = `Khamma Ghani Hukum! I would like to order ${product.name} (${size}).\n\n*My Custom Taste Settings:*${profileText}`;
+    return `https://wa.me/917014102742?text=${encodeURIComponent(message)}`;
+  };
 
   return (
     <div className="main-wrapper">
       <Navbar 
-        onOpenSample={() => setActiveModal('sample')} 
+        onOpenSample={() => window.dispatchEvent(new CustomEvent('wa-trigger-view', { detail: 'sample' }))} 
       />
 
       <section id="home" className="royal-hero">
@@ -71,7 +86,6 @@ export default function Home() {
 
           <div className="hero-cta" style={{ marginBottom: '15px' }}>
             <Link href="/collection" className="btn-royal">संग्रह देखें</Link>
-            <button className="btn-link-royal" onClick={() => setActiveModal('sample')}>मुफ्त सैंपल मंगवाएं</button>
           </div>
           
           <button 
@@ -111,14 +125,17 @@ export default function Home() {
                 <h3 className="product-name">{product.name}</h3>
                 <p className="product-desc">{product.desc}</p>
                 
-                <FlavorBars profile={product.flavorProfile} />
+                <FlavorSlider 
+                  profile={product.flavorProfile} 
+                  onChange={(key, value) => handleFlavorChange(product.id, key, value)} 
+                />
                 
                 <div className="price-tiers">
                   <div className="price-box">
                     <span className="weight">500g</span>
                     <span className="cost">₹{product.price500g}</span>
                     <a 
-                      href={`https://wa.me/917014102742?text=${encodeURIComponent(`Khamma Ghani Hukum! I would like to order ${product.name} (500g).`)}`} 
+                      href={getWhatsAppLink(product, '500g')} 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="btn-add-royal"
@@ -131,7 +148,7 @@ export default function Home() {
                     <span className="weight">1kg</span>
                     <span className="cost">₹{product.price1kg}</span>
                     <a 
-                      href={`https://wa.me/917014102742?text=${encodeURIComponent(`Khamma Ghani Hukum! I would like to order ${product.name} (1kg).`)}`} 
+                      href={getWhatsAppLink(product, '1kg')} 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="btn-add-royal"
@@ -248,7 +265,6 @@ export default function Home() {
         onOpenSupport={() => setActiveModal('support')} 
       />
 
-      {Boolean(activeModal === 'sample') && <SampleModal active={true} onClose={() => setActiveModal(null)} />}
       {Boolean(activeModal === 'policy') && <PolicyModal active={true} onClose={() => setActiveModal(null)} />}
       {Boolean(activeModal === 'support') && <SupportModal active={true} onClose={() => setActiveModal(null)} />}
       {Boolean(activeModal === 'perks') && <PerksModal active={true} onClose={() => setActiveModal(null)} />}
