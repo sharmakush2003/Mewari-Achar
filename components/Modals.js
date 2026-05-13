@@ -70,28 +70,143 @@ Address: ${addr}`;
 
 // 2. Policy Modal
 export const PolicyModal = ({ active = true, onClose }) => {
+  const [lang, setLang] = useState('hi');
   if (!active) return null;
   
+  const content = {
+    hi: {
+      title: "वापसी एवं रद्दीकरण नीति",
+      subtitle: "Refund & Cancellation Policy",
+      sections: [
+        { 
+          icon: "📦", 
+          title: "रिटर्न (वापसी)", 
+          desc: "ऑर्डर डिलीवर होने के बाद हम रिटर्न स्वीकार नहीं करते हैं।" 
+        },
+        { 
+          icon: "💰", 
+          title: "रिफंड (धनवापसी)", 
+          desc: "रिफंड केवल तभी दिया जाता है यदि: उत्पाद स्टॉक में न हो, डिलीवरी पर खराब हो (फोटो प्रमाण आवश्यक), या पार्सल गुम हो जाए।" 
+        },
+        { 
+          icon: "🚫", 
+          title: "रद्दीकरण", 
+          desc: "हम किसी भी कारण से ऑर्डर रद्द करने का अधिकार सुरक्षित रखते हैं। भुगतान के बाद रद्द होने पर, आपको 5-7 दिनों में रिफंड मिल जाएगा।" 
+        }
+      ],
+      footer: "प्रश्न? संपर्क करें: mewariachar@gmail.com",
+      toggle: "View in English"
+    },
+    en: {
+      title: "Refund & Cancellation Policy",
+      subtitle: "वापसी एवं रद्दीकरण नीति",
+      sections: [
+        { 
+          icon: "📦", 
+          title: "Returns", 
+          desc: "We do not accept returns once the order is delivered." 
+        },
+        { 
+          icon: "💰", 
+          title: "Refunds", 
+          desc: "Refunds are issued if: Product is unavailable, damaged on delivery (photo proof required), or lost in transit." 
+        },
+        { 
+          icon: "🚫", 
+          title: "Cancellations", 
+          desc: "We reserve the right to cancel orders. If cancelled after payment, you will receive a refund within 5-7 working days." 
+        }
+      ],
+      footer: "Questions? Contact: mewariachar@gmail.com",
+      toggle: "Hindi में देखें"
+    }
+  };
+
+  const t = content[lang];
+
   return (
     <div className={`modal-overlay active`} onClick={(e) => { 
         if (e.target.className.includes('modal-overlay')) onClose(); 
     }}>
-      <div className="modal-content" style={{ textAlign: 'left', maxWidth: '650px' }}>
-        <button className="close-modal" onClick={onClose}>&times;</button>
-        <div className="modal-header">
-          <span className="modal-icon">📄</span>
-          <h2 style={{ fontSize: '1.8rem', marginBottom: '1rem' }}>Refund & Cancellation Policy</h2>
+      <div className="modal-content royal-policy-modal" style={{ 
+          textAlign: 'center', 
+          maxWidth: '480px',
+          width: '90%',
+          background: '#fffcf5',
+          border: '1.5px solid #D4AF37',
+          padding: '25px 20px',
+          borderRadius: '20px'
+      }}>
+        <button className="close-modal" onClick={onClose} style={{ color: '#8B0000', top: '15px', right: '15px' }}>&times;</button>
+        
+        <div className="modal-header" style={{ marginBottom: '15px' }}>
+          <h2 style={{ 
+              fontFamily: 'var(--font-devanagari)', 
+              fontSize: '1.4rem', 
+              color: '#8B0000',
+              marginBottom: '2px'
+          }}>{t.title}</h2>
+          <p style={{ 
+              color: '#D4AF37', 
+              fontSize: '0.65rem', 
+              textTransform: 'uppercase', 
+              letterSpacing: '1.5px',
+              fontWeight: '800'
+          }}>{t.subtitle}</p>
         </div>
-        <div className="modal-body" style={{ fontSize: '0.95rem', lineHeight: '1.6', color: '#444' }}>
-          <p><strong>Returns:</strong> We do not accept returns once the order is delivered.</p>
-          <p style={{ marginTop: '10px' }}><strong>Refunds are issued if:</strong></p>
-          <ul style={{ marginLeft: '20px', marginBottom: '15px' }}>
-            <li>Product is unavailable after payment.</li>
-            <li>Product was damaged on delivery (photo proof required).</li>
-            <li>Product was lost in transit.</li>
-          </ul>
-          <p><strong>Cancellations:</strong> We reserve the right to cancel orders for any reason. If cancelled after payment, you will receive a refund within 5-7 working days.</p>
-          <p style={{ marginTop: '15px', fontWeight: 600, color: '#8B0000' }}>Questions? Contact: mewariachar@gmail.com</p>
+
+        <div className="modal-body">
+          <div className="policy-cards" style={{ display: 'flex', flexDirection: 'column', gap: '10px', textAlign: 'left' }}>
+            {t.sections.map((section, i) => (
+              <div key={i} style={{ 
+                  background: 'rgba(212, 175, 55, 0.04)', 
+                  padding: '12px 15px', 
+                  borderRadius: '10px',
+                  border: '1px solid rgba(212, 175, 55, 0.15)',
+                  display: 'flex',
+                  gap: '12px',
+                  alignItems: 'center'
+              }}>
+                <span style={{ fontSize: '1.2rem' }}>{section.icon}</span>
+                <div>
+                  <h4 style={{ 
+                      margin: '0 0 2px 0', 
+                      color: '#8B0000', 
+                      fontFamily: 'var(--font-devanagari)',
+                      fontSize: '0.95rem'
+                  }}>{section.title}</h4>
+                  <p style={{ 
+                      margin: 0, 
+                      fontSize: '0.75rem', 
+                      color: '#5a4a42', 
+                      lineHeight: '1.3',
+                      opacity: 0.8
+                  }}>{section.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ marginTop: '20px', borderTop: '1px solid rgba(139, 0, 0, 0.08)', paddingTop: '15px' }}>
+            <p style={{ fontSize: '0.75rem', color: '#8B0000', fontWeight: '700', margin: 0 }}>{t.footer}</p>
+            
+            <button 
+              onClick={() => setLang(lang === 'hi' ? 'en' : 'hi')}
+              style={{ 
+                  marginTop: '12px',
+                  background: 'none',
+                  border: '1px solid #D4AF37',
+                  color: '#D4AF37',
+                  padding: '6px 15px',
+                  borderRadius: '100px',
+                  fontSize: '0.65rem',
+                  fontWeight: '700',
+                  cursor: 'pointer'
+              }}
+            >
+              {t.toggle}
+            </button>
+          </div>
         </div>
       </div>
     </div>

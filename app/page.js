@@ -262,7 +262,7 @@ export default function Home() {
 
       <Footer 
         onOpenPolicy={() => setActiveModal('policy')} 
-        onOpenSupport={() => setActiveModal('support')} 
+        onOpenSupport={() => window.dispatchEvent(new CustomEvent('wa-trigger-view', { detail: 'contact' }))} 
       />
 
       {Boolean(activeModal === 'policy') && <PolicyModal active={true} onClose={() => setActiveModal(null)} />}

@@ -131,7 +131,7 @@ export default function Collection() {
 
             <Footer 
                 onOpenPolicy={() => setActiveModal('policy')} 
-                onOpenSupport={() => setActiveModal('support')} 
+                onOpenSupport={() => window.dispatchEvent(new CustomEvent('wa-trigger-view', { detail: 'contact' }))} 
             />
 
             {activeModal === 'policy' && <PolicyModal onClose={() => setActiveModal(null)} />}
