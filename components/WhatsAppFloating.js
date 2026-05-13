@@ -116,12 +116,23 @@ export default function WhatsAppFloating() {
 
     const filtered = options.filter(opt => 
       (opt.name || opt).toLowerCase().includes(search.toLowerCase())
-    ).slice(0, 50);
+    ).slice(0, 100);
 
     return (
-      <div className={`input-group ${disabled ? 'disabled' : ''}`} ref={dropdownRef}>
+      <div className={`shahi-group ${disabled ? 'disabled' : ''}`} ref={dropdownRef} style={{ position: 'relative' }}>
         <label>{label}</label>
-        <div className="search-select-box" onClick={() => !disabled && setIsOpen(!isOpen)}>
+        <div 
+          className="shahi-input search-select-box" 
+          onClick={() => !disabled && setIsOpen(!isOpen)}
+          style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center',
+            cursor: disabled ? 'not-allowed' : 'pointer',
+            opacity: disabled ? 0.6 : 1,
+            background: '#fff'
+          }}
+        >
           <input 
             type="text" 
             placeholder={placeholder} 
@@ -130,6 +141,14 @@ export default function WhatsAppFloating() {
             disabled={disabled}
             onFocus={() => setIsOpen(true)}
             className="search-inner-input"
+            style={{ 
+              border: 'none', 
+              background: 'transparent', 
+              width: '100%', 
+              outline: 'none',
+              fontSize: 'inherit',
+              color: 'inherit'
+            }}
           />
         </div>
         
@@ -496,172 +515,179 @@ Address: ${sampleData.address}`;
               </div>
             )}
 
-            {/* Checkout View */}
+            {/* Checkout View - Simplified Royal Rebuild */}
             {view === 'checkout' && (
               <div className="wa-menu-body">
-                <div className="wa-checkout-header">
-                  <h3>{selectedProduct.id === 'custom' && currentStep === 1 ? 'Craft Your Blend' : 'Delivery Details'}</h3>
-                  <p>{selectedProduct.id === 'custom' && currentStep === 1 ? 'Hukum, tell us your taste preferences:' : 'Please provide the delivery details for your royal parcel:'}</p>
-                </div>
-                
-                <div className="wa-location-loader">
-                    {locationData.isLoading && <div className="wa-loading-small">Loading Location Data...</div>}
-                </div>
-                
-                {selectedProduct.id === 'custom' && currentStep === 1 ? (
-                  <form className="wa-checkout-form" onSubmit={(e) => { e.preventDefault(); setCurrentStep(2); }}>
-                    {/* Main Ingredient */}
-                    <div className="input-group">
-                      <label>MAIN INGREDIENT</label>
-                      <select 
-                        className="wa-select-native"
-                        value={customerDetails.mainIngredient}
-                        onChange={(e) => setCustomerDetails({...customerDetails, mainIngredient: e.target.value})}
-                      >
-                        <option value="Mango">Traditional Mango (Aam)</option>
-                        <option value="Garlic">Royal Garlic (Lahsun)</option>
-                        <option value="Chilli">Green/Red Chilli (Mirch)</option>
-                        <option value="Lemon">Tangy Lemon (Nimbu)</option>
-                        <option value="Mixed">Mewari Mixed</option>
-                        <option value="Other">Something Else (Mention in notes)</option>
-                      </select>
-                    </div>
+                <div className="shahi-delivery-container">
+                  <div className="shahi-header-banner">
+                    <span className="shahi-motif">✦ ✧ ✦</span>
+                    <h3 className="shahi-main-title">शाही वितरण विवरण</h3>
+                    <p className="shahi-sub-title">Royal Delivery Particulars</p>
+                    <div className="shahi-divider"></div>
+                  </div>
 
-                    {/* Spice Level */}
-                    <div className="input-group">
-                      <label>SPICE LEVEL</label>
-                      <select 
-                        className="wa-select-native"
-                        value={customerDetails.spiceLevel}
-                        onChange={(e) => setCustomerDetails({...customerDetails, spiceLevel: e.target.value})}
-                      >
-                        <option value="Mild">Mild (Low Spice)</option>
-                        <option value="Medium">Medium (Balanced)</option>
-                        <option value="Royal Spicy">Royal Spicy (Teekha)</option>
-                      </select>
-                    </div>
+                  {selectedProduct.id === 'custom' && currentStep === 1 ? (
+                    <form className="shahi-royal-form" onSubmit={(e) => { e.preventDefault(); setCurrentStep(2); }}>
+                      <div className="shahi-form-section">
+                        <div className="shahi-section-title">स्वाद और पसंद (Preferences)</div>
+                        
+                        <div className="shahi-field">
+                          <label><i className="fas fa-leaf"></i> मुख्य सामग्री</label>
+                          <select 
+                            className="shahi-royal-input"
+                            value={customerDetails.mainIngredient}
+                            onChange={(e) => setCustomerDetails({...customerDetails, mainIngredient: e.target.value})}
+                          >
+                            <option value="Mango">Traditional Mango (Aam)</option>
+                            <option value="Garlic">Royal Garlic (Lahsun)</option>
+                            <option value="Chilli">Green/Red Chilli (Mirch)</option>
+                            <option value="Lemon">Tangy Lemon (Nimbu)</option>
+                            <option value="Mixed">Mewari Mixed</option>
+                            <option value="Other">Something Else</option>
+                          </select>
+                        </div>
 
-                    {/* Oil Type */}
-                    <div className="input-group">
-                      <label>OIL PREFERENCE</label>
-                      <select 
-                        className="wa-select-native"
-                        value={customerDetails.oilType}
-                        onChange={(e) => setCustomerDetails({...customerDetails, oilType: e.target.value})}
-                      >
-                        <option value="Mustard Oil">Traditional Mustard Oil</option>
-                        <option value="Groundnut Oil">Refined Groundnut Oil</option>
-                        <option value="Olive Oil">Healthy Olive Oil</option>
-                      </select>
-                    </div>
+                        <div className="shahi-row-grid">
+                          <div className="shahi-field">
+                            <label><i className="fas fa-pepper-hot"></i> तीखापन (Spice)</label>
+                            <select 
+                              className="shahi-royal-input"
+                              value={customerDetails.spiceLevel}
+                              onChange={(e) => setCustomerDetails({...customerDetails, spiceLevel: e.target.value})}
+                            >
+                              <option value="Mild">Mild</option>
+                              <option value="Medium">Medium</option>
+                              <option value="Royal Spicy">Royal Spicy</option>
+                            </select>
+                          </div>
+                          <div className="shahi-field">
+                            <label><i className="fas fa-tint"></i> तेल (Oil)</label>
+                            <select 
+                              className="shahi-royal-input"
+                              value={customerDetails.oilType}
+                              onChange={(e) => setCustomerDetails({...customerDetails, oilType: e.target.value})}
+                            >
+                              <option value="Mustard Oil">Mustard Oil</option>
+                              <option value="Groundnut Oil">Groundnut Oil</option>
+                              <option value="Olive Oil">Olive Oil</option>
+                            </select>
+                          </div>
+                        </div>
 
-                    {/* Special Notes */}
-                    <div className="input-group">
-                      <label>SPECIAL REQUESTS / NOTES</label>
-                      <textarea 
-                        rows="3"
-                        placeholder="e.g., Less salt, extra methi, or specific grandmother recipe style..."
-                        value={customerDetails.specialNote}
-                        onChange={(e) => setCustomerDetails({...customerDetails, specialNote: e.target.value})}
-                      ></textarea>
-                    </div>
-
-                    <button type="submit" className="wa-complete-btn">
-                      Proceed to Delivery Details <i className="fas fa-arrow-right"></i>
-                    </button>
-                  </form>
-                ) : (
-                  <form className="wa-checkout-form" onSubmit={handleFinalOrder}>
-                    {/* EMAIL ID */}
-                    <div className="input-group">
-                      <label>EMAIL ID</label>
-                      <input 
-                        type="email" 
-                        required 
-                        placeholder="hukum@example.com"
-                        value={customerDetails.email}
-                        onChange={(e) => setCustomerDetails({...customerDetails, email: e.target.value})}
-                      />
-                    </div>
-
-                    {/* PHONE NUMBER */}
-                    <div className="input-group">
-                      <label>PHONE NUMBER</label>
-                      <div className="phone-wrapper">
-                        <span className="prefix">+91</span>
-                        <input 
-                          type="tel" 
-                          required 
-                          placeholder="00000 00000"
-                          value={customerDetails.phone}
-                          onChange={(e) => setCustomerDetails({...customerDetails, phone: e.target.value})}
-                        />
+                        <div className="shahi-field">
+                          <label><i className="fas fa-pen-fancy"></i> विशेष निर्देश</label>
+                          <textarea 
+                            className="shahi-royal-input textarea-fixed"
+                            rows="2"
+                            placeholder="Hukum, tell us your requirements..."
+                            value={customerDetails.specialNote}
+                            onChange={(e) => setCustomerDetails({...customerDetails, specialNote: e.target.value})}
+                          ></textarea>
+                        </div>
                       </div>
-                    </div>
 
-                    {/* COUNTRY */}
-                    <SearchableSelect 
-                      label="COUNTRY"
-                      placeholder="Select Country"
-                      options={locationData.countries}
-                      value={customerDetails.country}
-                      onChange={(val) => val === 'Others' ? setCustomerDetails({...customerDetails, country: 'Others', state: '', district: ''}) : handleCountryChange(val)}
-                    />
+                      <button type="submit" className="shahi-next-btn">
+                        Proceed to Delivery <i className="fas fa-chevron-right"></i>
+                      </button>
+                    </form>
+                  ) : (
+                    <form className="shahi-royal-form" onSubmit={handleFinalOrder}>
+                      <div className="shahi-form-section">
+                        <div className="shahi-section-title">संपर्क सूत्र (Contact)</div>
+                        
+                        <div className="shahi-field">
+                          <label><i className="fas fa-envelope"></i> ईमेल</label>
+                          <input 
+                            type="email" 
+                            required 
+                            className="shahi-royal-input"
+                            placeholder="hukum@example.com"
+                            value={customerDetails.email}
+                            onChange={(e) => setCustomerDetails({...customerDetails, email: e.target.value})}
+                          />
+                        </div>
 
-                    {/* STATE */}
-                    <SearchableSelect 
-                      label="STATE"
-                      placeholder="Search State"
-                      disabled={!customerDetails.country || customerDetails.country === 'Others'}
-                      options={locationData.states}
-                      value={customerDetails.state}
-                      onChange={(val) => val === 'Others' ? setCustomerDetails({...customerDetails, state: 'Others', district: ''}) : handleStateChange(val)}
-                    />
+                        <div className="shahi-field">
+                          <label><i className="fas fa-phone"></i> फोन नंबर</label>
+                          <div className="shahi-phone-input-box">
+                            <span className="shahi-phone-code">+91</span>
+                            <input 
+                              type="tel" 
+                              required 
+                              className="shahi-royal-input no-left-radius"
+                              placeholder="00000 00000"
+                              value={customerDetails.phone}
+                              onChange={(e) => setCustomerDetails({...customerDetails, phone: e.target.value})}
+                            />
+                          </div>
+                        </div>
+                      </div>
 
-                    {/* DISTRICT */}
-                    <SearchableSelect 
-                      label="DISTRICT"
-                      placeholder="Search District"
-                      disabled={!customerDetails.state || customerDetails.state === 'Others'}
-                      options={locationData.cities}
-                      value={customerDetails.district}
-                      onChange={(val) => setCustomerDetails({...customerDetails, district: val})}
-                    />
+                      <div className="shahi-form-section">
+                        <div className="shahi-section-title">वितरण पता (Address)</div>
+                        
+                        <div className="shahi-row-grid">
+                          <div className="shahi-field">
+                            <label><i className="fas fa-map-marker-alt"></i> राज्य (State)</label>
+                            <input 
+                              type="text" 
+                              required 
+                              className="shahi-royal-input"
+                              placeholder="जैसे: Rajasthan"
+                              value={customerDetails.state}
+                              onChange={(e) => setCustomerDetails({...customerDetails, state: e.target.value})}
+                            />
+                          </div>
 
-                    {/* DELIVERY ADDRESS */}
-                    <div className="input-group">
-                      <label>DELIVERY ADDRESS</label>
-                      <textarea 
-                        required 
-                        rows="2"
-                        placeholder="Full Address with Landmark"
-                        value={customerDetails.address}
-                        onChange={(e) => setCustomerDetails({...customerDetails, address: e.target.value})}
-                      ></textarea>
-                    </div>
+                          <div className="shahi-field">
+                            <label><i className="fas fa-city"></i> ज़िला (District)</label>
+                            <input 
+                              type="text" 
+                              required 
+                              className="shahi-royal-input"
+                              placeholder="जैसे: Udaipur"
+                              value={customerDetails.district}
+                              onChange={(e) => setCustomerDetails({...customerDetails, district: e.target.value})}
+                            />
+                          </div>
+                        </div>
 
-                    {/* PIN CODE */}
-                    <div className="input-group">
-                      <label>PIN CODE</label>
-                      <input 
-                        type="text" 
-                        required 
-                        placeholder="313001"
-                        value={customerDetails.pinCode}
-                        onChange={(e) => setCustomerDetails({...customerDetails, pinCode: e.target.value})}
-                      />
-                    </div>
+                        <div className="shahi-field">
+                          <label><i className="fas fa-home"></i> पूरा पता (Full Address)</label>
+                          <textarea 
+                            required 
+                            className="shahi-royal-input textarea-fixed"
+                            rows="2"
+                            placeholder="मकान नंबर, गली, लैंडमार्क..."
+                            value={customerDetails.address}
+                            onChange={(e) => setCustomerDetails({...customerDetails, address: e.target.value})}
+                          ></textarea>
+                        </div>
 
-                    <div className="wa-info-bar">
-                      <i className="fas fa-info-circle"></i>
-                      <span>Hukum, please ensure all details are accurate for correct delivery rates and timely arrival. We are not responsible for delays caused by incorrect information.</span>
-                    </div>
+                        <div className="shahi-field">
+                          <label><i className="fas fa-thumbtack"></i> पिनकोड (PIN Code)</label>
+                          <input 
+                            type="text" 
+                            required 
+                            className="shahi-royal-input"
+                            placeholder="313001"
+                            value={customerDetails.pinCode}
+                            onChange={(e) => setCustomerDetails({...customerDetails, pinCode: e.target.value})}
+                          />
+                        </div>
+                      </div>
 
-                    <button type="submit" className="wa-complete-btn">
-                      Complete Order on WhatsApp <i className="fab fa-whatsapp"></i>
-                    </button>
-                  </form>
-                )}
+                      <div className="shahi-disclaimer-card">
+                        <i className="fas fa-info-circle"></i>
+                        <span>हुकुम, कृपया सुनिश्चित करें कि जानकारी सही है।</span>
+                      </div>
+
+                      <button type="submit" className="shahi-complete-btn">
+                        व्हाट्सएप पर ऑर्डर करें <i className="fab fa-whatsapp"></i>
+                      </button>
+                    </form>
+                  )}
+                </div>
               </div>
             )}
 
@@ -1117,10 +1143,22 @@ Address: ${sampleData.address}`;
         }
 
         .search-select-box {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          cursor: pointer;
+          position: relative;
+        }
+
+        .search-select-box:after {
+          content: '▼';
+          font-size: 0.7rem;
+          color: #D4AF37;
+          margin-right: 5px;
+          opacity: 0.8;
+          pointer-events: none;
+        }
+
+        .search-select-box:hover,
+        .search-select-box:focus-within {
+          border-color: #D4AF37 !important;
+          box-shadow: 0 4px 15px rgba(212, 175, 55, 0.15);
         }
 
         .search-inner-input {
@@ -1159,29 +1197,53 @@ Address: ${sampleData.address}`;
 
         .search-dropdown {
           position: absolute;
-          top: 100%;
+          top: calc(100% + 5px);
           left: 0;
           right: 0;
           background: #fff;
-          border: 1px solid #ddd;
-          border-top: none;
-          border-radius: 0 0 8px 8px;
-          max-height: 200px;
+          border: 1.5px solid #D4AF37;
+          border-radius: 12px;
+          max-height: 250px;
           overflow-y: auto;
           z-index: 1000;
-          box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+          box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+          animation: slideDown 0.2s ease-out;
+        }
+
+        @keyframes slideDown {
+          from { opacity: 0; transform: translateY(-10px); }
+          to { opacity: 1; transform: translateY(0); }
         }
 
         .search-option {
-          padding: 10px 15px;
+          padding: 12px 18px;
           cursor: pointer;
           font-size: 0.9rem;
-          border-bottom: 1px solid #f8f8f8;
+          border-bottom: 1px solid rgba(212, 175, 55, 0.05);
+          transition: all 0.2s;
+          color: #5a4a42;
         }
 
         .search-option:hover {
-          background: #f8f8f8;
+          background: rgba(212, 175, 55, 0.08);
           color: #8B0000;
+          padding-left: 22px;
+        }
+
+        .search-option.manual {
+          background: rgba(139, 0, 0, 0.02);
+          font-weight: 700;
+          color: #8B0000;
+          text-align: center;
+          border-top: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .no-results {
+          padding: 15px;
+          font-size: 0.85rem;
+          color: #999;
+          text-align: center;
+          font-style: italic;
         }
 
         .wa-info-bar {
@@ -1278,6 +1340,265 @@ Address: ${sampleData.address}`;
           border: 1px solid #ddd;
           border-radius: 20px;
           outline: none;
+        }
+
+        /* MASTERPIECE ROYAL CHECKOUT STYLES */
+        .shahi-delivery-container {
+          background: #fffcf5;
+          border: 2px solid #D4AF37;
+          border-radius: 30px;
+          padding: 35px 25px;
+          box-shadow: 0 20px 60px rgba(139, 0, 0, 0.12);
+          position: relative;
+          overflow: hidden;
+          margin-top: 10px;
+        }
+
+        .shahi-delivery-container:before {
+          content: '';
+          position: absolute;
+          top: 0; left: 0; right: 0; height: 6px;
+          background: linear-gradient(to right, #8B0000, #D4AF37, #8B0000);
+        }
+
+        .shahi-header-banner {
+          text-align: center;
+          margin-bottom: 35px;
+        }
+
+        .shahi-motif {
+          color: #D4AF37;
+          font-size: 14px;
+          letter-spacing: 5px;
+          display: block;
+          margin-bottom: 10px;
+        }
+
+        .shahi-main-title {
+          font-family: var(--font-royal, serif);
+          color: #8B0000;
+          font-size: 1.8rem;
+          margin: 0;
+          line-height: 1;
+        }
+
+        .shahi-sub-title {
+          font-size: 0.7rem;
+          color: #D4AF37;
+          text-transform: uppercase;
+          letter-spacing: 3px;
+          font-weight: 800;
+          margin: 8px 0 0 0;
+        }
+
+        .shahi-divider {
+          width: 60px;
+          height: 1px;
+          background: #D4AF37;
+          margin: 20px auto 0;
+          position: relative;
+        }
+
+        .shahi-divider:after {
+          content: '✦';
+          position: absolute;
+          top: -10px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: #fffcf5;
+          padding: 0 10px;
+          color: #D4AF37;
+          font-size: 14px;
+        }
+
+        .shahi-royal-form {
+          display: flex;
+          flex-direction: column;
+          gap: 35px;
+        }
+
+        .shahi-form-section {
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+        }
+
+        .shahi-section-title {
+          font-family: var(--font-royal, serif);
+          font-size: 1rem;
+          color: #8B0000;
+          border-left: 3px solid #D4AF37;
+          padding-left: 12px;
+          margin-bottom: 10px;
+          font-weight: 700;
+        }
+
+        .shahi-field {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .shahi-field label {
+          font-size: 0.75rem;
+          font-weight: 800;
+          color: #5a4a42;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        .shahi-field label i {
+          color: #D4AF37;
+          font-size: 0.9rem;
+        }
+
+        .shahi-royal-input {
+          width: 100%;
+          background: #fff !important;
+          border: 1.5px solid rgba(212, 175, 55, 0.3) !important;
+          border-radius: 12px !important;
+          padding: 14px 18px !important;
+          font-size: 0.95rem !important;
+          color: #2c1810 !important;
+          outline: none !important;
+          transition: all 0.3s;
+          font-family: inherit;
+          box-sizing: border-box;
+        }
+
+        .shahi-royal-input:focus {
+          border-color: #D4AF37 !important;
+          box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+          background: #fff !important;
+        }
+
+        .textarea-fixed {
+          resize: none;
+          min-height: 80px;
+        }
+
+        .shahi-row-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 20px;
+        }
+
+        .shahi-phone-input-box {
+          display: flex;
+          align-items: center;
+          background: #fff;
+          border: 1.5px solid rgba(212, 175, 55, 0.3);
+          border-radius: 12px;
+          overflow: hidden;
+        }
+
+        .shahi-phone-code {
+          padding: 0 15px;
+          font-weight: 800;
+          color: #8B0000;
+          background: rgba(212, 175, 55, 0.08);
+          border-right: 1.5px solid rgba(212, 175, 55, 0.2);
+          height: 52px;
+          display: flex;
+          align-items: center;
+        }
+
+        .no-left-radius {
+          border: none !important;
+          border-radius: 0 !important;
+        }
+
+        .shahi-disclaimer-card {
+          display: flex;
+          gap: 12px;
+          background: rgba(139, 0, 0, 0.03);
+          padding: 15px;
+          border-radius: 15px;
+          font-size: 0.75rem;
+          color: #8B0000;
+          line-height: 1.5;
+          border: 1px dashed rgba(139, 0, 0, 0.2);
+          font-weight: 600;
+        }
+
+        .shahi-next-btn, .shahi-complete-btn {
+          width: 100%;
+          padding: 20px;
+          background: linear-gradient(135deg, #8B0000 0%, #a50000 100%);
+          color: #fff;
+          border: none;
+          border-radius: 15px;
+          font-weight: 800;
+          font-size: 1.05rem;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 15px;
+          box-shadow: 0 12px 35px rgba(139, 0, 0, 0.25);
+          transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .shahi-next-btn:hover, .shahi-complete-btn:hover {
+          transform: translateY(-5px) scale(1.02);
+          box-shadow: 0 20px 50px rgba(139, 0, 0, 0.35);
+        }
+
+        /* ROYAL DROPDOWN OVERRIDE */
+        .search-dropdown {
+          background: #fffcf5 !important;
+          border: 2px solid #D4AF37 !important;
+          border-radius: 15px !important;
+          padding: 10px !important;
+          margin-top: 8px !important;
+          box-shadow: 0 25px 50px rgba(0,0,0,0.2) !important;
+          animation: royalSlide 0.3s ease-out !important;
+        }
+
+        @keyframes royalSlide {
+          from { opacity: 0; transform: translateY(-15px) scale(0.95); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .search-option {
+          padding: 14px 18px !important;
+          border-radius: 10px !important;
+          margin-bottom: 4px !important;
+          font-family: var(--font-royal, serif) !important;
+          color: #8B0000 !important;
+          font-weight: 700 !important;
+          transition: all 0.25s !important;
+          font-size: 0.95rem !important;
+          border: 1px solid transparent !important;
+        }
+
+        .search-option:hover {
+          background: #8B0000 !important;
+          color: #fffcf5 !important;
+          padding-left: 25px !important;
+          box-shadow: 0 5px 15px rgba(139, 0, 0, 0.2) !important;
+        }
+
+        .search-option.manual {
+          background: rgba(212, 175, 55, 0.1) !important;
+          border: 1px dashed #D4AF37 !important;
+          margin-top: 10px !important;
+          text-align: center !important;
+        }
+
+        @media (max-width: 480px) {
+          .shahi-row-grid {
+            grid-template-columns: 1fr;
+          }
+          .shahi-delivery-container {
+            padding: 25px 15px;
+          }
+          .shahi-main-title {
+            font-size: 1.5rem;
+          }
         }
 
         .wa-chat-input button {
