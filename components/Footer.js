@@ -1,4 +1,5 @@
 import { useLanguage } from '@/context/LanguageContext';
+import Link from 'next/link';
 
 export default function Footer({ onOpenPolicy, onOpenSupport }) {
     const { t } = useLanguage();
@@ -25,7 +26,7 @@ export default function Footer({ onOpenPolicy, onOpenSupport }) {
                 </div>
 
                 <div className="footer-nav">
-                    <button onClick={onOpenPolicy} className="footer-btn">{t('policy')}</button>
+                    <Link href="/privacy-policy" className="footer-btn" style={{ textDecoration: 'none' }}>{t('policy')}</Link>
                     <div className="gold-dot"></div>
                     <button onClick={onOpenSupport} className="footer-btn">{t('supportContact')}</button>
                 </div>
