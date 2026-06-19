@@ -26,11 +26,40 @@ const poppins = Poppins({
 });
 
 export const metadata = {
-  title: 'Mewari Special Achaar - Premium Homemade Pickles',
-  description: 'Authentic homemade pickles (Achaar) made with traditional recipes and love. Order now!',
+  metadataBase: new URL('https://www.mewari-achar.shop'),
+  title: 'Mewari Special Achaar - Premium Homemade Rajasthani Pickles',
+  description: 'Authentic homemade Rajasthani pickles (Achaar) crafted with traditional methods, sun-dried Mathania spices, and pure mustard oil. FSSAI & MSME Certified.',
+  keywords: [
+    'Mewari Achaar', 'Homemade Pickles', 'Rajasthani Achaar', 
+    'Mathania Mirchi Achaar', 'FSSAI Certified Pickles', 'Traditional Indian Pickles', 
+    'Buy Pickles Online', 'Mewari Homemade Pickles', 'Desi Achaar', 'Mewar Special Achaar'
+  ],
   icons: {
     icon: '/favicon.png',
     apple: '/favicon.png',
+  },
+  alternates: {
+    canonical: 'https://www.mewari-achar.shop',
+  },
+  openGraph: {
+    title: 'Mewari Special Achaar - Premium Homemade Rajasthani Pickles',
+    description: 'Authentic homemade Rajasthani pickles (Achaar) crafted with traditional methods, sun-dried Mathania spices, and pure mustard oil. FSSAI & MSME Certified.',
+    url: 'https://www.mewari-achar.shop',
+    siteName: 'Mewari Achaar',
+    images: [
+      {
+        url: '/favicon.png',
+        width: 512,
+        height: 512,
+        alt: 'Mewari Achaar Premium Homemade Pickles',
+      },
+    ],
+    locale: 'en_IN',
+    type: 'website',
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
@@ -38,10 +67,48 @@ import ClientWrapper from '@/components/ClientWrapper';
 import { LanguageProvider } from '@/context/LanguageContext';
 
 export default function RootLayout({ children }) {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Store',
+    'name': 'Mewari Achaar',
+    'image': 'https://www.mewari-achar.shop/favicon.png',
+    'description': 'Authentic homemade Rajasthani pickles (Achaar) crafted with traditional methods, sun-dried spices, and pure mustard oil. FSSAI & MSME Certified.',
+    'url': 'https://www.mewari-achar.shop',
+    'telephone': '+917014102742',
+    'address': {
+      '@type': 'PostalAddress',
+      'addressLocality': 'Chittorgarh',
+      'addressRegion': 'Rajasthan',
+      'addressCountry': 'IN'
+    },
+    'sameAs': [
+      'https://play.google.com/store/apps/details?id=com.mewari.achaar',
+      'https://wa.me/917014102742'
+    ],
+    'hasCredential': [
+      {
+        '@type': 'EducationalOccupationalCredential',
+        'credentialCategory': 'certification',
+        'name': 'FSSAI Registration',
+        'credentialId': '22226028000380'
+      },
+      {
+        '@type': 'EducationalOccupationalCredential',
+        'credentialCategory': 'certification',
+        'name': 'MSME Registration',
+        'credentialId': 'UDYAM-RJ-10-0076393'
+      }
+    ]
+  };
+
   return (
     <html lang="en" className={`${outfit.variable} ${playfair.variable} ${poppins.variable}`}>
       <head>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
       </head>
       <body>
           <AuthProvider>

@@ -38,6 +38,13 @@ export default function Footer({ onOpenPolicy, onOpenSupport }) {
                    </div>
                 </div>
 
+                <div className="footer-app-download">
+                    <span className="download-label">{t('downloadApp')}</span>
+                    <a href="https://play.google.com/store/apps/details?id=com.mewari.achaar" target="_blank" rel="noopener noreferrer" className="play-store-link">
+                        <img src="/google-play-badge.svg" alt="Get it on Google Play" className="play-store-badge-img" />
+                    </a>
+                </div>
+
                 <div className="footer-nav">
                     <Link href="/privacy-policy" className="footer-btn" style={{ textDecoration: 'none' }}>{t('policy')}</Link>
                     <div className="gold-dot"></div>
@@ -196,6 +203,30 @@ export default function Footer({ onOpenPolicy, onOpenSupport }) {
                     color: #5a4a42;
                     opacity: 0.5;
                     letter-spacing: 0.5px;
+                }
+                .footer-app-download {
+                    margin-bottom: 50px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 12px;
+                }
+                .download-label {
+                    color: #8B0000;
+                    font-weight: 800;
+                    font-size: 0.8rem;
+                    letter-spacing: 1.5px;
+                    text-transform: uppercase;
+                    font-family: var(--font-devanagari);
+                }
+                .play-store-badge-img {
+                    height: 50px;
+                    width: auto;
+                    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                }
+                .play-store-badge-img:hover {
+                    transform: scale(1.06);
+                    filter: brightness(1.1);
                 }
             `}</style>
         </footer>
