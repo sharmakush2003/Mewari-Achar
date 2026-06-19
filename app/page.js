@@ -208,39 +208,65 @@ export default function Home() {
         </div>
       </section>
       
-
-
       <section className="royal-msme-trust" >
         <div className="msme-container">
-           <div className="msme-badge-lockup">
-             <div className="msme-seal">
-               <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
-                 <circle cx="45" cy="45" r="43" stroke="#D4AF37" strokeWidth="1.5" fill="#fff"/>
-                 <circle cx="45" cy="45" r="38" stroke="rgba(212,175,55,0.3)" strokeWidth="0.5" fill="none"/>
-                 <path d="M10 35 Q45 32 80 35 L80 38 Q45 41 10 38 Z" fill="#FF9933" opacity="0.85"/>
-                 <path d="M10 38 Q45 41 80 38 L80 41 Q45 44 10 41 Z" fill="#fff" stroke="#ccc" strokeWidth="0.3"/>
-                 <path d="M10 41 Q45 44 80 41 L80 44 Q45 47 10 44 Z" fill="#138808" opacity="0.85"/>
-                 <circle cx="45" cy="40" r="5" stroke="#00008B" strokeWidth="1" fill="none"/>
-                 <circle cx="45" cy="40" r="1.2" fill="#00008B"/>
-                 {[...Array(24)].map((_, i) => {
-                   const angle = (i * 15 * Math.PI) / 180;
-                   const x1 = 45 + 1.5 * Math.cos(angle);
-                   const y1 = 40 + 1.5 * Math.sin(angle);
-                   const x2 = 45 + 4.5 * Math.cos(angle);
-                   const y2 = 40 + 4.5 * Math.sin(angle);
-                   return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#00008B" strokeWidth="0.5"/>;
-                 })}
-                 <text x="45" y="62" textAnchor="middle" fontSize="5.5" fontWeight="700" fill="#8B0000" fontFamily="serif" letterSpacing="1">GOVT OF INDIA</text>
-                 <text x="45" y="70" textAnchor="middle" fontSize="7" fontWeight="900" fill="#8B0000" fontFamily="serif" letterSpacing="2">MSME</text>
-                 <text x="45" y="77" textAnchor="middle" fontSize="4.5" fontWeight="600" fill="#5a4a42" fontFamily="serif" letterSpacing="1">MINISTRY</text>
-               </svg>
-             </div>
-             <div className="msme-info-editorial">
-                <h4 className="msme-title-editorial">{t('govtRecognized')}</h4>
-                <div className="msme-number">{t('regNum')}</div>
-                <p className="msme-nic">{t('nicCode')}</p>
-             </div>
-           </div>
+            {/* Card 1: MSME Registration */}
+            <div className="msme-badge-lockup">
+              <div className="msme-seal">
+                <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="45" cy="45" r="43" stroke="#D4AF37" strokeWidth="1.5" fill="#fff"/>
+                  <circle cx="45" cy="45" r="38" stroke="rgba(212,175,55,0.3)" strokeWidth="0.5" fill="none"/>
+                  <path d="M10 35 Q45 32 80 35 L80 38 Q45 41 10 38 Z" fill="#FF9933" opacity="0.85"/>
+                  <path d="M10 38 Q45 41 80 38 L80 41 Q45 44 10 41 Z" fill="#fff" stroke="#ccc" strokeWidth="0.3"/>
+                  <path d="M10 41 Q45 44 80 41 L80 44 Q45 47 10 44 Z" fill="#138808" opacity="0.85"/>
+                  <circle cx="45" cy="40" r="5" stroke="#00008B" strokeWidth="1" fill="none"/>
+                  <circle cx="45" cy="40" r="1.2" fill="#00008B"/>
+                  {[...Array(24)].map((_, i) => {
+                    const angle = (i * 15 * Math.PI) / 180;
+                    const x1 = 45 + 1.5 * Math.cos(angle);
+                    const y1 = 40 + 1.5 * Math.sin(angle);
+                    const x2 = 45 + 4.5 * Math.cos(angle);
+                    const y2 = 40 + 4.5 * Math.sin(angle);
+                    return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#00008B" strokeWidth="0.5"/>;
+                  })}
+                  <text x="45" y="62" textAnchor="middle" fontSize="5.5" fontWeight="700" fill="#8B0000" fontFamily="serif" letterSpacing="1">GOVT OF INDIA</text>
+                  <text x="45" y="70" textAnchor="middle" fontSize="7" fontWeight="900" fill="#8B0000" fontFamily="serif" letterSpacing="2">MSME</text>
+                  <text x="45" y="77" textAnchor="middle" fontSize="4.5" fontWeight="600" fill="#5a4a42" fontFamily="serif" letterSpacing="1">MINISTRY</text>
+                </svg>
+              </div>
+              <div className="msme-info-editorial">
+                 <h4 className="msme-title-editorial">{t('govtRecognized')}</h4>
+                 <div className="msme-number">{t('regNum')}</div>
+                 <p className="msme-nic">{t('nicCode')}</p>
+              </div>
+            </div>
+
+            {/* Card 2: FSSAI Registration */}
+            <div className="msme-badge-lockup">
+              <div className="msme-seal">
+                <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="45" cy="45" r="43" stroke="#D4AF37" strokeWidth="1.5" fill="#fff"/>
+                  <circle cx="45" cy="45" r="38" stroke="rgba(212,175,55,0.3)" strokeWidth="0.5" fill="none"/>
+                  <path d="M45 20 Q39 27 45 32 Q51 27 45 20 Z" fill="#138808" opacity="0.85"/>
+                  <path d="M48 22 Q52 26 48 30 Z" fill="#FF9933" opacity="0.85"/>
+                  <text x="45" y="47" textAnchor="middle" fontSize="12" fontWeight="900" fill="#138808" fontFamily="sans-serif" letterSpacing="0.2">fssai</text>
+                  <line x1="22" y1="52" x2="68" y2="52" stroke="#D4AF37" strokeWidth="0.8"/>
+                  <text x="45" y="62" textAnchor="middle" fontSize="5.5" fontWeight="700" fill="#8B0000" fontFamily="serif" letterSpacing="0.8">GOVT OF INDIA</text>
+                  <text x="45" y="70" textAnchor="middle" fontSize="6.5" fontWeight="900" fill="#8B0000" fontFamily="serif" letterSpacing="1">FOOD SAFETY</text>
+                  <text x="45" y="77" textAnchor="middle" fontSize="5" fontWeight="600" fill="#5a4a42" fontFamily="serif" letterSpacing="0.5">STANDARDS</text>
+                </svg>
+              </div>
+              <div className="msme-info-editorial">
+                 <h4 className="msme-title-editorial">{t('fssaiTitle')}</h4>
+                 <div className="msme-number">{t('fssaiRegNum')}</div>
+                 <p className="msme-nic" style={{ marginTop: '10px', fontSize: '0.85rem', lineHeight: '1.4' }}>
+                    <strong>Mewari Achaar</strong><br />
+                    • {t('fssaiKOB')}<br />
+                    • {t('fssaiCategories')}<br />
+                    • {t('fssaiValidity')}
+                 </p>
+              </div>
+            </div>
         </div>
       </section>
 

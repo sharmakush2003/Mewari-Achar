@@ -11,7 +11,7 @@ export default function Footer({ onOpenPolicy, onOpenSupport }) {
                     <p className="footer-tagline">{t('footerTagline')}</p>
                 </div>
                 
-                <div className="footer-trust-badge">
+                <div className="footer-trust-badges">
                    <div className="trust-inner">
                       <div className="trust-icon">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="#D4AF37">
@@ -21,6 +21,19 @@ export default function Footer({ onOpenPolicy, onOpenSupport }) {
                       <div className="trust-text">
                          <span className="trust-label">{t('msmeCertified')}</span>
                          <span className="trust-val">UDYAM-RJ-10-0076393</span>
+                      </div>
+                   </div>
+
+                   <div className="trust-inner">
+                      <div className="trust-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#138808" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                           <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                           <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                      </div>
+                      <div className="trust-text">
+                         <span className="trust-label">{t('fssaiTitle')}</span>
+                         <span className="trust-val">22226028000380</span>
                       </div>
                    </div>
                 </div>
@@ -67,9 +80,12 @@ export default function Footer({ onOpenPolicy, onOpenSupport }) {
                     margin-bottom: 45px;
                     letter-spacing: 0.5px;
                 }
-                .footer-trust-badge {
+                .footer-trust-badges {
                     display: flex;
                     justify-content: center;
+                    align-items: center;
+                    flex-wrap: wrap;
+                    gap: 20px;
                     margin-bottom: 50px;
                 }
                 .trust-inner {

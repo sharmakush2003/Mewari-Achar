@@ -138,6 +138,10 @@ export default function PrivacyPolicy() {
             owner: "Vijay Laxmi Sharma",
             reg: "MSME Certified Enterprise",
             udyam: "UDYAM ID: UDYAM-RJ-10-0076393",
+            fssai: "FSSAI Registration No: 22226028000380",
+            fssaiKOB: "Kind of Business: General Manufacturing",
+            fssaiCategories: "Licensed Categories: Pickles, Snacks & Sauces",
+            fssaiValidity: "Validity: 18-06-2026 to 17-06-2029",
             email: "mewariachar@gmail.com",
             phone: "+91 70141 02742"
           }
@@ -267,6 +271,10 @@ export default function PrivacyPolicy() {
             owner: "विजय लक्ष्मी शर्मा (Vijay Laxmi Sharma)",
             reg: "MSME प्रमाणित उद्यम",
             udyam: "UDYAM ID: UDYAM-RJ-10-0076393",
+            fssai: "FSSAI पंजीकरण संख्या: 22226028000380",
+            fssaiKOB: "व्यवसाय का प्रकार: सामान्य विनिर्माण",
+            fssaiCategories: "स्वीकृत श्रेणियां: अचार, स्नैक्स और सॉस",
+            fssaiValidity: "वैधता: 18-06-2026 से 17-06-2029",
             email: "mewariachar@gmail.com",
             phone: "+91 70141 02742"
           }
@@ -366,6 +374,10 @@ export default function PrivacyPolicy() {
                     <p><strong>Owner:</strong> {section.contact.owner}</p>
                     <p><strong>Corporate Registration:</strong> {section.contact.reg}</p>
                     <p><strong>{section.contact.udyam}</strong></p>
+                    {section.contact.fssai && <p><strong>{section.contact.fssai}</strong></p>}
+                    {section.contact.fssaiKOB && <p><strong>{section.contact.fssaiKOB}</strong></p>}
+                    {section.contact.fssaiCategories && <p><strong>{section.contact.fssaiCategories}</strong></p>}
+                    {section.contact.fssaiValidity && <p><strong>{section.contact.fssaiValidity}</strong></p>}
                     <p><strong>Email:</strong> <a href={`mailto:${section.contact.email}`}>{section.contact.email}</a></p>
                     <p><strong>WhatsApp Support:</strong> {section.contact.phone}</p>
                   </div>
