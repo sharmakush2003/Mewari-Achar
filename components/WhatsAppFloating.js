@@ -234,7 +234,7 @@ export default function WhatsAppFloating() {
 
   // Handlers
   const handleWhatsApp = (text) => {
-    const url = `https://wa.me/917014102742?text=${encodeURIComponent(text || 'Khamma Ghani Hukum! I would like to know more about Mewari Achaar.')}`;
+    const url = `https://wa.me/917014102742?text=${encodeURIComponent(text || 'Namaste Hukum! I would like to know more about Mewari Achaar.')}`;
     window.open(url, '_blank');
   };
 
@@ -243,7 +243,7 @@ export default function WhatsAppFloating() {
   const handleCallbackSubmit = (e) => {
     e.preventDefault();
     const { phone, date, time } = callbackDetails;
-    const message = `Khamma Ghani Hukum! I would like to request a callback.
+    const message = `Namaste Hukum! I would like to request a callback.
     
 *Details:*
 Phone: +91 ${phone}
@@ -470,7 +470,7 @@ Looking forward to the royal taste!`;
                         alert(t('fillAllInfo'));
                         return;
                       }
-                      const message = `Khamma Ghani Hukum! I would like to request a Free Sample.
+                      const message = `Namaste Hukum! I would like to request a Free Sample.
 Type: ${sampleData.type}
 Phone: +91 ${sampleData.phone}
 Address: ${sampleData.address}`;

@@ -47,10 +47,10 @@ export async function POST(request) {
             }
         }
 
-        // 3. TRIGGER WELCOME EMAIL (The Khamma Ghani logic)
+        // 3. TRIGGER WELCOME EMAIL (The Namaste logic)
         const userData = userDoc.data();
         if ((isBrandNewAuth || !exists) && !userData?.welcomeEmailSent) {
-            console.log(`[AUTH SYNC] Sending Khamma Ghani to new user: ${email}`);
+            console.log(`[AUTH SYNC] Sending Namaste to new user: ${email}`);
             await sendMewariWelcomeEmail(email, name || 'हुकुम').catch(err => {
                 console.error("[AUTH SYNC] Email failed:", err);
             });

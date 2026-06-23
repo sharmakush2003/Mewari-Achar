@@ -28,7 +28,7 @@ export const SampleModal = ({ active, onClose }) => {
               const phone = e.target.phone.value;
               const addr = e.target.address.value;
               const type = e.target.type.value;
-              const message = `Khamma Ghani Hukum! I would like to request a Free Sample.
+              const message = `Namaste Hukum! I would like to request a Free Sample.
 Type: ${type}
 Phone: ${phone}
 Address: ${addr}`;
@@ -242,7 +242,7 @@ export const SupportModal = ({ active = true, onClose }) => {
             </a>
             
             <a 
-              href={`https://wa.me/917014102742?text=${encodeURIComponent('Khamma Ghani Hukum! I need some support with my order.')}`} 
+              href={`https://wa.me/917014102742?text=${encodeURIComponent('Namaste Hukum! I need some support with my order.')}`} 
               target="_blank" 
               className="btn-outline-royal" 
               style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', borderColor: '#25D366', color: '#25D366' }}

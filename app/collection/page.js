@@ -114,7 +114,7 @@ export default function Collection() {
                                         <span className="weight">{t('bulkOrders')}</span>
                                         <span className="cost" style={{ fontSize: '0.6rem', lineHeight: '1.2', marginTop: '5px' }}>{t('bulkPriceDesc')}</span>
                                         <a 
-                                          href={`https://wa.me/917014102742?text=${encodeURIComponent(`Khamma Ghani Hukum! I want to inquire about custom/bulk rates for ${product.name}.`)}`} 
+                                          href={`https://wa.me/917014102742?text=${encodeURIComponent(`Namaste Hukum! I want to inquire about custom/bulk rates for ${product.name}.`)}`} 
                                           target="_blank" 
                                           rel="noopener noreferrer"
                                           className="btn-add-royal"
