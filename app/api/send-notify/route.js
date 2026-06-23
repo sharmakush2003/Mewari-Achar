@@ -3,13 +3,13 @@ import { sendWaitlistEmail } from '@/lib/email-service';
 
 export async function POST(request) {
   try {
-    const { userEmail, userName, productName, adminEmail } = await request.json();
+    const { userEmail, userName, productName, adminEmail, phone } = await request.json();
 
     if (!userEmail || !productName) {
       return NextResponse.json({ message: 'Missing required fields' }, { status: 400 });
     }
 
-    const result = await sendWaitlistEmail(userEmail, userName, productName, adminEmail);
+    const result = await sendWaitlistEmail(userEmail, userName, productName, adminEmail, phone);
 
     if (result.success) {
       return NextResponse.json({ message: 'Waitlist emails sent successfully', success: true });
