@@ -1061,16 +1061,24 @@ Address: ${sampleData.address}`;
           to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
+        @keyframes popupFadeCenter {
+          from { opacity: 0; transform: translate(-50%, -45%) scale(0.95); }
+          to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
         @media (max-width: 480px) {
           .wa-window {
             position: fixed;
-            bottom: 95px;
-            right: 15px;
-            left: 15px;
-            width: auto;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            bottom: auto;
+            right: auto;
+            width: calc(100% - 30px);
             height: 80vh;
             max-height: 85vh;
             border-radius: 20px;
+            animation: popupFadeCenter 0.3s ease-out;
           }
         }
 

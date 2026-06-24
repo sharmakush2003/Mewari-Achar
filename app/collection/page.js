@@ -44,7 +44,7 @@ export default function Collection() {
 
     const handleNotifyMe = async (product) => {
         if (!user) {
-            router.push('/login');
+            setActiveModal('login-toast');
             return;
         }
         
@@ -233,7 +233,20 @@ export default function Collection() {
                     }
                 }
             `}</style>
-
+            
+            {activeModal === 'login-toast' && (
+              <div className="toast-overlay" onClick={() => setActiveModal(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 100000, display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'fadeIn 0.2s' }}>
+                <div className="toast-content" onClick={e => e.stopPropagation()} style={{ background: '#fff', padding: '30px', borderRadius: '16px', textAlign: 'center', maxWidth: '320px', width: '90%', position: 'relative', boxShadow: '0 10px 40px rgba(0,0,0,0.2)' }}>
+                  <h3 style={{ color: '#8B0000', marginBottom: '10px', fontSize: '1.2rem', fontFamily: 'serif' }}>{language === 'hi' ? 'लॉगिन आवश्यक है' : 'Login Required'}</h3>
+                  <p style={{ fontSize: '0.95rem', color: '#555', marginBottom: '25px', lineHeight: '1.5' }}>{language === 'hi' ? 'वेटलिस्ट में शामिल होने के लिए आपको लॉगिन करना होगा।' : 'You need to login to join the waitlist.'}</p>
+                  <div style={{ display: 'flex', gap: '15px', justifyContent: 'center' }}>
+                    <button onClick={() => router.push('/login')} style={{ flex: 1, padding: '10px', fontSize: '0.95rem', textAlign: 'center', borderRadius: '8px', background: '#8B0000', color: '#fff', fontWeight: 'bold', border: 'none', cursor: 'pointer' }}>{language === 'hi' ? 'लॉगिन' : 'Login'}</button>
+                    <button onClick={() => router.push('/signup')} style={{ flex: 1, padding: '10px', fontSize: '0.95rem', textAlign: 'center', background: 'transparent', color: '#8B0000', border: '1px solid #8B0000', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>{language === 'hi' ? 'साइन अप' : 'Sign Up'}</button>
+                  </div>
+                  <button onClick={() => setActiveModal(null)} style={{ position: 'absolute', top: '15px', right: '15px', background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', color: '#999' }}>×</button>
+                </div>
+              </div>
+            )}
         </main>
     );
 }
