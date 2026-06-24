@@ -26,8 +26,9 @@ body {
     width: 100%;
     min-height: 100%;
     background-color: var(--bg-color);
-    overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
+    overflow-x: hidden;
+    overflow-y: auto !important;
 }
 
 body {
@@ -43,7 +44,6 @@ body {
     min-height: 100vh;
     background: var(--bg-color);
     position: relative;
-    overflow-x: hidden;
 }
 
 /* ── NAV BAR (FIXED) ── */
@@ -2840,4 +2840,289 @@ footer a {
 [lang="hi"] h1, [lang="hi"] h2, [lang="hi"] h3 {
     line-height: 1.3 !important;
 }
+
+/* ── GLOBAL JHAJI REDESIGN ── */
+/* Base Styles */
+body {
+    background-color: #ffffff;
+    font-family: 'Quicksand', 'Poppins', sans-serif;
+}
+
+.royal-section, .main-wrapper {
+    background-color: #ffffff !important;
+}
+
+/* Hero Section Override */
+.royal-hero {
+    padding: 80px 5% 60px;
+    background: #ffffff;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.hero-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.hero-display {
+    font-family: 'Poppins', sans-serif !important;
+    font-size: clamp(2.5rem, 8vw, 3.5rem) !important;
+    font-weight: 700 !important;
+    color: #222222 !important;
+    line-height: 1.2 !important;
+    letter-spacing: -0.5px !important;
+}
+
+.hero-display span {
+    font-style: normal !important;
+    color: #ea72ab !important; /* JhaJi Pink Accent */
+}
+
+.hero-lead {
+    font-family: 'Quicksand', sans-serif;
+    font-size: clamp(1rem, 4vw, 1.2rem);
+    color: #555555;
+    max-width: 700px;
+    font-weight: 500;
+}
+
+.hero-crown-seal {
+    display: none !important; /* Hide royal crown */
+}
+
+.hero-accents {
+    display: none !important; /* Hide royal accents */
+}
+
+/* Buttons */
+.btn-royal {
+    background: #ea72ab !important;
+    color: #ffffff !important;
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 600 !important;
+    border-radius: 5px !important;
+    padding: 12px 30px !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    box-shadow: none !important;
+    width: auto !important;
+}
+
+.btn-royal:hover {
+    background: #c4397b !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(234, 114, 171, 0.3) !important;
+}
+
+.btn-add-royal {
+    background: #ea72ab !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 5px !important;
+    padding: 10px 15px !important;
+    font-family: 'Poppins', sans-serif !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    font-size: 0.9rem !important;
+}
+
+.btn-add-royal:hover {
+    background: #c4397b !important;
+    color: white !important;
+}
+
+/* Product Grid */
+.gallery-stack {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
+    gap: 40px !important;
+    max-width: 1200px !important;
+    align-items: stretch !important;
+}
+
+.royal-product-card {
+    flex-direction: column !important;
+    gap: 20px !important;
+    border: 1px solid #eeeeee !important;
+    border-radius: 8px !important;
+    padding: 20px !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.03) !important;
+    background: #ffffff !important;
+}
+
+.royal-product-card .product-visual {
+    width: 100% !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    aspect-ratio: 1/1 !important;
+}
+
+.royal-product-card .product-info {
+    width: 100% !important;
+    text-align: center !important;
+}
+
+.royal-product-card .product-name {
+    font-family: 'Poppins', sans-serif !important;
+    font-size: clamp(1.2rem, 5vw, 1.5rem) !important;
+    font-weight: 600 !important;
+    color: #222222 !important;
+    text-align: center !important;
+    margin-bottom: 8px !important;
+}
+
+.royal-product-card .product-desc {
+    font-family: 'Quicksand', sans-serif !important;
+    font-size: 0.95rem !important;
+    color: #666666 !important;
+    text-align: center !important;
+    margin-bottom: 20px !important;
+}
+
+/* Price Tiers overrides */
+.price-tiers {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+}
+
+.price-box {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 12px !important;
+    border: 1px solid #eeeeee !important;
+    border-radius: 5px !important;
+    box-shadow: none !important;
+    flex-wrap: wrap !important;
+}
+
+.price-box.custom-tier {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+}
+
+.price-box.custom-tier .cost {
+    text-align: left !important;
+    font-size: 0.85rem !important;
+    line-height: 1.3 !important;
+    font-weight: 500 !important;
+}
+
+.price-box.custom-tier .btn-add-royal {
+    width: 100% !important;
+    text-align: center !important;
+}
+
+.price-box .weight {
+    font-family: 'Poppins', sans-serif !important;
+    color: #333333 !important;
+    font-size: 0.9rem !important;
+    margin-bottom: 0 !important;
+    letter-spacing: normal !important;
+    text-transform: none !important;
+    font-weight: 500 !important;
+    flex-shrink: 0;
+}
+
+.price-box .cost {
+    font-family: 'Poppins', sans-serif !important;
+    color: #333333 !important;
+    font-size: 1.1rem !important;
+    margin-bottom: 0 !important;
+    font-weight: 600 !important;
+    flex: 1;
+    text-align: center;
+    padding: 0 10px;
+}
+
+.price-box .btn-add-royal {
+    width: auto !important;
+    padding: 8px 20px !important;
+    flex-shrink: 0;
+}
+
+/* Section Headers */
+.section-header .section-label, .section-wide-label {
+    font-family: 'Quicksand', sans-serif !important;
+    color: #ea72ab !important;
+    letter-spacing: 2px !important;
+}
+
+.section-header .section-display {
+    font-family: 'Poppins', sans-serif !important;
+    font-size: clamp(2rem, 8vw, 2.5rem) !important;
+    font-weight: 700 !important;
+    color: #222222 !important;
+    line-height: 1.2 !important;
+}
+
+.section-header .section-display span {
+    font-style: normal !important;
+    color: #ea72ab !important;
+}
+
+.section-accent, .red-divider {
+    display: none !important;
+}
+
+/* Philosophy / Features Grid */
+.royal-features-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
+    gap: 30px !important;
+}
+
+.royal-feature-card {
+    border: 1px solid #eeeeee !important;
+    border-radius: 8px !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.02) !important;
+    background: #ffffff !important;
+}
+
+.feature-symbol {
+    background: #fdfdfa !important;
+    border: 1px solid #ea72ab !important;
+    box-shadow: none !important;
+}
+
+/* ── MARQUEE STYLES ── */
+.marquee-container {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    background: #e972ab;
+}
+
+.marquee-content {
+    display: inline-block;
+    padding-left: 100%;
+    animation: marquee 20s linear infinite;
+    font-family: var(--font-main);
+    font-weight: 500;
+}
+
+.marquee-content-secondary {
+    font-family: var(--font-main);
+    font-weight: 400;
+}
+
+@keyframes marquee {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(-100%, 0); }
+}
+
+@media (max-width: 768px) {
+    .secondary-header {
+        display: none !important;
+    }
+}
+
 

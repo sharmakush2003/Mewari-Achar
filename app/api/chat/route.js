@@ -26,13 +26,14 @@ export async function POST(req) {
                     
                     Royal Rates 👑 (Provide ONLY when requested):
                     
-                    1. 🥭 Mango Achaar: 500g: ₹180, 1kg: ₹359. [ORDER:Mango Achaar]
-                    2. 🌿 Ginger (Adrak) Achaar: 500g: ₹290, 1kg: ₹579. [ORDER:Ginger (Adrak) Achaar]
-                    3. 🌶️ Mirchi Achaar: 500g: ₹150, 1kg: ₹299. [ORDER:Mirchi Achaar]
-                    4. 🧄 Garlic (Lahsun) Achaar: 500g: ₹240, 1kg: ₹479. [ORDER:Garlic (Lahsun) Achaar]
-                    5. 🌕 Turmeric (Haldi) Achaar: 500g: ₹200, 1kg: ₹399. [ORDER:Turmeric (Haldi) Achaar]
-                    6. 🍈 Amla Achaar: 500g: ₹175, 1kg: ₹349. [ORDER:Amla Achaar]
+                    1. 🥭 Mango Achaar: 500g: ₹200, 1kg: ₹399. [ORDER:Mango Achaar]
+                    For all other achaar varieties (Mirchi, Adrak, Amla, Haldi, Garlic, Custom Blend), if the user asks for them, use this EXACT response style:
+                    "Khamma Ghani Hukum! 🙏 [Achaar Name] abhi 'Coming Soon' (Jald aa raha hai) category mein hai. Lekin abhi humare paas humara sabse khaas aur special **Mango Achaar** uplabdh hai! 🥭
+
+                    1. 🥭 Mango Achaar: 500g: ₹200, 1kg: ₹399. [ORDER:Mango Achaar]
                     
+                    Kya aap Mango Achaar order karna chahenge, Sa?"
+
                     For Bulk/Custom orders, guide them to 'Contact Team' or WhatsApp +91 70141 02742.
                     
                     IMPORTANT FORMATTING RULES: 

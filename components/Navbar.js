@@ -36,27 +36,27 @@ export default function Navbar({ onOpenOrders, onOpenSample }) {
     { name: t('home'), href: '/', icon: '🏠' },
     { name: t('collection'), href: '/collection', icon: '🍯' },
     { name: t('shop'), href: 'https://wa.me/c/917014102742', icon: '💬' },
-    { name: t('recipes'), href: '/recipes', icon: '📜' },
+    { name: t('pairingGuide'), href: '/pairing-guide', icon: '📜' },
   ];
 
   return (
     <>
+      {/* Top Pink Marquee */}
       <div 
-        className="nav-alert-bar" 
-        onClick={onOpenSample}
+        className="marquee-container"
         style={{ 
-          background: '#8B0000', 
+          background: '#e972ab', // JhaJi Pink
           color: 'white', 
-          textAlign: 'center', 
-          padding: '10px 5%', 
-          fontWeight: '600', 
+          padding: '8px 0', 
           fontSize: '0.85rem',
-          fontFamily: 'var(--font-devanagari)',
           display: menuOpen ? 'none' : 'block',
-          cursor: 'pointer'
+          position: 'relative',
+          overflow: 'hidden'
         }}
       >
-        {t('alertBar')}
+        <div className="marquee-content">
+          Maa ke Haath — Meet the mothers behind your pickle. → &nbsp;&nbsp;&nbsp;&nbsp; Maa ke Haath — Meet the mothers behind your pickle. → &nbsp;&nbsp;&nbsp;&nbsp; Maa ke Haath — Meet the mothers behind your pickle. →
+        </div>
       </div>
 
       <nav className={`mewari-nav-fixed ${scrolled ? 'is-scrolled' : ''}`} style={{ display: menuOpen ? 'none' : 'flex' }}>
@@ -147,6 +147,39 @@ export default function Navbar({ onOpenOrders, onOpenSample }) {
             <button onClick={() => setMenuOpen(false)} style={{ background: 'none', border: 'none', color: '#8B0000', fontSize: '2.5rem', cursor: 'pointer', lineHeight: 1 }}>&times;</button>
           </div>
 
+          <div className="drawer-footer-profile" style={{ marginTop: 0, borderTop: 'none', paddingTop: 0, marginBottom: '2rem', borderBottom: '1px solid rgba(139, 0, 0, 0.1)', paddingBottom: '1.5rem' }}>
+            {mounted && (
+              <>
+                {!user ? (
+                  <Link href="/login" onClick={() => setMenuOpen(false)} className="drawer-action-btn">
+                    {t('loginRegister')}
+                  </Link>
+                ) : (
+                  <>
+                    <div className="drawer-profile-info">
+                      <div className="drawer-avatar-circle">👤</div>
+                      <div className="drawer-user-details">
+                        <h4>{(() => {
+                          const rawName = user.displayName;
+                          if (!rawName || rawName === 'Valued Guest' || rawName === 'Guest') {
+                            const emailPrefix = user.email?.split('@')[0] || '';
+                            return `${t('hukum')} ${emailPrefix.split(/[._]/).map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ')}`;
+                          }
+                          return `${t('hukum')} ${rawName}`;
+                        })()}</h4>
+                        <span>{t('registeredMember')}</span>
+                      </div>
+                    </div>
+
+                    <button onClick={logout} className="drawer-action-btn drawer-logout-btn">
+                      {t('logout')}
+                    </button>
+                  </> 
+                )}
+              </>
+            )}
+          </div>
+
           <div className="drawer-links-box">
             {navItems.map((item) => {
               const isExternal = item.href.startsWith('http');
@@ -187,39 +220,6 @@ export default function Navbar({ onOpenOrders, onOpenSample }) {
               <span style={{ fontSize: '1.4rem' }}>🌐</span>
               <span style={{ fontSize: '0.95rem' }}>{t('changeLanguage')} ({language === 'hi' ? 'English' : 'Hindi'})</span>
             </button>
-          </div>
-
-          <div className="drawer-footer-profile">
-            {mounted && (
-              <>
-                {!user ? (
-                  <Link href="/login" onClick={() => setMenuOpen(false)} className="drawer-action-btn">
-                    {t('loginRegister')}
-                  </Link>
-                ) : (
-                  <>
-                    <div className="drawer-profile-info">
-                      <div className="drawer-avatar-circle">👤</div>
-                      <div className="drawer-user-details">
-                        <h4>{(() => {
-                          const rawName = user.displayName;
-                          if (!rawName || rawName === 'Valued Guest' || rawName === 'Guest') {
-                            const emailPrefix = user.email?.split('@')[0] || '';
-                            return `${t('hukum')} ${emailPrefix.split(/[._]/).map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ')}`;
-                          }
-                          return `${t('hukum')} ${rawName}`;
-                        })()}</h4>
-                        <span>{t('registeredMember')}</span>
-                      </div>
-                    </div>
-
-                    <button onClick={logout} className="drawer-action-btn drawer-logout-btn">
-                      {t('logout')}
-                    </button>
-                  </> 
-                )}
-              </>
-            )}
           </div>
         </div>
       )}

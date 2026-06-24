@@ -220,14 +220,15 @@ export default function WhatsAppFloating() {
     ...productsData.map(p => ({
       ...p,
       name: language === 'hi' ? p.translations.hi.name : p.translations.en.name,
-      price: p.price1kg // mapping price1kg to price for compatibility
+      price: p.comingSoon ? (language === 'hi' ? 'जल्द आ रहा है' : 'Coming Soon') : p.price1kg,
+      price500g: p.comingSoon ? (language === 'hi' ? 'जल्द आ रहा है' : 'Coming Soon') : p.price500g
     })),
     { 
       id: 'custom', 
       name: language === 'hi' ? 'कस्टम अचार ब्लेंड' : 'Custom Achaar Blend', 
       oldPrice: 0, 
-      price: 'Variable', 
-      price500g: 'N/A', 
+      price: language === 'hi' ? 'जल्द आ रहा है' : 'Coming Soon', 
+      price500g: language === 'hi' ? 'जल्द आ रहा है' : 'Coming Soon', 
       image: '/Images/CustomBlend.png' 
     }
   ];
@@ -353,9 +354,9 @@ Looking forward to the royal taste!`;
                 </div>
              </div>
              <button className="wa-close-top" onClick={() => setIsOpen(false)}>
-               <i className="fas fa-times"></i>
-             </button>
-          </div>
+                <i className="fas fa-times"></i>
+              </button>
+           </div>
 
           <div className="wa-window-body">
             {/* Menu View */}
@@ -510,10 +511,12 @@ Address: ${sampleData.address}`;
                       key={product.id} 
                       className="wa-product-card-compact"
                       onClick={() => {
+                        if (product.price === 'Coming Soon' || product.price === 'जल्द आ रहा है') return;
                         setSelectedProduct(product);
                         setCurrentStep(product.id === 'custom' ? 1 : 2);
                         setView('checkout');
                       }}
+                      style={{ opacity: (product.price === 'Coming Soon' || product.price === 'जल्द आ रहा है') ? 0.6 : 1, cursor: (product.price === 'Coming Soon' || product.price === 'जल्द आ रहा है') ? 'not-allowed' : 'pointer' }}
                     >
                       <div className="wa-prod-main-compact">
                         <div className="wa-prod-img-box-compact">
@@ -522,8 +525,12 @@ Address: ${sampleData.address}`;
                         <div className="wa-prod-info-compact">
                           <span className="wa-prod-name-compact">{product.name}</span>
                           <div className="wa-prod-prices-compact">
-                             <span className="wa-price-500g">500g: ₹{product.price500g}</span>
-                             <span className="wa-price-1kg">1kg: ₹{product.price}</span>
+                             <span className="wa-price-500g">
+                               500g: {typeof product.price500g === 'number' || !isNaN(Number(product.price500g)) ? `₹${product.price500g}` : product.price500g}
+                             </span>
+                             <span className="wa-price-1kg">
+                               1kg: {typeof product.price === 'number' || !isNaN(Number(product.price)) ? `₹${product.price}` : product.price}
+                             </span>
                           </div>
                         </div>
                       </div>
@@ -842,7 +849,7 @@ Address: ${sampleData.address}`;
                     </div>
 
                     <button 
-                      className="shahi-complete-btn"
+                      className="wa-developer-site-btn"
                       onClick={() => window.open('https://www.chittortech.online', '_blank')}
                     >
                       {t('visitMainWebsite')} <i className="fas fa-arrow-right"></i>
@@ -920,20 +927,17 @@ Address: ${sampleData.address}`;
                         return (
                           <React.Fragment key={index}>
                             <div className="chat-order-card">
-                              {product && (
-                                <div className="chat-prod-img-box">
-                                  <img 
-                                    src={product.image} 
-                                    alt={productName} 
-                                    className="chat-prod-img" 
-                                    style={{ objectFit: 'cover' }}
-                                  />
-                                </div>
-                              )}
+                              {/* Removed image as requested */}
                               <div className="chat-order-cta">
                                 <button 
                                   className="chat-order-btn"
+                                  disabled={product && (product.price === 'Coming Soon' || product.price === 'जल्द आ रहा है')}
+                                  style={{
+                                    opacity: product && (product.price === 'Coming Soon' || product.price === 'जल्द आ रहा है') ? 0.6 : 1,
+                                    cursor: product && (product.price === 'Coming Soon' || product.price === 'जल्द आ रहा है') ? 'not-allowed' : 'pointer'
+                                  }}
                                   onClick={() => {
+                                    if (product && (product.price === 'Coming Soon' || product.price === 'जल्द आ रहा है')) return;
                                     if (product) {
                                       setSelectedProduct(product);
                                       setView('checkout');
@@ -942,7 +946,11 @@ Address: ${sampleData.address}`;
                                     }
                                   }}
                                 >
-                                  <i className="fab fa-whatsapp"></i> {t('orderNow')} {productName}
+                                  {product && (product.price === 'Coming Soon' || product.price === 'जल्द आ रहा है') ? (
+                                    <><i className="fas fa-clock"></i> {language === 'hi' ? 'जल्द आ रहा है' : 'Coming Soon'} {productName}</>
+                                  ) : (
+                                    <><i className="fab fa-whatsapp"></i> {t('orderNow')} {productName}</>
+                                  )}
                                 </button>
                               </div>
                             </div>
@@ -964,24 +972,35 @@ Address: ${sampleData.address}`;
         </div>
       )}
       
-      <button 
-        className={`wa-fab ${isOpen ? 'active' : ''}`}
-        onClick={() => {
-          setIsOpen(!isOpen);
-          if (!isOpen) setView('menu'); 
-        }}
-      >
-        <i className={isOpen ? "fas fa-times" : "fab fa-whatsapp"}></i>
-        {!isOpen && <div className="wa-pulse"></div>}
-      </button>
+      {!isOpen && (
+        <button 
+          className="wa-fab"
+          onClick={() => {
+            setIsOpen(true);
+            setView('menu'); 
+          }}
+        >
+          <i className="fab fa-whatsapp"></i>
+          <div className="wa-pulse"></div>
+        </button>
+      )}
 
       <style jsx>{`
+        * {
+          box-sizing: border-box;
+        }
         .wa-floating-container {
           position: fixed;
           bottom: 30px;
           right: 30px;
           z-index: 9999;
           font-family: var(--font-main, 'Inter', sans-serif);
+        }
+        @media (max-width: 768px) {
+          .wa-floating-container {
+            bottom: 90px;
+            right: 20px;
+          }
         }
 
         .wa-fab {
@@ -1021,17 +1040,38 @@ Address: ${sampleData.address}`;
         }
 
         .wa-window {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          height: 100dvh;
+          position: absolute;
+          bottom: 85px;
+          right: 0;
+          width: 400px;
+          height: 650px;
+          max-height: 85vh;
           background: #fff;
-          z-index: 9999;
+          border-radius: 20px;
+          box-shadow: 0 15px 50px rgba(0,0,0,0.2);
           display: flex;
           flex-direction: column;
-          box-sizing: border-box;
+          overflow: hidden;
+          transform-origin: bottom right;
+          animation: popupFade 0.3s ease-out;
+        }
+
+        @keyframes popupFade {
+          from { opacity: 0; transform: scale(0.9) translateY(20px); }
+          to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        @media (max-width: 480px) {
+          .wa-window {
+            position: fixed;
+            bottom: 95px;
+            right: 15px;
+            left: 15px;
+            width: auto;
+            height: 80vh;
+            max-height: 85vh;
+            border-radius: 20px;
+          }
         }
 
         .wa-header {
@@ -1077,19 +1117,18 @@ Address: ${sampleData.address}`;
         .wa-window-body {
           flex: 1;
           overflow: hidden;
-          padding: 20px;
+          padding: 0;
           display: flex;
           flex-direction: column;
-          align-items: center;
           background: #fdfbf7;
         }
         
         .wa-menu-body {
           width: 100%;
-          max-width: 550px;
           overflow-y: auto;
-          max-height: 100%;
-          padding-bottom: 20px;
+          flex: 1;
+          padding: 20px;
+          box-sizing: border-box;
         }
 
         .wa-welcome-msg {
@@ -1425,13 +1464,15 @@ Address: ${sampleData.address}`;
 
         .wa-chat-body {
           width: 100%;
-          height: 100%;
+          flex: 1;
+          min-height: 0;
           display: flex;
           flex-direction: column;
         }
 
         .wa-chat-messages {
           flex: 1;
+          min-height: 0;
           padding: 20px;
           overflow-y: auto;
           display: flex;
@@ -1468,10 +1509,59 @@ Address: ${sampleData.address}`;
         }
 
         .wa-chat-input {
-          padding: 15px;
+          padding: 15px 15px 35px 15px;
           border-top: 1px solid #eee;
           display: flex;
           gap: 10px;
+          flex-shrink: 0;
+          background: #fff;
+        }
+
+        .chat-order-card {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          margin: 10px 0;
+          background: #fff;
+          border-radius: 12px;
+          overflow: hidden;
+          border: 1px solid #eee;
+        }
+
+        .chat-prod-img-box {
+          width: 100%;
+          height: 150px;
+          overflow: hidden;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background: #f8f8f8;
+        }
+
+        .chat-prod-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+        }
+
+        .chat-order-cta {
+          padding: 0 10px 10px;
+        }
+
+        .chat-order-btn {
+          width: 100%;
+          padding: 10px;
+          background: #25D366;
+          color: white;
+          border: none;
+          border-radius: 8px;
+          font-weight: bold;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
         }
 
         .wa-chat-input input {
@@ -1790,6 +1880,27 @@ Address: ${sampleData.address}`;
           align-items: center;
           justify-content: center;
           gap: 8px;
+        }
+        .wa-developer-site-btn {
+          width: 100%;
+          padding: 15px;
+          background: transparent;
+          color: #8B0000;
+          border: 2px solid #8B0000;
+          border-radius: 12px;
+          font-weight: 700;
+          font-size: 1rem;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          transition: all 0.3s;
+          margin-top: 10px;
+        }
+        .wa-developer-site-btn:hover {
+          background: #8B0000;
+          color: #fff;
         }
       `}</style>
     </div>

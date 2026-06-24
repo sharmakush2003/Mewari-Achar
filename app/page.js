@@ -9,11 +9,13 @@ import { products as allProducts } from '@/lib/products-data';
 import Link from 'next/link';
 import FlavorSlider from '@/components/FlavorSlider';
 import { PolicyModal, SupportModal, PerksModal } from '@/components/Modals';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const { user } = useAuth();
   const { t, language } = useLanguage();
   const [activeModal, setActiveModal] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
     // Show Perks Modal logic
@@ -52,6 +54,42 @@ export default function Home() {
     const profileText = `\n- Spicy: ${profile.spicy}/10\n- Tangy: ${profile.tangy}/10\n- Earthy: ${profile.earthy}/10\n- Pungent: ${profile.pungent}/10`;
     const message = `${t('supportTitle')}! I would like to order ${product.translations[language].name} (${size}).\n\n*My Custom Taste Settings:*${profileText}`;
     return `https://wa.me/917014102742?text=${encodeURIComponent(message)}`;
+  };
+
+  const handleNotifyMe = async (product) => {
+    if (!user) {
+      router.push('/login');
+      return;
+    }
+    
+    const productName = product.translations[language].name;
+    const cacheKey = `notify_${user.email}_${productName}`;
+
+    if (localStorage.getItem(cacheKey)) {
+      alert("You are already on the waitlist, please wait...");
+      return;
+    }
+    
+    try {
+      const response = await fetch('/api/send-notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userEmail: user.email,
+          userName: user.displayName || 'Valued Guest',
+          productName: productName
+        })
+      });
+      
+      if (response.ok) {
+        localStorage.setItem(cacheKey, "true");
+        alert(`You're on the waitlist! We will notify you when ${productName} launches.`);
+      } else {
+        alert('Failed to join waitlist. Please try again.');
+      }
+    } catch (err) {
+      alert('Error joining waitlist.');
+    }
   };
 
   return (
@@ -99,62 +137,59 @@ export default function Home() {
           <div className="section-accent"></div>
         </div>
 
-        <div className="gallery-stack">
-          {featuredProducts.map(product => (
-            <div key={product.id} className="royal-product-card" >
-              <div className="product-visual">
-                <img src={product.image} alt={product.name} className="product-img" />
+        <div className="gallery-stack" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '30px', maxWidth: '1200px', margin: '0 auto', padding: '0 5%' }}>
+          {featuredProducts.map((product, idx) => (
+            <div key={product.id} className="jhaji-product-card" style={{ background: '#fff', padding: '15px', borderRadius: '12px', display: 'flex', flexDirection: 'column', gap: '15px', border: '1px solid #eee' }}>
+              <div className="product-visual" style={{ width: '100%', aspectRatio: '1/1', overflow: 'hidden', borderRadius: '8px' }}>
+                <img src={product.image} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
-              <div className="product-info">
-                <h3 className="product-name">{product.translations[language].name}</h3>
-                <p className="product-desc">{product.translations[language].desc}</p>
+              
+              <div className="product-info" style={{ display: 'flex', flexDirection: 'column', gap: '10px', flex: 1 }}>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: '600', color: '#333', lineHeight: '1.4' }}>{product.translations[language].name}</h3>
                 
-                <FlavorSlider 
-                  profile={product.flavorProfile} 
-                  onChange={(key, value) => handleFlavorChange(product.id, key, value)} 
-                />
-                
-                <div className="price-tiers">
-                  <div className="price-box">
-                    <span className="weight">500g</span>
-                    <span className="cost">₹{product.price500g}</span>
-                    <a 
-                      href={getWhatsAppLink(product, '500g')} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="btn-add-royal"
-                      style={{ textDecoration: 'none', textAlign: 'center' }}
-                    >
-                      {t('orderWhatsApp')}
-                    </a>
-                  </div>
-                  <div className="price-box">
-                    <span className="weight">1kg</span>
-                    <span className="cost">₹{product.price1kg}</span>
-                    <a 
-                      href={getWhatsAppLink(product, '1kg')} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="btn-add-royal"
-                      style={{ textDecoration: 'none', textAlign: 'center' }}
-                    >
-                      {t('orderWhatsApp')}
-                    </a>
-                  </div>
-                  <div className="price-box custom-tier">
-                    <span className="weight">{t('bulkOrders')}</span>
-                    <span className="cost" style={{ fontSize: '0.6rem', lineHeight: '1.2', marginTop: '5px' }}>{t('bulkPriceDesc')}</span>
-                    <a 
-                      href={`https://wa.me/917014102742?text=${encodeURIComponent(`Namaste Hukum! I want to inquire about custom/bulk rates for ${product.name}.`)}`} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="btn-add-royal custom-btn"
-                      style={{ textDecoration: 'none', textAlign: 'center' }}
-                    >
-                      {t('contactTeam')}
-                    </a>
-                  </div>
+                <div className="rating" style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '0.9rem' }}>
+                  <span style={{ color: '#000' }}>★ ★ ★ ★ {idx % 2 === 0 ? '★' : '☆'}</span>
+                  <span style={{ fontWeight: '600', marginLeft: '5px' }}>{idx % 2 === 0 ? '4.8' : '4.7'}</span>
+                  <span style={{ color: '#666' }}>({1000 + idx * 123})</span>
                 </div>
+
+                {product.comingSoon ? (
+                  <>
+                    <div style={{ marginTop: 'auto', background: '#f8f8f8', padding: '10px', borderRadius: '5px', textAlign: 'center', marginBottom: '10px' }}>
+                      <span style={{ color: '#e972ab', fontWeight: 'bold', fontSize: '0.9rem', textTransform: 'uppercase' }}>{t('comingSoonBadge')}</span>
+                    </div>
+                    <button 
+                      onClick={() => handleNotifyMe(product)}
+                      style={{ width: '100%', background: '#e972ab', color: '#fff', border: 'none', padding: '12px', borderRadius: '5px', fontWeight: '600', cursor: 'pointer', textTransform: 'uppercase' }}
+                    >
+                      {t('notifyMe')}
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <select 
+                      id={`size-select-${product.id}`}
+                      style={{ width: '100%', padding: '10px', marginTop: 'auto', marginBottom: '10px', border: '1px solid #ddd', borderRadius: '5px', color: '#333', fontSize: '0.9rem', outline: 'none' }}
+                    >
+                      <option value="500g">{t('size500g')} {product.price500g}</option>
+                      <option value="1kg">{t('size1kg')} {product.price1kg}</option>
+                      <option value="5kg">{t('bulkWholesale')}</option>
+                      <option value="500g-glass" disabled>{language === 'hi' ? '500 ग्राम (कांच का जार) - ' : '500 Grams (Glass Jar) - '}{t('comingSoonBadge')}</option>
+                      <option value="1kg-glass" disabled>{language === 'hi' ? '1 किलो (कांच का जार) - ' : '1 kg (Glass Jar) - '}{t('comingSoonBadge')}</option>
+                    </select>
+
+                    <button 
+                      onClick={() => {
+                        const selectElement = document.getElementById(`size-select-${product.id}`);
+                        const selectedSize = selectElement ? selectElement.value : '500g';
+                        window.open(getWhatsAppLink(product, selectedSize), '_blank');
+                      }} 
+                      style={{ width: '100%', background: '#e972ab', color: '#fff', border: 'none', padding: '12px', borderRadius: '5px', fontWeight: '600', cursor: 'pointer', textAlign: 'center', textTransform: 'uppercase' }}
+                    >
+                      {t('addToCart')}
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           ))}
