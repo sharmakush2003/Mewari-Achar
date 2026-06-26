@@ -12,32 +12,13 @@ import { PolicyModal, SupportModal, PerksModal } from '@/components/Modals';
 import { useRouter } from 'next/navigation';
 
 export default function Home() {
-  const { user } = useAuth();
+  const { user, addToWaitlistLocal } = useAuth();
   const { t, language } = useLanguage();
   const [activeModal, setActiveModal] = useState(null);
   const router = useRouter();
   const allProducts = useProducts();
 
-  useEffect(() => {
-    // Show Perks Modal logic
-    const now = new Date().getTime();
-    const dismissedUntil = localStorage.getItem('mewari_perks_dismissed_until');
-    const lastShown = localStorage.getItem('mewari_perks_last_shown');
-    
-    // 1. Check if user dismissed it for 7 days
-    if (dismissedUntil && now < parseInt(dismissedUntil)) return;
-
-    // 2. Check if shown in the last 24 hours
-    const oneDay = 24 * 60 * 60 * 1000;
-    if (lastShown && (now - parseInt(lastShown) < oneDay)) return;
-
-    // Trigger modal
-    const timer = setTimeout(() => {
-      setActiveModal('perks');
-      localStorage.setItem('mewari_perks_last_shown', now.toString());
-    }, 1500);
-    return () => clearTimeout(timer);
-  }, []);
+  // Removed automatic "Rajsi Sadasyata" PerksModal popup on page load as requested
 
   // Show only top 3 products for the homepage
   const [featuredProducts, setFeaturedProducts] = useState(allProducts.slice(0, 3));
@@ -63,6 +44,17 @@ export default function Home() {
     return `https://wa.me/917014102742?text=${encodeURIComponent(message)}`;
   };
 
+  const getProductCodes = (product) => {
+    const enName = product.translations?.en?.name?.toUpperCase() || "";
+    return [enName, enName.replace(/\s+/g, '_')];
+  };
+
+  const isProductWaitlisted = (product) => {
+    return user && user.waitlistedProducts && getProductCodes(product).some(code => 
+      user.waitlistedProducts.includes(code)
+    );
+  };
+
   const handleNotifyMe = async (product) => {
     if (!user) {
       setActiveModal('login-toast');
@@ -70,9 +62,10 @@ export default function Home() {
     }
     
     const productName = product.translations[language].name;
+    const productCode = product.translations.en.name.toUpperCase().replace(/\s+/g, '_');
     const cacheKey = `notify_${user.email}_${productName}`;
 
-    if (localStorage.getItem(cacheKey)) {
+    if (isProductWaitlisted(product) || localStorage.getItem(cacheKey)) {
       alert("You are already on the waitlist, please wait...");
       return;
     }
@@ -84,12 +77,16 @@ export default function Home() {
         body: JSON.stringify({
           userEmail: user.email,
           userName: user.displayName || 'Valued Guest',
-          productName: productName
+          productName: productName,
+          productCode: productCode
         })
       });
       
       if (response.ok) {
         localStorage.setItem(cacheKey, "true");
+        if (addToWaitlistLocal) {
+          addToWaitlistLocal(productCode);
+        }
         alert(`You're on the waitlist! We will notify you when ${productName} launches.`);
       } else {
         alert('Failed to join waitlist. Please try again.');
@@ -165,12 +162,21 @@ export default function Home() {
                     <div style={{ marginTop: 'auto', background: '#f8f8f8', padding: '10px', borderRadius: '5px', textAlign: 'center', marginBottom: '10px' }}>
                       <span style={{ color: '#e972ab', fontWeight: 'bold', fontSize: '0.9rem', textTransform: 'uppercase' }}>{t('comingSoonBadge')}</span>
                     </div>
-                    <button 
-                      onClick={() => handleNotifyMe(product)}
-                      style={{ width: '100%', background: '#e972ab', color: '#fff', border: 'none', padding: '12px', borderRadius: '5px', fontWeight: '600', cursor: 'pointer', textTransform: 'uppercase' }}
-                    >
-                      {t('notifyMe')}
-                    </button>
+                    {isProductWaitlisted(product) ? (
+                      <button 
+                        disabled
+                        style={{ width: '100%', background: '#f5f5f5', color: '#888', border: '1px solid #ddd', padding: '12px', borderRadius: '5px', fontWeight: '600', cursor: 'not-allowed', textTransform: 'uppercase' }}
+                      >
+                        {language === 'hi' ? 'वेटलिस्ट में शामिल ✓' : 'WAITLISTED ✓'}
+                      </button>
+                    ) : (
+                      <button 
+                        onClick={() => handleNotifyMe(product)}
+                        style={{ width: '100%', background: '#e972ab', color: '#fff', border: 'none', padding: '12px', borderRadius: '5px', fontWeight: '600', cursor: 'pointer', textTransform: 'uppercase' }}
+                      >
+                        {t('notifyMe')}
+                      </button>
+                    )}
                   </>
                 ) : (
                   <>

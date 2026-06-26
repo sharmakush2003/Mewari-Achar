@@ -40,14 +40,21 @@ export const AuthProvider = ({ children }) => {
                         // Enrich the user object with Firestore data
                         setUser({
                             ...firebaseUser,
-                            displayName: userData.displayName || firebaseUser.displayName || 'हुकुम'
+                            displayName: userData.displayName || firebaseUser.displayName || 'हुकुम',
+                            waitlistedProducts: userData.waitlistedProducts || []
                         });
                     } else {
-                        setUser(firebaseUser);
+                        setUser({
+                            ...firebaseUser,
+                            waitlistedProducts: []
+                        });
                     }
                 } catch (error) {
                     console.error("Error fetching user profile:", error);
-                    setUser(firebaseUser);
+                    setUser({
+                        ...firebaseUser,
+                        waitlistedProducts: []
+                    });
                 }
             } else {
                 setUser(null);
@@ -238,6 +245,23 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const addToWaitlistLocal = (productCode) => {
+        if (user) {
+            setUser(prev => {
+                if (!prev) return null;
+                const updatedList = prev.waitlistedProducts ? [...prev.waitlistedProducts] : [];
+                const codes = [productCode.toUpperCase(), productCode.toUpperCase().replace(/_/g, ' ')];
+                codes.forEach(c => {
+                    if (!updatedList.includes(c)) updatedList.push(c);
+                });
+                return {
+                    ...prev,
+                    waitlistedProducts: updatedList
+                };
+            });
+        }
+    };
+
     return (
         <AuthContext.Provider value={{ 
             user, 
@@ -251,7 +275,8 @@ export const AuthProvider = ({ children }) => {
             signupWithEmail,
             checkUserExists,
             resetPassword,
-            sendFailedLoginAlert
+            sendFailedLoginAlert,
+            addToWaitlistLocal
         }}>
             {children}
         </AuthContext.Provider>
