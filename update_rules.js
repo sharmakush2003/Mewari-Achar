@@ -31,6 +31,13 @@ service cloud.firestore {
       allow read: if true;
       allow write: if false;
     }
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    match /app_config/{configDoc} {
+      allow read: if true;
+      allow write: if false;
+    }
     match /{document=**} {
       allow read, write: if false;
     }
