@@ -5,7 +5,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { useAuth } from '@/components/AuthContext';
 import { useLanguage } from '@/context/LanguageContext';
-import { products as allProducts } from '@/lib/products-data';
+import { useProducts } from '@/lib/useProducts';
 import Link from 'next/link';
 import FlavorSlider from '@/components/FlavorSlider';
 import { PolicyModal, SupportModal, PerksModal } from '@/components/Modals';
@@ -16,6 +16,7 @@ export default function Home() {
   const { t, language } = useLanguage();
   const [activeModal, setActiveModal] = useState(null);
   const router = useRouter();
+  const allProducts = useProducts();
 
   useEffect(() => {
     // Show Perks Modal logic

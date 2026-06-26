@@ -2,11 +2,12 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from './CartContext';
-import { products } from '@/lib/products-data';
+import { useProducts } from '@/lib/useProducts';
 import Link from 'next/link';
 
 export default function CartDrawer() {
     const { cart, isCartOpen, setIsCartOpen, removeFromCart, calculateTotal, mounted } = useCart();
+    const products = useProducts();
 
     if (!mounted) return null;
 

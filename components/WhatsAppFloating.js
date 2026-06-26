@@ -4,11 +4,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { indiaData } from '../lib/india-data';
-import { products as productsData } from '../lib/products-data';
+import { useProducts } from '../lib/useProducts';
 import { useLanguage } from '@/context/LanguageContext';
 
 export default function WhatsAppFloating() {
   const router = useRouter();
+  const productsData = useProducts();
   const [isOpen, setIsOpen] = useState(false);
   const [view, setView] = useState('menu'); 
   const { language, t } = useLanguage(); 

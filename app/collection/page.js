@@ -5,7 +5,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { useAuth } from '@/components/AuthContext';
 import { useLanguage } from '@/context/LanguageContext';
-import { products as allProducts } from '@/lib/products-data';
+import { useProducts } from '@/lib/useProducts';
 import FlavorSlider from '@/components/FlavorSlider';
 import { PolicyModal, OrdersModal, SupportModal } from '@/components/Modals';
 import AOS from 'aos';
@@ -15,6 +15,7 @@ import { useRouter } from 'next/navigation';
 export default function Collection() {
     const { user } = useAuth();
     const { t, language } = useLanguage();
+    const allProducts = useProducts();
     const [activeModal, setActiveModal] = useState(null);
     const [mounted, setMounted] = useState(false);
 
