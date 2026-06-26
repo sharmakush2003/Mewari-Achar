@@ -42,6 +42,12 @@ export default function Home() {
   // Show only top 3 products for the homepage
   const [featuredProducts, setFeaturedProducts] = useState(allProducts.slice(0, 3));
 
+  useEffect(() => {
+    if (allProducts.length > 1) {
+      setFeaturedProducts(allProducts.slice(0, 3));
+    }
+  }, [allProducts]);
+
   const handleFlavorChange = (productId, key, value) => {
     setFeaturedProducts(prev => prev.map(p => 
       p.id === productId 

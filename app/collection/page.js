@@ -24,6 +24,12 @@ export default function Collection() {
     const [productsList, setProductsList] = useState(allProducts);
 
     useEffect(() => {
+        if (allProducts.length > 0) {
+            setProductsList(allProducts);
+        }
+    }, [allProducts]);
+
+    useEffect(() => {
         setMounted(true);
         AOS.init({ duration: 1000, once: true });
     }, []);
