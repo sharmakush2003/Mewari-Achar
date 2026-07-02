@@ -38,9 +38,7 @@ export default function Home() {
   };
 
   const getWhatsAppLink = (product, size) => {
-    const profile = product.flavorProfile;
-    const profileText = `\n- Spicy: ${profile.spicy}/10\n- Tangy: ${profile.tangy}/10\n- Earthy: ${profile.earthy}/10\n- Pungent: ${profile.pungent}/10`;
-    const message = `${t('supportTitle')}! I would like to order ${product.translations[language].name} (${size}).\n\n*My Custom Taste Settings:*${profileText}`;
+    const message = `${t('supportTitle')}! I would like to order ${product.translations[language].name} (${size}).`;
     return `https://wa.me/917014102742?text=${encodeURIComponent(message)}`;
   };
 
