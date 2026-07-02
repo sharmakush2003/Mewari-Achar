@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mewari Achaar - Secure Checkout</title>
+  <!-- Google Fonts: Outfit for royal typography -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <!-- Razorpay Standard Checkout Script -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <style>
+    :root {
+      --bg-color: #0F0F12;
+      --card-bg: rgba(26, 26, 32, 0.8);
+      --primary-color: #D4AF37; /* Metallic Gold */
+      --primary-hover: #F3E5AB; /* Soft Gold */
+      --text-color: #F8F9FA;
+      --text-muted: #A0AEC0;
+      --success-color: #2ECC71;
+      --error-color: #E74C3C;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden; /* Disable scrolling globally */
+      position: fixed; /* Lock viewport completely */
+    }
+
+    body {
+      background: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
+    }
+
+    /* Subtle Animated Background Gradients */
+    body::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, rgba(15, 15, 18, 0) 70%);
+      animation: rotateBg 20s linear infinite;
+      z-index: -1;
+    }
+
+    @keyframes rotateBg {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Glassmorphism Container */
+    .checkout-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-radius: 20px;
+      padding: 30px 24px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      text-align: center;
+      transform: translateY(0);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .checkout-card:hover {
+      border-color: rgba(212, 175, 55, 0.4);
+      box-shadow: 0 20px 40px rgba(212, 175, 55, 0.1);
+    }
+
+    .logo-container {
+      margin-bottom: 16px;
+    }
+
+    .logo-img {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      border: 2px solid var(--primary-color);
+      padding: 5px;
+      background: #1A1A20;
+      object-fit: contain;
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+      background: linear-gradient(135deg, #FFF, var(--primary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      font-weight: 300;
+    }
+
+    .order-details {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      text-align: left;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 13.5px;
+    }
+
+    .detail-row:last-child {
+      margin-bottom: 0;
+      border-top: 1px dashed rgba(255, 255, 255, 0.1);
+      padding-top: 10px;
+      font-weight: 600;
+    }
+
+    .detail-label {
+      color: var(--text-muted);
+    }
+
+    .detail-value {
+      color: var(--text-color);
+      word-break: break-all;
+      padding-left: 10px;
+      text-align: right;
+    }
+
+    .amount-value {
+      color: var(--primary-color) !important;
+      font-size: 16.5px;
+    }
+
+    /* Premium Golden Button */
+    .pay-btn {
+      background: linear-gradient(135deg, var(--primary-color), #B5942B);
+      color: #0F0F12;
+      border: none;
+      border-radius: 12px;
+      padding: 14px 20px;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      width: 100%;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(212, 175, 55, 0.2);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pay-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 25px rgba(212, 175, 55, 0.4);
+      background: linear-gradient(135deg, var(--primary-hover), var(--primary-color));
+    }
+
+    .pay-btn:active {
+      transform: translateY(1px);
+    }
+
+    .pay-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* Loading Spinner */
+    .spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 3px solid rgba(15, 15, 18, 0.3);
+      border-radius: 50%;
+      border-top-color: #0F0F12;
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Status Overlays */
+    .status-container {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg-color);
+      border-radius: 20px;
+      z-index: 10;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .status-icon {
+      font-size: 56px;
+      margin-bottom: 16px;
+    }
+
+    .status-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .status-desc {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .status-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-color);
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: 13.5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .status-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* High Performance Responsive Media Queries */
+    @media (max-width: 480px) {
+      body {
+        padding: 0;
+        align-items: stretch;
+        position: fixed;
+        overflow: hidden;
+      }
+      .checkout-card {
+        padding: 40px 24px 24px 24px;
+        border-radius: 0;
+        border: none;
+        max-width: 100vw;
+        height: 100vh;
+        box-shadow: none;
+        background: var(--bg-color); /* pure dark background instead of translucent glass card on mobile */
+        overflow: hidden; /* Prevent internal scrolling */
+        display: flex;
+        flex-direction: column;
+      }
+      .logo-container {
+        margin-top: 20px;
+        margin-bottom: 24px;
+      }
+      .logo-img {
+        width: 80px;
+        height: 80px;
+      }
+      h1 {
+        font-size: 24px;
+        margin-bottom: 8px;
+      }
+      .subtitle {
+        font-size: 14px;
+        margin-bottom: 32px;
+      }
+      .order-details {
+        padding: 20px;
+        margin-bottom: 32px;
+        border-radius: 16px;
+      }
+      .detail-row {
+        margin-bottom: 14px;
+        font-size: 14.5px;
+      }
+      .detail-row:last-child {
+        padding-top: 14px;
+      }
+      .amount-value {
+        font-size: 18px;
+      }
+      .pay-btn {
+        padding: 16px;
+        font-size: 16px;
+        border-radius: 12px;
+        margin-top: auto; /* Push button to the bottom */
+        margin-bottom: 10px;
+      }
+      .status-container {
+        padding: 30px 24px;
+        border-radius: 0;
+      }
+      .status-icon {
+        font-size: 56px;
+        margin-bottom: 16px;
+      }
+      .status-title {
+        font-size: 22px;
+        margin-bottom: 10px;
+      }
+      .status-desc {
+        font-size: 14px;
+        margin-bottom: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="checkout-card" id="cardContainer">
+    <div class="logo-container">
+      <!-- High quality avatar placeholder fallback if image loads fails -->
+      <img src="/mewari Achaar logo.png" class="logo-img" alt="Mewari Achaar" onerror="this.src='https://placehold.co/100/1a1a20/d4af37?text=MA'">
+    </div>
+    
+    <h1 id="titleText">Royal Secure Checkout</h1>
+    <p class="subtitle">Powered by Razorpay Secure Gateway</p>
+
+    <div class="order-details">
+      <div class="detail-row">
+        <span class="detail-label">Item Description</span>
+        <span class="detail-value" id="lblProduct">Pickle Order</span>
+      </div>
+      <div class="detail-row" id="rowEmail" style="display:none;">
+        <span class="detail-label">Email</span>
+        <span class="detail-value" id="lblEmail">-</span>
+      </div>
+      <div class="detail-row" id="rowPhone" style="display:none;">
+        <span class="detail-label">Contact</span>
+        <span class="detail-value" id="lblPhone">-</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Total Amount</span>
+        <span class="detail-value amount-value" id="lblAmount">₹0.00</span>
+      </div>
+    </div>
+
+    <button class="pay-btn" id="btnPay" onclick="startPaymentProcess(false)">
+      Proceed to Pay
+    </button>
+
+    <!-- Success Overlay -->
+    <div class="status-container" id="successStatus">
+      <div class="status-icon" style="color: var(--success-color);">✓</div>
+      <div class="status-title">Payment Successful!</div>
+      <div class="status-desc" id="successDesc">Your transaction was completed and verified successfully. Redirecting...</div>
+      <button class="status-btn" onclick="closeCheckout()">Finish</button>
+    </div>
+
+    <!-- Failure Overlay -->
+    <div class="status-container" id="failureStatus">
+      <div class="status-icon" style="color: var(--error-color);">✗</div>
+      <div class="status-title">Payment Failed</div>
+      <div class="status-desc" id="failureDesc">The transaction could not be completed. Please try again.</div>
+      <button class="status-btn" onclick="hideFailureOverlay()">Try Again</button>
+    </div>
+  </div>
+
+  <script>
+    // Get query parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const amountPaise = parseInt(urlParams.get('amount'), 10) || 100; // default to min 100 paise (1 INR)
+    const currency = urlParams.get('currency') || 'INR';
+    const email = urlParams.get('email') || '';
+    const phone = urlParams.get('phone') || '';
+    const productName = urlParams.get('product') || 'Mewari Achaar Order';
+
+    // Update UI elements on load
+    document.getElementById('lblProduct').innerText = productName;
+    document.getElementById('lblAmount').innerText = '₹' + (amountPaise / 100).toFixed(2);
+    
+    if (email) {
+      document.getElementById('lblEmail').innerText = email;
+      document.getElementById('rowEmail').style.display = 'flex';
+    }
+    if (phone) {
+      document.getElementById('lblPhone').innerText = phone;
+      document.getElementById('rowPhone').style.display = 'flex';
+    }
+
+    const payBtn = document.getElementById('btnPay');
+
+    // Helper to send message to Android Native Client
+    function notifyAndroidSuccess(paymentId, orderId, signature) {
+      if (window.Android && typeof window.Android.onPaymentSuccess === 'function') {
+        window.Android.onPaymentSuccess(paymentId, orderId, signature);
+      }
+    }
+
+    function notifyAndroidError(code, description) {
+      if (window.Android && typeof window.Android.onPaymentError === 'function') {
+        window.Android.onPaymentError(code, description);
+      }
+    }
+
+    function notifyAndroidDismissed() {
+      if (window.Android && typeof window.Android.onPaymentDismissed === 'function') {
+        window.Android.onPaymentDismissed();
+      }
+    }
+
+    function closeCheckout() {
+      if (window.Android && typeof window.Android.closeCheckout === 'function') {
+        window.Android.closeCheckout();
+      }
+    }
+
+    function setBtnLoading(loading, text = 'Processing...') {
+      if (loading) {
+        payBtn.disabled = true;
+        payBtn.innerHTML = `<span class="spinner"></span>${text}`;
+      } else {
+        payBtn.disabled = false;
+        payBtn.innerText = text;
+      }
+    }
+
+    function showFailureOverlay(desc) {
+      document.getElementById('failureDesc').innerText = desc || 'Payment failed or cancelled.';
+      document.getElementById('failureStatus').style.display = 'flex';
+    }
+
+    function hideFailureOverlay() {
+      document.getElementById('failureStatus').style.display = 'none';
+      setBtnLoading(false, 'Proceed to Pay');
+    }
+
+    function showSuccessOverlay(desc) {
+      document.getElementById('successDesc').innerText = desc || 'Your payment was successful!';
+      document.getElementById('successStatus').style.display = 'flex';
+    }
+
+    async function startPaymentProcess(simulate = false) {
+      setBtnLoading(true, simulate ? 'Simulating Payment...' : 'Initializing Secure Gateway...');
+      
+      try {
+        // Step 1: Create Order by calling Backend API
+        const createResponse = await fetch('/api/create-order', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            amount: amountPaise,
+            currency: currency,
+            receipt: 'rcpt_' + Math.random().toString(36).substring(2, 10)
+          })
+        });
+
+        if (!createResponse.ok) {
+          const errorData = await createResponse.json();
+          throw new Error(errorData.error || 'Failed to initialize payment order');
+        }
+
+        const orderData = await createResponse.json();
+        const { order_id, key_id } = orderData;
+
+        if (simulate) {
+          setBtnLoading(true, 'Verifying Simulated Payment...');
+          const verifyResponse = await fetch('/api/verify-payment', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              razorpay_order_id: order_id,
+              razorpay_payment_id: 'pay_simulated',
+              razorpay_signature: 'dummy_signature_verified'
+            })
+          });
+
+          const verifyData = await verifyResponse.json();
+
+          if (verifyResponse.ok && verifyData.status === 'success') {
+            showSuccessOverlay('Thank you! Your simulated payment was verified.');
+            notifyAndroidSuccess('pay_simulated', order_id, 'dummy_signature_verified');
+          } else {
+            throw new Error(verifyData.error || 'Signature verification failed');
+          }
+          return;
+        }
+
+        // Step 2: Configure Razorpay Checkout options
+        const options = {
+          key: key_id,
+          amount: amountPaise,
+          currency: currency,
+          name: 'Mewari Achaar',
+          description: productName,
+          image: '/mewari Achaar logo.png',
+          order_id: order_id,
+          prefill: {
+            name: email.split('@')[0] || 'Royal Guest',
+            email: email,
+            contact: phone
+          },
+          theme: {
+            color: '#D4AF37' // Match royal gold accent
+          },
+          modal: {
+            ondismiss: function() {
+              console.log('Payment modal dismissed by user');
+              notifyAndroidDismissed();
+              showFailureOverlay('Payment cancelled. Please try again.');
+            }
+          },
+          handler: async function (response) {
+            // This is called on payment success
+            setBtnLoading(true, 'Verifying Payment...');
+            try {
+              // Step 3: Send success details to Verification API
+              const verifyResponse = await fetch('/api/verify-payment', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature
+                })
+              });
+
+              const verifyData = await verifyResponse.json();
+
+              if (verifyResponse.ok && verifyData.status === 'success') {
+                showSuccessOverlay('Thank you! Your payment was verified.');
+                notifyAndroidSuccess(response.razorpay_payment_id, response.razorpay_order_id, response.razorpay_signature);
+              } else {
+                throw new Error(verifyData.error || 'Signature verification failed');
+              }
+            } catch (err) {
+              showFailureOverlay('Verification error: ' + err.message);
+              notifyAndroidError('VERIFICATION_FAILED', err.message);
+            }
+          }
+        };
+
+        // Open Razorpay Standard Checkout modal
+        const rzp = new Razorpay(options);
+        
+        rzp.on('payment.failed', function (response) {
+          console.error('Payment failure event:', JSON.stringify(response.error));
+          notifyAndroidError(response.error.code, response.error.description);
+          showFailureOverlay('Payment failed: ' + response.error.description);
+        });
+
+        rzp.open();
+
+      } catch (error) {
+        console.error('Payment flow error:', error);
+        showFailureOverlay(error.message);
+        notifyAndroidError('INIT_FAILED', error.message);
+      }
+    }
+  </script>
+</body>
+</html>
